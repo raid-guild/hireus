@@ -6,7 +6,7 @@ class AppContextProvider extends Component {
   state = {
     // UX state
     stage: 1,
-    is_paid: '',
+    is_paid: true,
     // Personal Info state
     name: '',
     email: '',
@@ -37,12 +37,21 @@ class AppContextProvider extends Component {
     });
   };
 
+  updatePaymentChoice = () => {
+    this.setState((prevState) => {
+      return {
+        is_paid: !prevState.is_paid
+      };
+    });
+  };
+
   render() {
     return (
       <AppContext.Provider
         value={{
           ...this.state,
-          updateStage: this.updateStage
+          updateStage: this.updateStage,
+          updatePaymentChoice: this.updatePaymentChoice
         }}
       >
         {this.props.children}

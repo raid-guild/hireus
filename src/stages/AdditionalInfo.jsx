@@ -1,29 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   FormControl,
   FormLabel,
-  FormErrorMessage,
   FormHelperText,
-  Input,
   Textarea,
   Stack,
   Checkbox
 } from '@chakra-ui/react';
 
-// import CheckBox from '../components/CheckBox';
+import { AppContext } from '../context/AppContext';
+
 import RadioBox from '../components/RadioBox';
 
-const Requirement = () => {
+const AdditionalInfo = () => {
+  const context = useContext(AppContext);
   const [priority, setPriority] = useState('Fast');
 
+  console.log(priority);
+
   return (
-    <div className='requirement-container'>
-      {/* <CheckBox
-        options={['$$5000 - $20000', '$20000 - $50000', '> $50000']}
-        updateRadio={setBudgetRange}
-        name='budget'
-        defaultValue='$5000 - $20000'
-      /> */}
+    <div className='additional-info-container'>
       <FormControl mb={10} isRequired>
         <FormLabel>How can we help?</FormLabel>
         <Textarea placeholder='Describe how you think RaidGuild can help?' />
@@ -42,7 +38,12 @@ const Requirement = () => {
       </Stack>
 
       <FormControl>
-        <Checkbox colorScheme='red'>Continue without paying</Checkbox>
+        <Checkbox
+          colorScheme='red'
+          onChange={() => context.updatePaymentChoice()}
+        >
+          Continue without paying
+        </Checkbox>
         <FormHelperText>
           Note that unpaid submissions might lose our priority over other
           projects.
@@ -52,4 +53,4 @@ const Requirement = () => {
   );
 };
 
-export default Requirement;
+export default AdditionalInfo;

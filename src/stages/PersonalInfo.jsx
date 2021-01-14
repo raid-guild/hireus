@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Input,
   Textarea,
   Stack
@@ -13,6 +11,9 @@ import RadioBox from '../components/RadioBox';
 
 const PersonalInfo = () => {
   const [contactType, setContactType] = useState('Email');
+
+  console.log(contactType);
+
   return (
     <div className='personal-info-container'>
       <Stack mb={10} direction='row'>
@@ -35,11 +36,11 @@ const PersonalInfo = () => {
           <Input placeholder='@handlename' />
         </FormControl>
         <FormControl>
-          <FormLabel>Your Telegram Handle if any</FormLabel>
+          <FormLabel>Your Telegram Handle</FormLabel>
           <Input placeholder='@handlename' />
         </FormControl>
         <FormControl>
-          <FormLabel>Your Twitter Handle if any</FormLabel>
+          <FormLabel>Your Twitter Handle</FormLabel>
           <Input placeholder='@handlename' />
         </FormControl>
       </Stack>

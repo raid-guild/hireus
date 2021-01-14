@@ -21,7 +21,7 @@ const HeadsUp = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.5 }}
       >
-        Hire Us
+        Hiring RaidGuild
       </motion.h1>
 
       <motion.p

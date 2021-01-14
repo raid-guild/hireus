@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Input,
   Textarea,
   Stack
 } from '@chakra-ui/react';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
-import 'react-day-picker/lib/style.css';
 
 import RadioBox from '../components/RadioBox';
 
@@ -17,7 +13,8 @@ const ProjectInfo = () => {
   const [projectType, setProjectType] = useState('New');
   const [projectSpecs, setProjectSpecs] = useState('Yes');
   const [budgetRange, setBudgetRange] = useState('$5000 - $20000');
-  const [selectedDay, setSelectedDay] = useState('');
+
+  console.log(projectType, projectSpecs, budgetRange);
 
   return (
     <div className='project-info-container'>
@@ -56,21 +53,15 @@ const ProjectInfo = () => {
         <Textarea placeholder='Tell us about your project' />
       </FormControl>
 
-      <Stack direction='row'>
-        <FormControl isRequired>
-          <FormLabel as='legend'>What's your Budget Range?</FormLabel>
-          <RadioBox
-            options={['$$5000 - $20000', '$20000 - $50000', '> $50000']}
-            updateRadio={setBudgetRange}
-            name='budget'
-            defaultValue='$5000 - $20000'
-          />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel>What's the expected deadline?</FormLabel>
-          <DayPickerInput onDayChange={setSelectedDay} />
-        </FormControl>
-      </Stack>
+      <FormControl isRequired>
+        <FormLabel as='legend'>What's your Budget Range?</FormLabel>
+        <RadioBox
+          options={['$$5000 - $20000', '$20000 - $50000', '> $50000']}
+          updateRadio={setBudgetRange}
+          name='budget'
+          defaultValue='$5000 - $20000'
+        />
+      </FormControl>
     </div>
   );
 };
