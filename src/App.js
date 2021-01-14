@@ -15,6 +15,8 @@ import './App.scss';
 
 import raidguild__logo from './assets/raidguild__logo.png';
 
+// Comment to trigger vercel deployment
+
 const App = () => {
   const context = useContext(AppContext);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
