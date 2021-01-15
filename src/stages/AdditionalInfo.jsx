@@ -29,7 +29,7 @@ const AdditionalInfo = () => {
         <FormControl isRequired>
           <FormLabel as='legend'>What's the priority?</FormLabel>
           <RadioBox
-            options={['Fast', 'Good', 'Cheap']}
+            options={['Fast', 'Polished', 'Cheap']}
             updateRadio={setPriority}
             name='priority'
             defaultValue='Fast'

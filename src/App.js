@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import { AppContext } from './context/AppContext';
@@ -68,6 +68,7 @@ const App = () => {
                   {context.stage === 4 && <RequiredServices />}
                   {context.stage === 5 && <AdditionalInfo />}
                   {context.stage === 6 && <Feedback />}
+
                   {context.stage > 1 && (
                     <button
                       id='prev-stage-button'
@@ -76,6 +77,7 @@ const App = () => {
                       <i className='fas fa-arrow-left'></i>
                     </button>
                   )}
+
                   {context.stage <= 6 && (
                     <motion.button
                       id='next-stage-button'
@@ -94,6 +96,12 @@ const App = () => {
                           : 'Submit'
                         : null}
                     </motion.button>
+                  )}
+
+                  {context.stage !== 1 && (
+                    <Link to='/faq'>
+                      <p id='faq-stage-link'>Read FAQ</p>
+                    </Link>
                   )}
                 </>
               </Route>
