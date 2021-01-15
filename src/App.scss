@@ -89,6 +89,18 @@
   color: $theme-color-secondary;
   text-transform: uppercase;
   text-decoration: underline;
+  font-family: $secondary-font;
+}
+
+#faq-stage-link {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 2rem 2rem 0 0;
+  color: $theme-color-secondary;
+  text-transform: uppercase;
+  text-decoration: underline;
+  font-family: $secondary-font;
 }
 
 .headsup-container {

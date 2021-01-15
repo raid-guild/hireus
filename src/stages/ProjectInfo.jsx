@@ -56,7 +56,13 @@ const ProjectInfo = () => {
       <FormControl isRequired>
         <FormLabel as='legend'>What's your Budget Range?</FormLabel>
         <RadioBox
-          options={['$$5000 - $20000', '$20000 - $50000', '> $50000']}
+          options={[
+            '$1000 - $5000',
+            '$$5000 - $20000',
+            '$20000 - $50000',
+            '> $50000',
+            'Not Sure'
+          ]}
           updateRadio={setBudgetRange}
           name='budget'
           defaultValue='$5000 - $20000'
