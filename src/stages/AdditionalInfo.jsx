@@ -11,10 +11,11 @@ import {
 import { AppContext } from '../context/AppContext';
 
 import RadioBox from '../components/RadioBox';
+import { Link } from 'react-router-dom';
 
 const AdditionalInfo = () => {
   const context = useContext(AppContext);
-  const [priority, setPriority] = useState('Fast');
+  const [priority, setPriority] = useState('Fast & Polished');
 
   console.log(priority);
 
@@ -29,10 +30,10 @@ const AdditionalInfo = () => {
         <FormControl isRequired>
           <FormLabel as='legend'>What's the priority?</FormLabel>
           <RadioBox
-            options={['Fast', 'Polished', 'Cheap']}
+            options={['Fast & Polished', 'Fast & Cheap', 'Polished & Cheap']}
             updateRadio={setPriority}
             name='priority'
-            defaultValue='Fast'
+            defaultValue='Fast & Polished'
           />
         </FormControl>
       </Stack>
@@ -49,6 +50,12 @@ const AdditionalInfo = () => {
           projects.
         </FormHelperText>
       </FormControl>
+
+      {context.is_paid && (
+        <Link to='/faq'>
+          <p id='payment-info-link'>What am I paying for?</p>
+        </Link>
+      )}
     </div>
   );
 };

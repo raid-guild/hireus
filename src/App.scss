@@ -58,7 +58,6 @@
   font-size: 1.2rem;
   font-family: $secondary-font;
   margin-bottom: 3rem;
-
   padding: 0.7rem;
 }
 
@@ -101,6 +100,21 @@
   text-transform: uppercase;
   text-decoration: underline;
   font-family: $secondary-font;
+}
+
+#payment-info-link {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: $theme-color-primary;
+  font-family: $secondary-font;
+  margin-right: 3rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+#payment-info-link:hover {
+  text-decoration: underline;
 }
 
 .headsup-container {
