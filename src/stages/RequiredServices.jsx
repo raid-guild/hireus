@@ -35,6 +35,7 @@ const RequiredServices = () => {
         name='budget'
         defaultValue='$5000 - $20000'
       /> */}
+      <h2 className='step-title'>Step 3 of 4: Required Services</h2>
       <Stack direction='row'>
         <FormControl mb={10} isRequired>
           <FormLabel mb={5}>What services are needed?</FormLabel>
@@ -51,7 +52,7 @@ const RequiredServices = () => {
           </CheckboxGroup>
         </FormControl>
 
-        <FormControl isRequired>
+        <FormControl>
           <FormLabel>What's the expected deadline?</FormLabel>
           <DayPickerInput onDayChange={setSelectedDay} />
         </FormControl>
