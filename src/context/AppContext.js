@@ -6,7 +6,8 @@ class AppContextProvider extends Component {
   state = {
     // UX state
     stage: 1,
-    is_paid: true,
+    is_not_paid: false,
+    is_dialog_open: false,
     // Personal Info state
     name: '',
     email: '',
@@ -37,10 +38,29 @@ class AppContextProvider extends Component {
     });
   };
 
-  updatePaymentChoice = () => {
+  updatePaymentChoice = (option) => {
+    if (option) {
+      this.setState((prevState) => {
+        return {
+          is_not_paid: !prevState.is_not_paid,
+          is_dialog_open: !prevState.is_dialog_open
+        };
+      });
+    }
+
+    if (!option) {
+      this.setState((prevState) => {
+        return {
+          is_dialog_open: !prevState.is_dialog_open
+        };
+      });
+    }
+  };
+
+  updateDialogState = () => {
     this.setState((prevState) => {
       return {
-        is_paid: !prevState.is_paid
+        is_dialog_open: !prevState.is_dialog_open
       };
     });
   };
@@ -51,7 +71,8 @@ class AppContextProvider extends Component {
         value={{
           ...this.state,
           updateStage: this.updateStage,
-          updatePaymentChoice: this.updatePaymentChoice
+          updatePaymentChoice: this.updatePaymentChoice,
+          updateDialogState: this.updateDialogState
         }}
       >
         {this.props.children}

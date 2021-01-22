@@ -4,8 +4,11 @@ import {
   FormLabel,
   Input,
   Textarea,
-  Stack
+  Stack,
+  Tooltip
 } from '@chakra-ui/react';
+
+import { InfoIcon } from '@chakra-ui/icons';
 
 import RadioBox from '../components/RadioBox';
 
@@ -16,6 +19,7 @@ const PersonalInfo = () => {
 
   return (
     <div className='personal-info-container'>
+      <h2 className='step-title'>Step 1 of 4: Personal Infomation</h2>
       <Stack mb={10} direction='row'>
         <FormControl isRequired>
           <FormLabel>Name</FormLabel>
@@ -31,8 +35,18 @@ const PersonalInfo = () => {
         <Textarea placeholder='Tell us about yourself' />
       </FormControl>
       <Stack mb={10} direction='row'>
-        <FormControl isRequired>
-          <FormLabel>Your Discord Handle</FormLabel>
+        <FormControl>
+          <FormLabel>
+            Your Discord Handle{' '}
+            <Tooltip
+              hasArrow
+              placement='top'
+              label='Our main communications channel for work is Discord. In order to participate in the development process you will need to join our server.'
+              aria-label='disclaimer tooltip'
+            >
+              <InfoIcon />
+            </Tooltip>
+          </FormLabel>
           <Input placeholder='@handlename' />
         </FormControl>
         <FormControl>

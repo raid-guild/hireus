@@ -88,12 +88,13 @@ const App = () => {
                         if (context.stage < 6) context.updateStage('next');
                       }}
                     >
-                      {context.stage < 5 && 'Next'}
+                      {context.stage === 1 && 'Start'}
+                      {context.stage < 5 && context.stage > 1 && 'Next'}
                       {context.stage === 6 && 'Done'}
                       {context.stage === 5
-                        ? context.is_paid
-                          ? 'Pay 300 DAI & Submit'
-                          : 'Submit'
+                        ? context.is_not_paid
+                          ? 'Submit'
+                          : 'Pay 300 DAI & Submit'
                         : null}
                     </motion.button>
                   )}

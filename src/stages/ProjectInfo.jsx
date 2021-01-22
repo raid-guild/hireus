@@ -18,6 +18,7 @@ const ProjectInfo = () => {
 
   return (
     <div className='project-info-container'>
+      <h2 className='step-title'>Step 2 of 4: Project Information</h2>
       <Stack mb={10} direction='row'>
         <FormControl isRequired>
           <FormLabel as='legend'>New or Existing Project?</FormLabel>
@@ -31,7 +32,7 @@ const ProjectInfo = () => {
         <FormControl isRequired>
           <FormLabel as='legend'>Do you have project specs ready?</FormLabel>
           <RadioBox
-            options={['Yes', 'No', 'Need Help']}
+            options={['Yes', 'Partial', 'None']}
             updateRadio={setProjectSpecs}
             name='project-specs'
             defaultValue='Yes'
@@ -44,7 +45,7 @@ const ProjectInfo = () => {
           <Input placeholder='Project Name' />
         </FormControl>
         <FormControl isRequired>
-          <FormLabel>Relevant Project Link if any</FormLabel>
+          <FormLabel>Relevant Project Link</FormLabel>
           <Input placeholder='Any link related to the project' />
         </FormControl>
       </Stack>
