@@ -58,11 +58,17 @@ class AppContextProvider extends Component {
   };
 
   updateDialogState = () => {
-    this.setState((prevState) => {
-      return {
-        is_dialog_open: !prevState.is_dialog_open
-      };
-    });
+    if (!this.state.is_not_paid) {
+      this.setState((prevState) => {
+        return {
+          is_dialog_open: !prevState.is_dialog_open
+        };
+      });
+    } else {
+      this.setState((prevState) => {
+        return { is_not_paid: !prevState.is_not_paid };
+      });
+    }
   };
 
   render() {

@@ -9,7 +9,10 @@ import PersonalInfo from './stages/PersonalInfo';
 import ProjectInfo from './stages/ProjectInfo';
 import RequiredServices from './stages/RequiredServices';
 import AdditionalInfo from './stages/AdditionalInfo';
+import Confirmation from './stages/Confirmation';
 import Feedback from './stages/Feedback';
+
+import FAQ from './pages/Faq';
 
 import './App.scss';
 
@@ -67,9 +70,10 @@ const App = () => {
                   {context.stage === 3 && <ProjectInfo />}
                   {context.stage === 4 && <RequiredServices />}
                   {context.stage === 5 && <AdditionalInfo />}
-                  {context.stage === 6 && <Feedback />}
+                  {context.stage === 6 && <Confirmation />}
+                  {context.stage === 7 && <Feedback />}
 
-                  {context.stage > 1 && (
+                  {context.stage !== 1 && context.stage !== 6 && (
                     <button
                       id='prev-stage-button'
                       onClick={() => context.updateStage('previous')}
@@ -78,36 +82,56 @@ const App = () => {
                     </button>
                   )}
 
-                  {context.stage <= 6 && (
+                  {context.stage < 6 && (
                     <motion.button
                       id='next-stage-button'
                       initial={{ x: '100vw' }}
                       animate={{ x: 0 }}
                       transition={{ delay: 1.3 }}
                       onClick={() => {
-                        if (context.stage < 6) context.updateStage('next');
+                        context.updateStage('next');
                       }}
                     >
                       {context.stage === 1 && 'Start'}
                       {context.stage < 5 && context.stage > 1 && 'Next'}
-                      {context.stage === 6 && 'Done'}
-                      {context.stage === 5
-                        ? context.is_not_paid
-                          ? 'Submit'
-                          : 'Pay 300 DAI & Submit'
-                        : null}
                     </motion.button>
                   )}
 
+                  {context.stage === 5 && context.is_not_paid && (
+                    <button
+                      id='next-stage-button'
+                      onClick={() => {
+                        if (context.stage < 6) context.updateStage('next');
+                      }}
+                    >
+                      Submit
+                    </button>
+                  )}
+
+                  {context.stage === 5 && !context.is_not_paid && (
+                    <button
+                      id='next-stage-button'
+                      onClick={() => {
+                        if (context.stage < 6) context.updateStage('next');
+                      }}
+                    >
+                      Pay 300 DAI & Submit
+                    </button>
+                  )}
+
                   {context.stage !== 1 && (
-                    <Link to='/faq'>
+                    <Link to='/faq' target='_blank' rel='noopener noreferrer'>
                       <p id='faq-stage-link'>Read FAQ</p>
                     </Link>
+                  )}
+
+                  {context.stage === 7 && (
+                    <button id='next-stage-button'>Done</button>
                   )}
                 </>
               </Route>
               <Route path='/faq' exact>
-                <div></div>
+                <FAQ />
               </Route>
             </Switch>
           </Router>

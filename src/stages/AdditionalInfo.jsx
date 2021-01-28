@@ -10,8 +10,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogContent,
-  AlertDialogOverlay
+  AlertDialogOverlay,
+  Tooltip
 } from '@chakra-ui/react';
+
+import { InfoIcon } from '@chakra-ui/icons';
 
 import { AppContext } from '../context/AppContext';
 
@@ -31,13 +34,23 @@ const AdditionalInfo = () => {
     <div className='additional-info-container'>
       <h2 className='step-title'>Step 4 of 4: Additional Information</h2>
       <FormControl mb={10} isRequired>
-        <FormLabel>How can we help?</FormLabel>
-        <Textarea placeholder='Describe how you think RaidGuild can help?' />
+        <FormLabel>Do you need something very specific?</FormLabel>
+        <Textarea placeholder='In plain words, tell us how you think we can best help you.' />
       </FormControl>
 
       <Stack mb={10} direction='row'>
         <FormControl isRequired>
-          <FormLabel as='legend'>What's the priority?</FormLabel>
+          <FormLabel as='legend'>
+            What's the priority?{' '}
+            <Tooltip
+              hasArrow
+              placement='top'
+              label='It can be fast, polished, or inexpensive.'
+              aria-label='disclaimer tooltip'
+            >
+              <InfoIcon />
+            </Tooltip>
+          </FormLabel>
           <RadioBox
             options={[
               'Fast & Polished',
@@ -74,8 +87,7 @@ const AdditionalInfo = () => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Note that submissions without payment might not be picked up. Are
-              you sure?
+              If you choose not to pay, we can’t guarantee a quick reply.
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -92,15 +104,15 @@ const AdditionalInfo = () => {
                 onClick={() => context.updatePaymentChoice(true)}
                 ml={3}
               >
-                {context.is_not_paid ? 'Uncheck' : 'Continue'}
+                Continue
               </button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
 
-      {context.is_paid && (
-        <Link to='/faq'>
+      {!context.is_not_paid && (
+        <Link to='/faq' target='_blank' rel='noopener noreferrer'>
           <p id='payment-info-link'>What am I paying for?</p>
         </Link>
       )}

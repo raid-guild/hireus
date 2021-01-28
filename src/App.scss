@@ -155,12 +155,17 @@
   text-decoration: underline;
 }
 
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 8fr 1fr;
+}
+
 .headsup-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   color: $subtitle-color;
-  padding: 5rem;
+
   h1 {
     font-family: $primary-font;
     font-size: 2rem;
@@ -235,7 +240,77 @@
 .required-services-container {
   .chakra-checkbox__label {
     color: $theme-color-secondary;
-    text-transform: uppercase;
+    text-transform: none;
     letter-spacing: 2px;
+    font-family: $secondary-font;
+    margin-bottom: 4px;
+  }
+}
+
+.faq-container {
+  .chakra-accordion__item {
+    border: none;
+    outline: none;
+  }
+  .chakra-accordion__button {
+    color: $theme-color-secondary;
+    font-family: $secondary-font;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+  }
+  .chakra-accordion__panel {
+    color: $subtitle-color;
+    font-family: $secondary-font;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+  a {
+    color: $theme-color-primary;
+    text-decoration: underline;
+    font-family: $secondary-font;
+  }
+}
+
+.confirmation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  h2 {
+    margin-top: 1rem;
+  }
+  p {
+    color: $subtitle-color;
+    margin-bottom: 1rem;
+    font-family: $primary-font;
+    font-size: 1rem;
+    letter-spacing: 1.2px;
+  }
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    button {
+      color: $title-color;
+      background-color: $theme-color-primary;
+      border: 2px solid $theme-color-primary;
+      text-transform: uppercase;
+      font-size: 1rem;
+      font-family: $secondary-font;
+      padding: 0.7rem;
+      margin: 25px;
+    }
+    button:hover {
+      background-color: $input-background-color;
+      color: $theme-color-primary;
+    }
+    a {
+      color: $theme-color-primary;
+      font-size: 1rem;
+      font-family: $secondary-font;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
   }
 }
