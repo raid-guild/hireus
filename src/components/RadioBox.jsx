@@ -1,4 +1,4 @@
-import { Box, useRadio, useRadioGroup, HStack } from '@chakra-ui/react';
+import { Box, useRadio, useRadioGroup, HStack, VStack } from '@chakra-ui/react';
 
 // 1. Create a component that consumes the `useRadio` hook
 function RadioCard(props) {
@@ -43,7 +43,18 @@ function RadioBox(props) {
 
   const group = getRootProps();
 
-  return (
+  return props.stack === 'vertical' ? (
+    <VStack {...group} style={{ alignItems: 'inherit' }}>
+      {props.options.map((value) => {
+        const radio = getRadioProps({ value });
+        return (
+          <RadioCard key={value} {...radio}>
+            {value}
+          </RadioCard>
+        );
+      })}
+    </VStack>
+  ) : (
     <HStack {...group}>
       {props.options.map((value) => {
         const radio = getRadioProps({ value });

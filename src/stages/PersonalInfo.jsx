@@ -19,20 +19,30 @@ const PersonalInfo = () => {
 
   return (
     <div className='personal-info-container'>
-      <h2 className='step-title'>Step 1 of 4: Personal Infomation</h2>
+      <h2 className='step-title'>Step 1 of 4: Personal Information</h2>
       <Stack mb={10} direction='row'>
         <FormControl isRequired>
           <FormLabel>Name</FormLabel>
           <Input placeholder='Your Name' />
         </FormControl>
         <FormControl isRequired>
-          <FormLabel>Email address</FormLabel>
+          <FormLabel>
+            Email address{' '}
+            <Tooltip
+              hasArrow
+              placement='top'
+              label='Please use an email address that you check often.'
+              aria-label='disclaimer tooltip'
+            >
+              <InfoIcon />
+            </Tooltip>
+          </FormLabel>
           <Input type='email' placeholder='Your email address' />
         </FormControl>
       </Stack>
       <FormControl mb={10} isRequired>
         <FormLabel>Your Bio</FormLabel>
-        <Textarea placeholder='Tell us about yourself' />
+        <Textarea placeholder='It’s very helpful to know your background, how familiar you are with web3, and crypto in general.' />
       </FormControl>
       <Stack mb={10} direction='row'>
         <FormControl>
@@ -64,7 +74,7 @@ const PersonalInfo = () => {
           options={['Email', 'Discord', 'Telegram']}
           updateRadio={setContactType}
           name='contact-type'
-          defaultValue='Email'
+          defaultValue='Discord'
         />
       </FormControl>
     </div>

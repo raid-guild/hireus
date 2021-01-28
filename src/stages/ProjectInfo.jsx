@@ -4,24 +4,36 @@ import {
   FormLabel,
   Input,
   Textarea,
-  Stack
+  Stack,
+  Tooltip
 } from '@chakra-ui/react';
+
+import { InfoIcon } from '@chakra-ui/icons';
 
 import RadioBox from '../components/RadioBox';
 
 const ProjectInfo = () => {
   const [projectType, setProjectType] = useState('New');
   const [projectSpecs, setProjectSpecs] = useState('Yes');
-  const [budgetRange, setBudgetRange] = useState('$5000 - $20000');
 
-  console.log(projectType, projectSpecs, budgetRange);
+  console.log(projectType, projectSpecs);
 
   return (
     <div className='project-info-container'>
       <h2 className='step-title'>Step 2 of 4: Project Information</h2>
       <Stack mb={10} direction='row'>
         <FormControl isRequired>
-          <FormLabel as='legend'>New or Existing Project?</FormLabel>
+          <FormLabel as='legend'>
+            New or Existing Project?{' '}
+            <Tooltip
+              hasArrow
+              placement='top'
+              label='By existing, we mean a project that has already launched.'
+              aria-label='disclaimer tooltip'
+            >
+              <InfoIcon />
+            </Tooltip>
+          </FormLabel>
           <RadioBox
             options={['New', 'Existing']}
             updateRadio={setProjectType}
@@ -30,7 +42,17 @@ const ProjectInfo = () => {
           />
         </FormControl>
         <FormControl isRequired>
-          <FormLabel as='legend'>Do you have project specs ready?</FormLabel>
+          <FormLabel as='legend'>
+            Do you have project specs ready?{' '}
+            <Tooltip
+              hasArrow
+              placement='top'
+              label='You should choose “Yes” if you know exactly what needs to be done and have it written down, or “Partial” if you have some things written down but no complete specifications of the work needed.'
+              aria-label='disclaimer tooltip'
+            >
+              <InfoIcon />
+            </Tooltip>
+          </FormLabel>
           <RadioBox
             options={['Yes', 'Partial', 'None']}
             updateRadio={setProjectSpecs}
@@ -44,30 +66,27 @@ const ProjectInfo = () => {
           <FormLabel>Project Name</FormLabel>
           <Input placeholder='Project Name' />
         </FormControl>
-        <FormControl isRequired>
-          <FormLabel>Relevant Project Link</FormLabel>
-          <Input placeholder='Any link related to the project' />
+        <FormControl>
+          <FormLabel>
+            Link to Specs{' '}
+            <Tooltip
+              hasArrow
+              placement='top'
+              label='This is the main resource or reference we should be looking at.'
+              aria-label='disclaimer tooltip'
+            >
+              <InfoIcon />
+            </Tooltip>
+          </FormLabel>
+          <Input
+            placeholder='Any link related to the project'
+            isDisabled={projectSpecs === 'None' ? true : false}
+          />
         </FormControl>
       </Stack>
       <FormControl mb={10} isRequired>
         <FormLabel>Project Description</FormLabel>
-        <Textarea placeholder='Tell us about your project' />
-      </FormControl>
-
-      <FormControl isRequired>
-        <FormLabel as='legend'>What's your Budget Range?</FormLabel>
-        <RadioBox
-          options={[
-            '$1000 - $5000',
-            '$5000 - $20000',
-            '$20000 - $50000',
-            '> $50000',
-            'Not Sure'
-          ]}
-          updateRadio={setBudgetRange}
-          name='budget'
-          defaultValue='$5000 - $20000'
-        />
+        <Textarea placeholder='Describe your project, goals, vision. Feel free to put as many links to resources as you can. (docs, specs, prototypes, etc)' />
       </FormControl>
     </div>
   );
