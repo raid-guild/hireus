@@ -23,25 +23,51 @@ import { Link } from 'react-router-dom';
 
 const AdditionalInfo = () => {
   const context = useContext(AppContext);
+  const [specificInfo, setSpecificInfo] = useState('');
   const [priority, setPriority] = useState('Fast & Polished');
+  const [checkBoxStatus, setCheckBoxStatus] = useState(false);
 
+  const [buttonClick, setButtonClickStatus] = useState(false);
+
+  const [paymentStatus, setPaymentStatus] = useState(true);
+  const [dialogStatus, setDialogStatus] = useState(false);
   const onClose = () => context.updateDialogState();
   const cancelRef = React.useRef();
 
-  console.log(priority);
+  const modalConfirmHandler = () => {
+    setPaymentStatus(false);
+    setCheckBoxStatus(true);
+  };
+
+  const checkBoxChangeHandler = () => {
+    if (checkBoxStatus) {
+      setPaymentStatus(true);
+      setCheckBoxStatus(false);
+    }
+    if (!checkBoxStatus) {
+      setDialogStatus(true);
+    }
+  };
 
   return (
     <div className='additional-info-container'>
       <h2 className='step-title'>Step 4 of 4: Additional Information</h2>
-      <FormControl mb={10} isRequired>
+      <FormControl
+        mb={10}
+        isRequired
+        isInvalid={specificInfo === '' && buttonClick ? true : false}
+      >
         <FormLabel>Do you need something very specific?</FormLabel>
-        <Textarea placeholder='In plain words, tell us how you think we can best help you.' />
+        <Textarea
+          placeholder='In plain words, tell us how you think we can best help you.'
+          onChange={(e) => setSpecificInfo(e.target.value)}
+        />
       </FormControl>
 
       <Stack mb={10} direction='row'>
         <FormControl isRequired>
           <FormLabel as='legend'>
-            What's the priority?{' '}
+            What are your priorities?{' '}
             <Tooltip
               hasArrow
               placement='top'
@@ -66,16 +92,16 @@ const AdditionalInfo = () => {
 
       <FormControl>
         <Checkbox
-          isChecked={context.is_not_paid}
+          isChecked={checkBoxStatus}
           colorScheme='red'
-          onChange={() => context.updateDialogState()}
+          onChange={checkBoxChangeHandler}
         >
           Continue without paying
         </Checkbox>
       </FormControl>
 
       <AlertDialog
-        isOpen={context.is_dialog_open}
+        isOpen={dialogStatus}
         leastDestructiveRef={cancelRef}
         onClose={onClose}
         isCentered
@@ -91,17 +117,13 @@ const AdditionalInfo = () => {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <button
-                className='dialog-button-cancel'
-                ref={cancelRef}
-                onClick={() => context.updatePaymentChoice(false)}
-              >
+              <button className='dialog-button-cancel' ref={cancelRef}>
                 Cancel
               </button>
               <button
                 className='dialog-button-select'
                 colorScheme='red'
-                onClick={() => context.updatePaymentChoice(true)}
+                onClick={modalConfirmHandler}
                 ml={3}
               >
                 Continue
@@ -115,6 +137,28 @@ const AdditionalInfo = () => {
         <Link to='/faq' target='_blank' rel='noopener noreferrer'>
           <p id='payment-info-link'>What am I paying for?</p>
         </Link>
+      )}
+
+      {context.is_not_paid && (
+        <button
+          id='next-stage-button'
+          onClick={() => {
+            context.updateStage('next');
+          }}
+        >
+          Submit
+        </button>
+      )}
+
+      {!context.is_not_paid && (
+        <button
+          id='next-stage-button'
+          onClick={() => {
+            context.updateStage('next');
+          }}
+        >
+          Pay 300 DAI & Submit
+        </button>
       )}
     </div>
   );

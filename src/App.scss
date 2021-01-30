@@ -69,6 +69,10 @@
   padding: 0.7rem;
 }
 
+#next-stage-button:disabled {
+  cursor: not-allowed;
+}
+
 .chakra-modal__content {
   font-family: $primary-font;
   .chakra-modal__header {

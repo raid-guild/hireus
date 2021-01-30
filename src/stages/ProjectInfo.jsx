@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -10,13 +10,19 @@ import {
 
 import { InfoIcon } from '@chakra-ui/icons';
 
+import { AppContext } from '../context/AppContext';
+
 import RadioBox from '../components/RadioBox';
 
 const ProjectInfo = () => {
+  const context = useContext(AppContext);
   const [projectType, setProjectType] = useState('New');
   const [projectSpecs, setProjectSpecs] = useState('Yes');
+  const [specsLink, setSpecsLink] = useState('');
+  const [projectName, setProjectName] = useState('');
+  const [projectDescription, setProjectDescription] = useState('');
 
-  console.log(projectType, projectSpecs);
+  const [buttonClick, setButtonClickStatus] = useState(false);
 
   return (
     <div className='project-info-container'>
@@ -41,6 +47,7 @@ const ProjectInfo = () => {
             defaultValue='New'
           />
         </FormControl>
+
         <FormControl isRequired>
           <FormLabel as='legend'>
             Do you have project specs ready?{' '}
@@ -61,11 +68,19 @@ const ProjectInfo = () => {
           />
         </FormControl>
       </Stack>
+
       <Stack mb={10} direction='row'>
-        <FormControl isRequired>
+        <FormControl
+          isRequired
+          isInvalid={projectName === '' && buttonClick ? true : false}
+        >
           <FormLabel>Project Name</FormLabel>
-          <Input placeholder='Project Name' />
+          <Input
+            placeholder='Project Name'
+            onChange={(e) => setProjectName(e.target.value)}
+          />
         </FormControl>
+
         <FormControl>
           <FormLabel>
             Link to Specs{' '}
@@ -81,13 +96,44 @@ const ProjectInfo = () => {
           <Input
             placeholder='Any link related to the project'
             isDisabled={projectSpecs === 'None' ? true : false}
+            onChange={(e) => setSpecsLink(e.target.value)}
           />
         </FormControl>
       </Stack>
-      <FormControl mb={10} isRequired>
+
+      <FormControl
+        mb={10}
+        isRequired
+        isInvalid={projectDescription === '' && buttonClick ? true : false}
+      >
         <FormLabel>Project Description</FormLabel>
-        <Textarea placeholder='Describe your project, goals, vision. Feel free to put as many links to resources as you can. (docs, specs, prototypes, etc)' />
+        <Textarea
+          placeholder='Describe your project, goals, vision. Feel free to put as many links to resources as you can. (docs, specs, prototypes, etc)'
+          onChange={(e) => setProjectDescription(e.target.value)}
+        />
       </FormControl>
+
+      <button
+        id='next-stage-button'
+        onClick={() => {
+          if (projectName && projectDescription) {
+            setButtonClickStatus(false);
+            context.setProjectData(
+              projectType,
+              projectSpecs,
+              specsLink,
+              projectName,
+              projectDescription
+            );
+            context.updateStage('next');
+          } else {
+            setButtonClickStatus(true);
+            alert('Please fill in all the required fields!');
+          }
+        }}
+      >
+        Next
+      </button>
     </div>
   );
 };

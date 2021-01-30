@@ -82,51 +82,10 @@ const App = () => {
                     </button>
                   )}
 
-                  {context.stage < 6 && (
-                    <motion.button
-                      id='next-stage-button'
-                      initial={{ x: '100vw' }}
-                      animate={{ x: 0 }}
-                      transition={{ delay: 1.3 }}
-                      onClick={() => {
-                        context.updateStage('next');
-                      }}
-                    >
-                      {context.stage === 1 && 'Start'}
-                      {context.stage < 5 && context.stage > 1 && 'Next'}
-                    </motion.button>
-                  )}
-
-                  {context.stage === 5 && context.is_not_paid && (
-                    <button
-                      id='next-stage-button'
-                      onClick={() => {
-                        if (context.stage < 6) context.updateStage('next');
-                      }}
-                    >
-                      Submit
-                    </button>
-                  )}
-
-                  {context.stage === 5 && !context.is_not_paid && (
-                    <button
-                      id='next-stage-button'
-                      onClick={() => {
-                        if (context.stage < 6) context.updateStage('next');
-                      }}
-                    >
-                      Pay 300 DAI & Submit
-                    </button>
-                  )}
-
                   {context.stage !== 1 && (
                     <Link to='/faq' target='_blank' rel='noopener noreferrer'>
                       <p id='faq-stage-link'>Read FAQ</p>
                     </Link>
-                  )}
-
-                  {context.stage === 7 && (
-                    <button id='next-stage-button'>Done</button>
                   )}
                 </>
               </Route>

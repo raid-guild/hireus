@@ -6,24 +6,24 @@ class AppContextProvider extends Component {
   state = {
     // UX state
     stage: 1,
-    is_not_paid: false,
-    is_dialog_open: false,
     // Personal Info state
     name: '',
     email: '',
     bio: '',
-    discord: '',
-    telegram: '',
-    twitter: '',
-    contact_type: '1',
+    discordHandle: '',
+    telegramHandle: '',
+    twitterHandle: '',
+    contactType: '',
     // Project Info state
-    project_type: '',
-    have_specs: '',
-    project_name: '',
-    project_desc: '',
-    link: '',
-    budget: '',
-    deadline: '',
+    projectType: '',
+    projectSpecs: '',
+    specsLink: '',
+    projectName: '',
+    projectDescription: '',
+    // Services Info state
+    servicesRequired: '',
+    selectedDay: '',
+    budgetRange: '',
     //Requirement Info state
     needs: '',
     raidguild_need: '',
@@ -38,37 +38,48 @@ class AppContextProvider extends Component {
     });
   };
 
-  updatePaymentChoice = (option) => {
-    if (option) {
-      this.setState((prevState) => {
-        return {
-          is_not_paid: !prevState.is_not_paid,
-          is_dialog_open: !prevState.is_dialog_open
-        };
-      });
-    }
-
-    if (!option) {
-      this.setState((prevState) => {
-        return {
-          is_dialog_open: !prevState.is_dialog_open
-        };
-      });
-    }
+  setPersonalData = (
+    name,
+    email,
+    bio,
+    discordHandle,
+    telegramHandle,
+    twitterHandle,
+    contactType
+  ) => {
+    this.setState({
+      name,
+      email,
+      bio,
+      discordHandle,
+      telegramHandle,
+      twitterHandle,
+      contactType
+    });
   };
 
-  updateDialogState = () => {
-    if (!this.state.is_not_paid) {
-      this.setState((prevState) => {
-        return {
-          is_dialog_open: !prevState.is_dialog_open
-        };
-      });
-    } else {
-      this.setState((prevState) => {
-        return { is_not_paid: !prevState.is_not_paid };
-      });
-    }
+  setProjectData = (
+    projectType,
+    projectSpecs,
+    specsLink,
+    projectName,
+    projectDescription
+  ) => {
+    this.setState({
+      projectType,
+      projectSpecs,
+      specsLink,
+      projectName,
+      projectDescription
+    });
+  };
+
+  setRequiredServicesData = (servicesRequired, selectedDay, budgetRange) => {
+    this.setState({
+      servicesRequired,
+      selectedDay,
+      budgetRange
+    });
   };
 
   render() {
@@ -77,8 +88,9 @@ class AppContextProvider extends Component {
         value={{
           ...this.state,
           updateStage: this.updateStage,
-          updatePaymentChoice: this.updatePaymentChoice,
-          updateDialogState: this.updateDialogState
+          setPersonalData: this.setPersonalData,
+          setProjectData: this.setProjectData,
+          setRequiredServicesData: this.setRequiredServicesData
         }}
       >
         {this.props.children}
