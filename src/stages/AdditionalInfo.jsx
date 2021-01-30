@@ -25,18 +25,20 @@ const AdditionalInfo = () => {
   const context = useContext(AppContext);
   const [specificInfo, setSpecificInfo] = useState('');
   const [priority, setPriority] = useState('Fast & Polished');
-  const [checkBoxStatus, setCheckBoxStatus] = useState(false);
 
   const [buttonClick, setButtonClickStatus] = useState(false);
 
+  const [checkBoxStatus, setCheckBoxStatus] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(true);
   const [dialogStatus, setDialogStatus] = useState(false);
-  const onClose = () => context.updateDialogState();
+
+  const onClose = () => setDialogStatus(false);
   const cancelRef = React.useRef();
 
   const modalConfirmHandler = () => {
     setPaymentStatus(false);
     setCheckBoxStatus(true);
+    onClose();
   };
 
   const checkBoxChangeHandler = () => {
@@ -117,7 +119,11 @@ const AdditionalInfo = () => {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <button className='dialog-button-cancel' ref={cancelRef}>
+              <button
+                className='dialog-button-cancel'
+                ref={cancelRef}
+                onClick={onClose}
+              >
                 Cancel
               </button>
               <button
@@ -133,32 +139,31 @@ const AdditionalInfo = () => {
         </AlertDialogOverlay>
       </AlertDialog>
 
-      {!context.is_not_paid && (
+      {paymentStatus && (
         <Link to='/faq' target='_blank' rel='noopener noreferrer'>
           <p id='payment-info-link'>What am I paying for?</p>
         </Link>
       )}
 
-      {context.is_not_paid && (
+      {context.chainID === '' ||
+      context.chainID === 42 ||
+      context.chainID === '0x2a' ? (
         <button
           id='next-stage-button'
           onClick={() => {
-            context.updateStage('next');
+            if (specificInfo !== '') {
+              setButtonClickStatus(false);
+              context.submitAll(specificInfo, priority, paymentStatus);
+            } else {
+              setButtonClickStatus(true);
+              alert('Please fill in all the required fields!');
+            }
           }}
         >
-          Submit
+          {paymentStatus ? 'Pay 300 DAI & Submit' : 'Submit'}
         </button>
-      )}
-
-      {!context.is_not_paid && (
-        <button
-          id='next-stage-button'
-          onClick={() => {
-            context.updateStage('next');
-          }}
-        >
-          Pay 300 DAI & Submit
-        </button>
+      ) : (
+        <p id='next-stage-button'>Switch to Kovan</p>
       )}
     </div>
   );
