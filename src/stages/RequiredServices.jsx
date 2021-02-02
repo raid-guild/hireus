@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -13,34 +13,47 @@ import { InfoIcon } from '@chakra-ui/icons';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 
+import { AppContext } from '../context/AppContext';
+
 import RadioBox from '../components/RadioBox';
 
 const checkbox_options = [
   'DAO (Design, Development)',
   'Development (Frontend, Backend)',
-  'NFTs (contracts, art, tokenomics)',
-  'Marketing (copy writing, strategy)',
+  'NFTs (Contracts, Art, Tokenomics)',
+  'Marketing (Copy writing, Strategy)',
   'Smart Contracts (Solidity, Audits)',
-  'Strategy (product management, launch planning, agile/SCRUM)',
-  'Tokenomics (incentives, distribution, rewards)',
+  'Strategy (Product management, Launch planning, Agile/SCRUM)',
+  'Tokenomics (Incentives, Distribution, Rewards)',
   'UX (Research, Testing, User Stories)',
   'Visual Design (Branding, Illustration, etc)',
   'Help me figure out what I need'
 ];
 
 const RequiredServices = () => {
+  const context = useContext(AppContext);
+  const [servicesRequired, setServicesRequired] = useState([]);
   const [selectedDay, setSelectedDay] = useState('');
-  const [budgetRange, setBudgetRange] = useState('$5000 - $20000');
+  const [budgetRange, setBudgetRange] = useState('$5k - $20k');
 
-  console.log(selectedDay, budgetRange);
+  const [buttonClick, setButtonClickStatus] = useState(false);
 
   return (
     <div className='required-services-container'>
       <h2 className='step-title'>Step 3 of 4: Required Services</h2>
       <Stack direction='row'>
-        <FormControl mb={10} isRequired>
+        <FormControl
+          mb={10}
+          isRequired
+          isInvalid={
+            servicesRequired.length === 0 && buttonClick ? true : false
+          }
+        >
           <FormLabel mb={5}>What services are needed?</FormLabel>
-          <CheckboxGroup colorScheme='green' onChange={(e) => console.log(e)}>
+          <CheckboxGroup
+            colorScheme='green'
+            onChange={(e) => setServicesRequired(e)}
+          >
             <Stack direction='column'>
               {checkbox_options.map((value, index) => {
                 return (
@@ -81,6 +94,26 @@ const RequiredServices = () => {
           </FormControl>
         </Stack>
       </Stack>
+
+      <button
+        id='next-stage-button'
+        onClick={() => {
+          if (servicesRequired.length !== 0) {
+            setButtonClickStatus(false);
+            context.setRequiredServicesData(
+              servicesRequired,
+              selectedDay,
+              budgetRange
+            );
+            context.updateStage('next');
+          } else {
+            setButtonClickStatus(true);
+            alert('Please fill in all the required fields!');
+          }
+        }}
+      >
+        Next
+      </button>
     </div>
   );
 };

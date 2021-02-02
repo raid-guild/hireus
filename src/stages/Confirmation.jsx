@@ -14,7 +14,7 @@ const Confirmation = () => {
         <h2 className='step-title'>The Fires Have Been Lit!</h2>
         <p>
           Your request is on its way. Expect a response from the Guild within 48
-          hours. While you wait, your feedback can help us level up.
+          hours. While we work, your feedback can help us level up.
         </p>
         <div className='button-container'>
           <button

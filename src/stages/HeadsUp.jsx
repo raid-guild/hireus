@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+
+import { AppContext } from '../context/AppContext';
 
 import rg__crest from '../assets/rg__crest.png';
 
 const HeadsUp = () => {
+  const context = useContext(AppContext);
   return (
     <div className='grid-container'>
       <div></div>
@@ -62,6 +65,17 @@ const HeadsUp = () => {
         </motion.p>
       </div>
       <div></div>
+      <motion.button
+        id='next-stage-button'
+        initial={{ x: '100vw' }}
+        animate={{ x: 0 }}
+        transition={{ delay: 1.3 }}
+        onClick={() => {
+          context.updateStage('next');
+        }}
+      >
+        Start
+      </motion.button>
     </div>
   );
 };

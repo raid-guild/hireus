@@ -69,6 +69,10 @@
   padding: 0.7rem;
 }
 
+#next-stage-button:disabled {
+  cursor: not-allowed;
+}
+
 .chakra-modal__content {
   font-family: $primary-font;
   .chakra-modal__header {
@@ -186,7 +190,8 @@
 .personal-info-container,
 .project-info-container,
 .required-services-container,
-.additional-info-container {
+.additional-info-container,
+.feedback-container {
   width: 75%;
   margin: auto;
   font-family: $primary-font;
