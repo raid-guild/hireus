@@ -7,19 +7,25 @@ import RadioBox from '../components/RadioBox';
 
 const Feedback = () => {
   const context = useContext(AppContext);
+  const [feedbackOne, setFeedbackOne] = useState('');
+  const [feedbackTwo, setFeedbackTwo] = useState('');
   const [rating, setRating] = useState('4');
 
-  console.log(rating);
-
   return (
-    <div className='personal-info-container'>
+    <div className='feedback-container'>
       <FormControl mb={10}>
         <FormLabel>How did you hear about us?</FormLabel>
-        <Textarea placeholder='Let us know how you came to know us' />
+        <Textarea
+          placeholder='Let us know how you came to know us'
+          onChange={(e) => setFeedbackOne(e.target.value)}
+        />
       </FormControl>
       <FormControl mb={10}>
         <FormLabel>What could be better?</FormLabel>
-        <Textarea placeholder='Based on your experience, what do you think' />
+        <Textarea
+          placeholder='Based on your experience, what do you think'
+          onChange={(e) => setFeedbackTwo(e.target.value)}
+        />
       </FormControl>
       <FormControl>
         <FormLabel as='legend'>Rate your experience so far</FormLabel>
@@ -31,7 +37,14 @@ const Feedback = () => {
         />
       </FormControl>
 
-      <button id='next-stage-button'>Submit</button>
+      <button
+        id='next-stage-button'
+        onClick={() => {
+          context.submitFeedback(feedbackOne, feedbackTwo, rating);
+        }}
+      >
+        Submit
+      </button>
     </div>
   );
 };

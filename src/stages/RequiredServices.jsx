@@ -34,7 +34,7 @@ const RequiredServices = () => {
   const context = useContext(AppContext);
   const [servicesRequired, setServicesRequired] = useState([]);
   const [selectedDay, setSelectedDay] = useState('');
-  const [budgetRange, setBudgetRange] = useState('$5000 - $20000');
+  const [budgetRange, setBudgetRange] = useState('$5k - $20k');
 
   const [buttonClick, setButtonClickStatus] = useState(false);
 

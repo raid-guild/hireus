@@ -6,6 +6,8 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 
 export const AppContext = createContext();
 
+const axios = require('axios');
+
 const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider,
@@ -26,8 +28,10 @@ const web3Modal = new Web3Modal({
 // const DAI_ABI = require('../abi/DAI_ABI.json');
 
 // KOVAN TESTNET
-const DAI_CONTRACT_ADDRESS = '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa';
+const DAI_CONTRACT_ADDRESS = '0xff795577d9ac8bd7d90ee22b6c1703490b6512fd';
 const DAI_ABI = require('../abi/DAI_ABI.json');
+
+let raidID = '';
 
 class AppContextProvider extends Component {
   state = {
@@ -56,7 +60,11 @@ class AppContextProvider extends Component {
     budgetRange: '',
     //Additional Info state
     specificInfo: '',
-    priority: ''
+    priority: '',
+    //Feedback Info state
+    feedbackOne: '',
+    feedbackTwo: '',
+    rating: ''
   };
 
   updateStage = (type) => {
@@ -131,14 +139,9 @@ class AppContextProvider extends Component {
   };
 
   sendData = async (hash = 'not paid') => {
-    await fetch('https://guild-keeper.herokuapp.com/hireusv2/airtable', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: process.env.ACCESS_KEY,
+    await axios
+      .post('https://guild-keeper.herokuapp.com/consultation', {
+        key: process.env.REACT_APP_ACCESS_KEY,
         name: this.state.name,
         email: this.state.email,
         bio: this.state.bio,
@@ -158,7 +161,12 @@ class AppContextProvider extends Component {
         priority: this.state.priority,
         transaction_hash: hash
       })
-    });
+      .then(function (response) {
+        if (response.data !== 'ERROR') raidID = response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
     this.updateStage('next');
   };
@@ -167,7 +175,7 @@ class AppContextProvider extends Component {
     const DAI = new this.state.web3.eth.Contract(DAI_ABI, DAI_CONTRACT_ADDRESS);
     const balance = await DAI.methods.balanceOf(this.state.account).call();
 
-    if (this.state.web3.utils.fromWei(balance) < 300) {
+    if (this.state.web3.utils.fromWei(balance) < 1) {
       return alert('Insufficient DAI Balance!');
     }
 
@@ -175,7 +183,7 @@ class AppContextProvider extends Component {
       await DAI.methods
         .transfer(
           '0xbeb3e32355a933501c247e2dbde6e6ca2489bf3d',
-          this.state.web3.utils.toWei('300')
+          this.state.web3.utils.toWei('1')
         )
         .send({
           from: this.state.account
@@ -187,16 +195,35 @@ class AppContextProvider extends Component {
   };
 
   submitAll = async (specificInfo, priority, paymentStatus) => {
-    this.setState({ specificInfo, priority });
-
-    if (paymentStatus) {
-      await this.connectWallet();
-      if (this.state.chainID === 42 || this.state.chainID === '0x2a') {
-        await this.processPayment();
+    this.setState({ specificInfo, priority }, async () => {
+      if (paymentStatus) {
+        await this.connectWallet();
+        if (this.state.chainID === 42 || this.state.chainID === '0x2a') {
+          await this.processPayment();
+        }
+      } else {
+        await this.sendData();
       }
-    } else {
-      await this.sendData();
-    }
+    });
+  };
+
+  submitFeedback = async (feedbackOne, feedbackTwo, rating) => {
+    this.setState({ feedbackOne, feedbackTwo, rating }, async () => {
+      await axios
+        .post('https://guild-keeper.herokuapp.com/feedback', {
+          key: process.env.REACT_APP_ACCESS_KEY,
+          raidID: raidID,
+          feedbackOne: this.state.feedbackOne,
+          feedbackTwo: this.state.feedbackTwo,
+          rating: this.state.rating
+        })
+        .then(function (response) {
+          if (response.data !== 'ERROR') window.location.reload();
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    });
   };
 
   render() {
@@ -208,7 +235,8 @@ class AppContextProvider extends Component {
           setPersonalData: this.setPersonalData,
           setProjectData: this.setProjectData,
           setRequiredServicesData: this.setRequiredServicesData,
-          submitAll: this.submitAll
+          submitAll: this.submitAll,
+          submitFeedback: this.submitFeedback
         }}
       >
         {this.props.children}
