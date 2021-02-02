@@ -40,6 +40,7 @@ class AppContextProvider extends Component {
     account: '',
     chainID: '',
     web3: '',
+    submitting: false,
     // Personal Info state
     name: '',
     email: '',
@@ -168,7 +169,7 @@ class AppContextProvider extends Component {
         console.log(error);
       });
 
-    this.updateStage('next');
+    this.setState({ submitting: false }, () => this.updateStage('next'));
   };
 
   processPayment = async () => {
@@ -198,10 +199,13 @@ class AppContextProvider extends Component {
     this.setState({ specificInfo, priority }, async () => {
       if (paymentStatus) {
         await this.connectWallet();
+
+        this.setState({ submitting: true });
         if (this.state.chainID === 42 || this.state.chainID === '0x2a') {
           await this.processPayment();
         }
       } else {
+        this.setState({ submitting: true });
         await this.sendData();
       }
     });
@@ -209,6 +213,8 @@ class AppContextProvider extends Component {
 
   submitFeedback = async (feedbackOne, feedbackTwo, rating) => {
     this.setState({ feedbackOne, feedbackTwo, rating }, async () => {
+      this.setState({ submitting: true });
+
       await axios
         .post('https://guild-keeper.herokuapp.com/hireus-v2/feedback', {
           key: process.env.REACT_APP_ACCESS_KEY,
@@ -223,6 +229,8 @@ class AppContextProvider extends Component {
         .catch(function (error) {
           console.log(error);
         });
+
+      this.setState({ submitting: false });
     });
   };
 

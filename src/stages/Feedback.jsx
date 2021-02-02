@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { FormControl, FormLabel, Textarea } from '@chakra-ui/react';
+import { FormControl, FormLabel, Textarea, Button } from '@chakra-ui/react';
 
 import { AppContext } from '../context/AppContext';
 
@@ -37,14 +37,16 @@ const Feedback = () => {
         />
       </FormControl>
 
-      <button
-        id='next-stage-button'
+      <Button
+        isLoading={context.submitting}
+        loadingText='Submitting'
+        id='chakra-button'
         onClick={() => {
           context.submitFeedback(feedbackOne, feedbackTwo, rating);
         }}
       >
         Submit
-      </button>
+      </Button>
     </div>
   );
 };
