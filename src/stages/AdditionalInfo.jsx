@@ -11,7 +11,8 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
-  Tooltip
+  Tooltip,
+  Button
 } from '@chakra-ui/react';
 
 import { InfoIcon } from '@chakra-ui/icons';
@@ -148,8 +149,10 @@ const AdditionalInfo = () => {
       {context.chainID === '' ||
       context.chainID === 42 ||
       context.chainID === '0x2a' ? (
-        <button
-          id='next-stage-button'
+        <Button
+          isLoading={context.submitting}
+          loadingText='Submitting'
+          id='chakra-button'
           onClick={() => {
             if (specificInfo !== '') {
               setButtonClickStatus(false);
@@ -161,7 +164,7 @@ const AdditionalInfo = () => {
           }}
         >
           {paymentStatus ? 'Pay 300 DAI & Submit' : 'Submit'}
-        </button>
+        </Button>
       ) : (
         <p id='next-stage-button'>Switch to Kovan</p>
       )}
