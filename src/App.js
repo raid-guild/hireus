@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import { AppContext } from './context/AppContext';
@@ -12,7 +12,7 @@ import AdditionalInfo from './stages/AdditionalInfo';
 import Confirmation from './stages/Confirmation';
 import Feedback from './stages/Feedback';
 
-import FAQ from './pages/Faq';
+import FAQ from './components/Faq';
 
 import './App.scss';
 
@@ -81,17 +81,18 @@ const App = () => {
                   )}
 
                   {context.stage !== 1 && (
-                    <Link to='/faq' target='_blank' rel='noopener noreferrer'>
-                      <p id='faq-stage-link'>Read FAQ</p>
-                    </Link>
+                    <button
+                      onClick={() => context.updateFaqModalStatus(true)}
+                      id='faq-button'
+                    >
+                      Read FAQ
+                    </button>
                   )}
                 </>
               </Route>
-              <Route path='/faq' exact>
-                <FAQ />
-              </Route>
             </Switch>
           </Router>
+          <FAQ />
         </>
       )}
     </div>

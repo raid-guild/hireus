@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import { AppContext } from '../context/AppContext';
@@ -59,9 +58,9 @@ const HeadsUp = () => {
         >
           The consultation costs 300 DAI and requires a web3 enabled browser.
           For more info about the consultation, value and process, check our{' '}
-          <Link id='faq' target='_blank' rel='noopener noreferrer' to='/faq'>
+          <button id='faq' onClick={() => context.updateFaqModalStatus(true)}>
             FAQ
-          </Link>
+          </button>
         </motion.p>
       </div>
       <div></div>

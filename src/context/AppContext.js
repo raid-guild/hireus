@@ -43,6 +43,7 @@ class AppContextProvider extends Component {
     submitting: false,
     hash: '',
     notEnoughBalance: false,
+    faqModalStatus: false,
     // Personal Info state
     name: '',
     email: '',
@@ -72,6 +73,10 @@ class AppContextProvider extends Component {
 
   inputChangeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
+  };
+
+  updateFaqModalStatus = (status) => {
+    this.setState({ faqModalStatus: status });
   };
 
   updateStage = (type) => {
@@ -231,7 +236,8 @@ class AppContextProvider extends Component {
           setRequiredServicesData: this.setRequiredServicesData,
           submitAll: this.submitAll,
           submitFeedback: this.submitFeedback,
-          inputChangeHandler: this.inputChangeHandler
+          inputChangeHandler: this.inputChangeHandler,
+          updateFaqModalStatus: this.updateFaqModalStatus
         }}
       >
         {this.props.children}
