@@ -41,6 +41,8 @@ class AppContextProvider extends Component {
     chainID: '',
     web3: '',
     submitting: false,
+    hash: '',
+    notEnoughBalance: false,
     // Personal Info state
     name: '',
     email: '',
@@ -177,7 +179,8 @@ class AppContextProvider extends Component {
     const balance = await DAI.methods.balanceOf(this.state.account).call();
 
     if (this.state.web3.utils.fromWei(balance) < 1) {
-      return alert('Insufficient DAI Balance!');
+      this.setState({ notEnoughBalance: true, submitting: false });
+      return;
     }
 
     try {
@@ -190,18 +193,20 @@ class AppContextProvider extends Component {
           from: this.state.account
         })
         .once('transactionHash', async (hash) => {
+          this.setState({ hash: hash });
           await this.sendData(hash);
         });
-    } catch (err) {}
+    } catch (err) {
+      this.setState({ submitting: false });
+    }
   };
 
   submitAll = async (specificInfo, priority, paymentStatus) => {
     this.setState({ specificInfo, priority }, async () => {
       if (paymentStatus) {
         await this.connectWallet();
-
-        this.setState({ submitting: true });
         if (this.state.chainID === 42 || this.state.chainID === '0x2a') {
+          this.setState({ submitting: true });
           await this.processPayment();
         }
       } else {

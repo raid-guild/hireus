@@ -12,6 +12,7 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   Tooltip,
+  useToast,
   Button
 } from '@chakra-ui/react';
 
@@ -24,6 +25,8 @@ import { Link } from 'react-router-dom';
 
 const AdditionalInfo = () => {
   const context = useContext(AppContext);
+  const toast = useToast();
+
   const [specificInfo, setSpecificInfo] = useState('');
   const [priority, setPriority] = useState('Fast & Polished');
 
@@ -116,7 +119,8 @@ const AdditionalInfo = () => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              You may submit this form without paying, but we can’t guarantee that you will receive a response.
+              You may submit this form without paying, but we can’t guarantee
+              that you will receive a response.
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -146,6 +150,14 @@ const AdditionalInfo = () => {
         </Link>
       )}
 
+      {context.notEnoughBalance &&
+        toast({
+          title: 'Your wallet has insufficient DAI balance.',
+          status: 'warning',
+          duration: 3000,
+          position: 'top'
+        })}
+
       {context.chainID === '' ||
       context.chainID === 42 ||
       context.chainID === '0x2a' ? (
@@ -159,14 +171,19 @@ const AdditionalInfo = () => {
               context.submitAll(specificInfo, priority, paymentStatus);
             } else {
               setButtonClickStatus(true);
-              alert('Please fill in all the required fields!');
+              toast({
+                title: 'Please fill in all the required fields.',
+                status: 'warning',
+                duration: 3000,
+                position: 'top'
+              });
             }
           }}
         >
           {paymentStatus ? 'Pay 300 DAI & Submit' : 'Submit'}
         </Button>
       ) : (
-        <p id='next-stage-button'>Switch to Kovan</p>
+        <p id='wrong-network-text'>Switch to Kovan</p>
       )}
     </div>
   );

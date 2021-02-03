@@ -5,7 +5,8 @@ import {
   Stack,
   Checkbox,
   CheckboxGroup,
-  Tooltip
+  Tooltip,
+  useToast
 } from '@chakra-ui/react';
 
 import { InfoIcon } from '@chakra-ui/icons';
@@ -34,6 +35,8 @@ const checkbox_options = [
 
 const RequiredServices = () => {
   const context = useContext(AppContext);
+  const toast = useToast();
+
   const [servicesRequired, setServicesRequired] = useState([]);
   const [selectedDay, setSelectedDay] = useState('');
   const [budgetRange, setBudgetRange] = useState('$5k - $20k');
@@ -116,7 +119,12 @@ const RequiredServices = () => {
             context.updateStage('next');
           } else {
             setButtonClickStatus(true);
-            alert('Please fill in all the required fields!');
+            toast({
+              title: 'Please fill in all the required fields.',
+              status: 'warning',
+              duration: 3000,
+              position: 'top'
+            });
           }
         }}
       >

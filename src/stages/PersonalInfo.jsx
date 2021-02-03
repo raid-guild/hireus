@@ -5,7 +5,8 @@ import {
   Input,
   Textarea,
   Stack,
-  Tooltip
+  Tooltip,
+  useToast
 } from '@chakra-ui/react';
 
 import { InfoIcon } from '@chakra-ui/icons';
@@ -16,6 +17,7 @@ import { AppContext } from '../context/AppContext';
 
 const PersonalInfo = () => {
   const context = useContext(AppContext);
+  const toast = useToast();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -135,7 +137,12 @@ const PersonalInfo = () => {
             context.updateStage('next');
           } else {
             setButtonClickStatus(true);
-            alert('Please fill in all the required fields!');
+            toast({
+              title: 'Please fill in all the required fields.',
+              status: 'warning',
+              duration: 3000,
+              position: 'top'
+            });
           }
         }}
       >
