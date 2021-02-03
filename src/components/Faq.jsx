@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Accordion,
   AccordionItem,
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Box
+  Box,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button
 } from '@chakra-ui/react';
+
+import { AppContext } from '../context/AppContext';
 
 const faq_items = [
   {
@@ -46,43 +55,60 @@ const faq_items = [
 ];
 
 const FAQ = () => {
+  const context = useContext(AppContext);
   return (
-    <div className='grid-container'>
-      <div></div>
-      <div className='faq-container'>
-        <Accordion defaultIndex={[0]}>
-          {faq_items.map((item, index) => {
-            return (
-              <AccordionItem key={index}>
-                <AccordionButton>
-                  <Box flex='1' textAlign='left'>
-                    {item.q}
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-                <AccordionPanel pb={4}>{item.a}</AccordionPanel>
-              </AccordionItem>
-            );
-          })}
-          <AccordionItem>
-            <AccordionButton>
-              <Box flex='1' textAlign='left'>
-                How do I get DAI?
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-            <AccordionPanel pb={4}>
-              <p>
-                First, you need <a href='https://metamask.io/'>Metamask</a>.
-              </p>
-              <p>Second, you need ETH. Here are a few good onramps.</p>
-              <p>Third, you need to swap that ETH for DAI.</p>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
-      </div>
-      <div></div>
-    </div>
+    <Modal
+      onClose={() => context.updateFaqModalStatus(false)}
+      isOpen={context.faqModalStatus}
+      isCentered
+      scrollBehavior='inside'
+    >
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>FAQs</ModalHeader>
+        <ModalBody>
+          <Accordion defaultIndex={[0]}>
+            {faq_items.map((item, index) => {
+              return (
+                <AccordionItem key={index}>
+                  <AccordionButton>
+                    <Box flex='1' textAlign='left'>
+                      {item.q}
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                  <AccordionPanel pb={4}>{item.a}</AccordionPanel>
+                </AccordionItem>
+              );
+            })}
+            <AccordionItem>
+              <AccordionButton>
+                <Box flex='1' textAlign='left'>
+                  How do I get DAI?
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel pb={4}>
+                <p>
+                  First, you need <a href='https://metamask.io/'>Metamask</a>.
+                </p>
+                <p>Second, you need ETH. Here are a few good onramps.</p>
+                <p>Third, you need to swap that ETH for DAI.</p>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            onClick={() => {
+              context.updateFaqModalStatus(false);
+            }}
+          >
+            Close
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
 

@@ -43,6 +43,7 @@ class AppContextProvider extends Component {
     submitting: false,
     hash: '',
     notEnoughBalance: false,
+    faqModalStatus: false,
     // Personal Info state
     name: '',
     email: '',
@@ -58,7 +59,7 @@ class AppContextProvider extends Component {
     projectName: '',
     projectDescription: '',
     // Services Info state
-    servicesRequired: '',
+    servicesRequired: [],
     selectedDay: '',
     budgetRange: '',
     //Additional Info state
@@ -70,6 +71,14 @@ class AppContextProvider extends Component {
     rating: ''
   };
 
+  inputChangeHandler = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  updateFaqModalStatus = (status) => {
+    this.setState({ faqModalStatus: status });
+  };
+
   updateStage = (type) => {
     this.setState((prevState) => {
       return {
@@ -78,39 +87,16 @@ class AppContextProvider extends Component {
     });
   };
 
-  setPersonalData = (
-    name,
-    email,
-    bio,
-    discordHandle,
-    telegramHandle,
-    twitterHandle,
-    contactType
-  ) => {
+  setPersonalData = (contactType) => {
     this.setState({
-      name,
-      email,
-      bio,
-      discordHandle,
-      telegramHandle,
-      twitterHandle,
       contactType
     });
   };
 
-  setProjectData = (
-    projectType,
-    projectSpecs,
-    specsLink,
-    projectName,
-    projectDescription
-  ) => {
+  setProjectData = (projectType, projectSpecs) => {
     this.setState({
       projectType,
-      projectSpecs,
-      specsLink,
-      projectName,
-      projectDescription
+      projectSpecs
     });
   };
 
@@ -249,7 +235,9 @@ class AppContextProvider extends Component {
           setProjectData: this.setProjectData,
           setRequiredServicesData: this.setRequiredServicesData,
           submitAll: this.submitAll,
-          submitFeedback: this.submitFeedback
+          submitFeedback: this.submitFeedback,
+          inputChangeHandler: this.inputChangeHandler,
+          updateFaqModalStatus: this.updateFaqModalStatus
         }}
       >
         {this.props.children}

@@ -19,13 +19,9 @@ const PersonalInfo = () => {
   const context = useContext(AppContext);
   const toast = useToast();
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [bio, setBio] = useState('');
-  const [discordHandle, setDiscordHandle] = useState('');
-  const [telegramHandle, setTelegramHandle] = useState('');
-  const [twitterHandle, setTwitterHandle] = useState('');
-  const [contactType, setContactType] = useState('Email');
+  const [contactType, setContactType] = useState(
+    context.contactType || 'Discord'
+  );
 
   const [buttonClick, setButtonClickStatus] = useState(false);
 
@@ -35,18 +31,20 @@ const PersonalInfo = () => {
       <Stack mb={10} direction='row'>
         <FormControl
           isRequired
-          isInvalid={name === '' && buttonClick ? true : false}
+          isInvalid={context.name === '' && buttonClick ? true : false}
         >
           <FormLabel>Name</FormLabel>
           <Input
             placeholder='Your Name'
-            onChange={(e) => setName(e.target.value)}
+            onChange={context.inputChangeHandler}
+            name='name'
+            value={context.name}
           />
         </FormControl>
 
         <FormControl
           isRequired
-          isInvalid={email === '' && buttonClick ? true : false}
+          isInvalid={context.email === '' && buttonClick ? true : false}
         >
           <FormLabel>
             Email address{' '}
@@ -62,19 +60,23 @@ const PersonalInfo = () => {
           <Input
             type='email'
             placeholder='Your email address'
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={context.inputChangeHandler}
+            name='email'
+            value={context.email}
           />
         </FormControl>
       </Stack>
       <FormControl
         mb={10}
         isRequired
-        isInvalid={bio === '' && buttonClick ? true : false}
+        isInvalid={context.bio === '' && buttonClick ? true : false}
       >
         <FormLabel>Your Bio</FormLabel>
         <Textarea
           placeholder='It’s very helpful to know your background, how familiar you are with web3, and crypto in general.'
-          onChange={(e) => setBio(e.target.value)}
+          onChange={context.inputChangeHandler}
+          name='bio'
+          value={context.bio}
         />
       </FormControl>
       <Stack mb={10} direction='row'>
@@ -92,21 +94,27 @@ const PersonalInfo = () => {
           </FormLabel>
           <Input
             placeholder='@handlename'
-            onChange={(e) => setDiscordHandle(e.target.value)}
+            onChange={context.inputChangeHandler}
+            name='discordHandle'
+            value={context.discordHandle}
           />
         </FormControl>
         <FormControl>
           <FormLabel>Your Telegram Handle</FormLabel>
           <Input
             placeholder='@handlename'
-            onChange={(e) => setTelegramHandle(e.target.value)}
+            name='telegramHandle'
+            onChange={context.inputChangeHandler}
+            value={context.telegramHandle}
           />
         </FormControl>
         <FormControl>
           <FormLabel>Your Twitter Handle</FormLabel>
           <Input
             placeholder='@handlename'
-            onChange={(e) => setTwitterHandle(e.target.value)}
+            name='twitterHandle'
+            onChange={context.inputChangeHandler}
+            value={context.twitterHandle}
           />
         </FormControl>
       </Stack>
@@ -115,24 +123,17 @@ const PersonalInfo = () => {
         <RadioBox
           options={['Email', 'Discord', 'Telegram']}
           updateRadio={setContactType}
-          name='contact-type'
-          defaultValue='Discord'
+          name='contactType'
+          defaultValue={context.contactType || contactType}
+          value={context.contactType || contactType}
         />
       </FormControl>
 
       <button
         id='next-stage-button'
         onClick={() => {
-          if (name && email && bio) {
-            context.setPersonalData(
-              name,
-              email,
-              bio,
-              discordHandle,
-              telegramHandle,
-              twitterHandle,
-              contactType
-            );
+          if (context.name && context.email && context.bio) {
+            context.setPersonalData(contactType);
             setButtonClickStatus(false);
             context.updateStage('next');
           } else {
