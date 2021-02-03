@@ -116,7 +116,7 @@ const AdditionalInfo = () => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              If you choose not to pay, we can’t guarantee a quick reply.
+              You may submit this form without paying, but we can’t guarantee that you will receive a response.
             </AlertDialogBody>
 
             <AlertDialogFooter>
