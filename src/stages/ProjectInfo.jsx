@@ -5,7 +5,8 @@ import {
   Input,
   Textarea,
   Stack,
-  Tooltip
+  Tooltip,
+  useToast
 } from '@chakra-ui/react';
 
 import { InfoIcon } from '@chakra-ui/icons';
@@ -16,6 +17,8 @@ import RadioBox from '../components/RadioBox';
 
 const ProjectInfo = () => {
   const context = useContext(AppContext);
+  const toast = useToast();
+
   const [projectType, setProjectType] = useState('New');
   const [projectSpecs, setProjectSpecs] = useState('Yes');
   const [specsLink, setSpecsLink] = useState('');
@@ -128,7 +131,12 @@ const ProjectInfo = () => {
             context.updateStage('next');
           } else {
             setButtonClickStatus(true);
-            alert('Please fill in all the required fields!');
+            toast({
+              title: 'Please fill in all the required fields.',
+              status: 'warning',
+              duration: 3000,
+              position: 'top'
+            });
           }
         }}
       >

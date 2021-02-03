@@ -56,7 +56,8 @@
 
 #next-stage-button,
 #prev-stage-button,
-#chakra-button {
+#chakra-button,
+#wrong-network-text {
   position: fixed;
   bottom: 0;
   width: auto;
@@ -67,7 +68,14 @@
   font-size: 1.2rem;
   font-family: $secondary-font;
   margin-bottom: 3rem;
-  padding: 0.7rem;
+  padding: 10px 30px;
+}
+
+#wrong-network-text {
+  right: 0;
+  margin-left: auto;
+  margin-right: 3rem;
+  background-color: $background-color-secondary;
 }
 
 #chakra-button {
@@ -77,6 +85,17 @@
   right: 0;
   margin-left: auto;
   margin-right: 3rem;
+}
+
+.chakra-toast {
+  font-family: $secondary-font;
+
+  .chakra-alert {
+    background-color: $input-background-color;
+    color: $theme-color-primary;
+    border-radius: 0;
+    padding: 15px;
+  }
 }
 
 .chakra-modal__content {
@@ -131,22 +150,6 @@
 #next-stage-button:focus {
   outline: none;
 }
-
-// .donutSpinner {
-//   display: inline-block;
-//   border: 4px solid hsl(222 100% 95%);
-//   border-left-color: hsl(243 80% 62%);
-//   border-radius: 50%;
-//   width: 30px;
-//   height: 30px;
-//   animation: donut-spin 1.2s linear infinite;
-// }
-
-// @keyframes donut-spin {
-//   to {
-//     transform: rotate(1turn);
-//   }
-// }
 
 #faq {
   color: $theme-color-secondary;
@@ -259,9 +262,6 @@
     background-color: $theme-color-secondary;
     border-radius: 0;
   }
-  //   .DayPickerInput-Overlay {
-  //     bottom: 50px;
-  //   }
 }
 
 .required-services-container {
@@ -306,12 +306,21 @@
   h2 {
     margin-top: 1rem;
   }
+  #hash-text {
+    font-family: $secondary-font;
+    color: $theme-color-secondary;
+    background-color: $background-color-secondary;
+    padding: 5px 10px;
+  }
   p {
     color: $subtitle-color;
     margin-bottom: 1rem;
     font-family: $primary-font;
     font-size: 1rem;
     letter-spacing: 1.2px;
+    a {
+      margin-right: 5px;
+    }
   }
   .button-container {
     display: flex;
