@@ -88,7 +88,13 @@ const RequiredServices = () => {
             </FormLabel>
             <RadioBox
               stack='vertical'
-              options={['< $5k', '$5k - $20k', '$20k-$50k', '$50k+', 'Not Sure']}
+              options={[
+                '< $5k',
+                '$5k - $20k',
+                '$20k - $50k',
+                '$50k +',
+                'Not Sure'
+              ]}
               updateRadio={setBudgetRange}
               name='budget'
               defaultValue='$5k - $20k'
