@@ -18,15 +18,17 @@ import { AppContext } from '../context/AppContext';
 import RadioBox from '../components/RadioBox';
 
 const checkbox_options = [
-  'DAO (Design, Development)',
+  'DAO (Design, Deployment)',
   'Development (Frontend, Backend)',
+  'Marketing (Social Media, Copywriting, Memes/GIFs)',
+  'Motion Design (Video, Explainers, Sticker Packs)',
   'NFTs (Contracts, Art, Tokenomics)',
-  'Marketing (Copy writing, Strategy)',
   'Smart Contracts (Solidity, Audits)',
-  'Strategy (Product management, Launch planning, Agile/SCRUM)',
+  'Strategy (Product, Launch Planning, Agile)',
   'Tokenomics (Incentives, Distribution, Rewards)',
   'UX (Research, Testing, User Stories)',
-  'Visual Design (Branding, Illustration, etc)',
+  'UI (Interface Design, Interaction Design)',
+  'Visual Design (Branding, Illustration, Graphics)',
   'Help me figure out what I need'
 ];
 
@@ -78,7 +80,7 @@ const RequiredServices = () => {
               <Tooltip
                 hasArrow
                 placement='top'
-                label='We know it’s hard to estimate budget in some cases. This is just so we get an idea of the amount of raiders we’ll be able to involve in the raid.'
+                label='We know it’s hard to estimate in many cases. This is just so we get an idea of the amount of raiders we’ll be able to involve in the raid.'
                 aria-label='disclaimer tooltip'
               >
                 <InfoIcon />
@@ -86,7 +88,7 @@ const RequiredServices = () => {
             </FormLabel>
             <RadioBox
               stack='vertical'
-              options={['< $5k', '$5k - $20k', '> 20k', 'Not Sure']}
+              options={['< $5k', '$5k - $20k', '$20k-$50k', '$50k+', 'Not Sure']}
               updateRadio={setBudgetRange}
               name='budget'
               defaultValue='$5k - $20k'
