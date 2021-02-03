@@ -37,9 +37,13 @@ const RequiredServices = () => {
   const context = useContext(AppContext);
   const toast = useToast();
 
-  const [servicesRequired, setServicesRequired] = useState([]);
-  const [selectedDay, setSelectedDay] = useState('');
-  const [budgetRange, setBudgetRange] = useState('$5k - $20k');
+  const [servicesRequired, setServicesRequired] = useState(
+    context.servicesRequired || []
+  );
+  const [selectedDay, setSelectedDay] = useState(context.selectedDay || '');
+  const [budgetRange, setBudgetRange] = useState(
+    context.budgetRange || '$5k - $20k'
+  );
 
   const [buttonClick, setButtonClickStatus] = useState(false);
 
@@ -58,6 +62,8 @@ const RequiredServices = () => {
           <CheckboxGroup
             colorScheme='green'
             onChange={(e) => setServicesRequired(e)}
+            name='servicesRequired'
+            value={servicesRequired}
           >
             <Stack direction='column'>
               {checkbox_options.map((value, index) => {
@@ -74,7 +80,7 @@ const RequiredServices = () => {
         <Stack direction='column'>
           <FormControl mb='2rem'>
             <FormLabel>What's the expected deadline?</FormLabel>
-            <DayPickerInput onDayChange={setSelectedDay} />
+            <DayPickerInput onDayChange={setSelectedDay} value={selectedDay} />
           </FormControl>
 
           <FormControl isRequired>
@@ -99,8 +105,9 @@ const RequiredServices = () => {
                 'Not Sure'
               ]}
               updateRadio={setBudgetRange}
-              name='budget'
-              defaultValue='$5k - $20k'
+              name='budgetRange'
+              defaultValue={context.budgetRange || budgetRange}
+              value={context.budgetRange || budgetRange}
             />
           </FormControl>
         </Stack>

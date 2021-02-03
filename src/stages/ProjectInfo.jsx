@@ -19,11 +19,10 @@ const ProjectInfo = () => {
   const context = useContext(AppContext);
   const toast = useToast();
 
-  const [projectType, setProjectType] = useState('New');
-  const [projectSpecs, setProjectSpecs] = useState('Yes');
-  const [specsLink, setSpecsLink] = useState('');
-  const [projectName, setProjectName] = useState('');
-  const [projectDescription, setProjectDescription] = useState('');
+  const [projectType, setProjectType] = useState(context.projectType || 'New');
+  const [projectSpecs, setProjectSpecs] = useState(
+    context.projectSpecs || 'Yes'
+  );
 
   const [buttonClick, setButtonClickStatus] = useState(false);
 
@@ -46,8 +45,9 @@ const ProjectInfo = () => {
           <RadioBox
             options={['New', 'Existing']}
             updateRadio={setProjectType}
-            name='project-type'
-            defaultValue='New'
+            name='projectType'
+            defaultValue={context.projectType || projectType}
+            value={context.projectType || projectType}
           />
         </FormControl>
 
@@ -66,8 +66,9 @@ const ProjectInfo = () => {
           <RadioBox
             options={['Yes', 'Partial', 'None']}
             updateRadio={setProjectSpecs}
-            name='project-specs'
-            defaultValue='Yes'
+            name='projectSpecs'
+            defaultValue={context.projectSpecs || projectSpecs}
+            value={context.projectSpecs || projectSpecs}
           />
         </FormControl>
       </Stack>
@@ -75,12 +76,14 @@ const ProjectInfo = () => {
       <Stack mb={10} direction='row'>
         <FormControl
           isRequired
-          isInvalid={projectName === '' && buttonClick ? true : false}
+          isInvalid={context.projectName === '' && buttonClick ? true : false}
         >
           <FormLabel>Project Name</FormLabel>
           <Input
             placeholder='Project Name'
-            onChange={(e) => setProjectName(e.target.value)}
+            name='projectName'
+            onChange={context.inputChangeHandler}
+            value={context.projectName}
           />
         </FormControl>
 
@@ -99,7 +102,9 @@ const ProjectInfo = () => {
           <Input
             placeholder='Any link related to the project'
             isDisabled={projectSpecs === 'None' ? true : false}
-            onChange={(e) => setSpecsLink(e.target.value)}
+            onChange={context.inputChangeHandler}
+            name='specsLink'
+            value={context.specsLink}
           />
         </FormControl>
       </Stack>
@@ -107,27 +112,25 @@ const ProjectInfo = () => {
       <FormControl
         mb={10}
         isRequired
-        isInvalid={projectDescription === '' && buttonClick ? true : false}
+        isInvalid={
+          context.projectDescription === '' && buttonClick ? true : false
+        }
       >
         <FormLabel>Project Description</FormLabel>
         <Textarea
           placeholder='Describe your project, goals, vision. Feel free to put as many links to resources as you can. (docs, specs, prototypes, etc)'
-          onChange={(e) => setProjectDescription(e.target.value)}
+          onChange={context.inputChangeHandler}
+          name='projectDescription'
+          value={context.projectDescription}
         />
       </FormControl>
 
       <button
         id='next-stage-button'
         onClick={() => {
-          if (projectName && projectDescription) {
+          if (context.projectName && context.projectDescription) {
             setButtonClickStatus(false);
-            context.setProjectData(
-              projectType,
-              projectSpecs,
-              specsLink,
-              projectName,
-              projectDescription
-            );
+            context.setProjectData(projectType, projectSpecs);
             context.updateStage('next');
           } else {
             setButtonClickStatus(true);

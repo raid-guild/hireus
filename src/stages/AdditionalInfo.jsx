@@ -150,14 +150,6 @@ const AdditionalInfo = () => {
         </Link>
       )}
 
-      {context.notEnoughBalance &&
-        toast({
-          title: 'Your wallet has insufficient DAI balance.',
-          status: 'warning',
-          duration: 3000,
-          position: 'top'
-        })}
-
       {context.chainID === '' ||
       context.chainID === 42 ||
       context.chainID === '0x2a' ? (
@@ -169,6 +161,14 @@ const AdditionalInfo = () => {
             if (specificInfo !== '') {
               setButtonClickStatus(false);
               context.submitAll(specificInfo, priority, paymentStatus);
+              if (context.notEnoughBalance) {
+                toast({
+                  title: 'Your wallet has insufficient DAI balance.',
+                  status: 'warning',
+                  duration: 3000,
+                  position: 'top'
+                });
+              }
             } else {
               setButtonClickStatus(true);
               toast({
