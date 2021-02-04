@@ -137,6 +137,29 @@ const FAQ = () => {
                 </p>
               </AccordionPanel>
             </AccordionItem>
+
+            <AccordionItem>
+              <AccordionButton>
+                <Box flex='1' textAlign='left'>
+                  How can I get in touch with RaidGuild?
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel pb={4}>
+                <p>
+                  If you have questions about RaidGuild, the submission form or
+                  our consultation process, hop into our{' '}
+                  <a
+                    href='https://discord.gg/Sv5avwyNPX'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    #client-arena
+                  </a>{' '}
+                  channel in Discord.
+                </p>
+              </AccordionPanel>
+            </AccordionItem>
           </Accordion>
         </ModalBody>
         <ModalFooter>
