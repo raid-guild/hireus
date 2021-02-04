@@ -21,7 +21,6 @@ import { InfoIcon } from '@chakra-ui/icons';
 import { AppContext } from '../context/AppContext';
 
 import RadioBox from '../components/RadioBox';
-import { Link } from 'react-router-dom';
 
 const AdditionalInfo = () => {
   const context = useContext(AppContext);
@@ -145,9 +144,12 @@ const AdditionalInfo = () => {
       </AlertDialog>
 
       {paymentStatus && (
-        <Link to='/faq' target='_blank' rel='noopener noreferrer'>
-          <p id='payment-info-link'>What am I paying for?</p>
-        </Link>
+        <button
+          id='payment-info-link'
+          onClick={() => context.updateFaqModalStatus(true)}
+        >
+          What am I paying for?
+        </button>
       )}
 
       {context.chainID === '' ||
