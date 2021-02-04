@@ -90,10 +90,51 @@ const FAQ = () => {
               </AccordionButton>
               <AccordionPanel pb={4}>
                 <p>
-                  First, you need <a href='https://metamask.io/'>Metamask</a>.
+                  DAI is a stablecoin pegged to the US Dollar. First, you'll
+                  need a wallet like{' '}
+                  <a
+                    href='https://metamask.io/'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    Metamask
+                  </a>{' '}
+                  to manage your funds.
                 </p>
-                <p>Second, you need ETH. Here are a few good onramps.</p>
-                <p>Third, you need to swap that ETH for DAI.</p>
+                <br />
+                <p>
+                  Second, you'll need funds. To go from fiat currencies to the
+                  Ethereum ecosystem you can use a onramp like{' '}
+                  <a
+                    href='https://www.sendwyre.com/'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    Wyre
+                  </a>{' '}
+                  or{' '}
+                  <a
+                    href='https://ramp.network/'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    Ramp
+                  </a>
+                  .
+                </p>
+                <br />
+                <p>
+                  {' '}
+                  Lastly, you can use a decentralized exchange like{' '}
+                  <a
+                    href='https://app.uniswap.org/#/swap'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    Uniswap
+                  </a>{' '}
+                  to swap your ETH for DAI.
+                </p>
               </AccordionPanel>
             </AccordionItem>
           </Accordion>

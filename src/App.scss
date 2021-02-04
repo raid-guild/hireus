@@ -7,15 +7,22 @@
   flex-direction: column;
   justify-content: center;
   background-color: $background-color-primary;
+  padding: 10px;
+}
+
+.main {
+  height: 100%;
   border: 2px solid $theme-color-primary;
+  display: grid;
+  place-items: center;
 }
 
 .step-title {
   color: $theme-color-primary;
   text-transform: uppercase;
   font-family: $secondary-font;
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
+  font-size: 22px;
+  margin-bottom: 1.5rem;
 }
 
 .window {
@@ -40,18 +47,18 @@
 }
 
 #raidguild-logo {
-  width: 200px;
+  width: 180px;
   position: fixed;
   top: 0;
   left: 0;
-  margin: 2rem 0 0 2rem;
+  margin: 2.5rem 0 0 2.5rem;
 }
 
 #rg-crest {
   position: fixed;
   top: 0;
   right: 0;
-  margin: 1rem;
+  margin: 2rem;
 }
 
 #next-stage-button,
@@ -89,6 +96,7 @@
 
 .chakra-toast {
   font-family: $secondary-font;
+  margin-top: 10px;
 
   .chakra-alert {
     background-color: $input-background-color;
@@ -165,8 +173,8 @@
   margin-left: auto;
   margin-right: 3rem;
   width: auto;
-  color: $theme-color-secondary;
-  background-color: $background-color-primary;
+  color: $background-color-primary;
+  background-color: $theme-color-secondary;
   border: 1px solid $theme-color-secondary;
   text-transform: uppercase;
   font-size: 1rem;
@@ -176,18 +184,17 @@
 }
 
 #faq-button:hover {
-  background-color: $theme-color-secondary;
-  color: $background-color-primary;
+  background-color: $background-color-primary;
+  color: $theme-color-secondary;
 }
 
 #payment-info-link {
   position: absolute;
-  bottom: 0;
+  bottom: 100px;
   right: 0;
   color: $theme-color-primary;
   font-family: $secondary-font;
   margin-right: 3rem;
-  margin-bottom: 1rem;
   cursor: pointer;
 }
 
