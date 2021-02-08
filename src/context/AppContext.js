@@ -12,24 +12,24 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider,
     options: {
-      infuraId: process.env.REACT_APP_KOVAN_NODE_ENDPOINT
+      infuraId: process.env.REACT_APP_MAINNET_NODE_ENDPOINT
     }
   }
 };
 
 const web3Modal = new Web3Modal({
-  network: 'kovan',
-  cacheProvider: false,
+  network: 'mainnet',
+  cacheProvider: true,
   providerOptions
 });
 
 //MAINNET
-// const DAI_CONTRACT_ADDRESS = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
-// const DAI_ABI = require('../abi/DAI_ABI.json');
+const DAI_CONTRACT_ADDRESS = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
+const DAI_ABI = require('../abi/DAI_ABI.json');
 
 // KOVAN TESTNET
-const DAI_CONTRACT_ADDRESS = '0xff795577d9ac8bd7d90ee22b6c1703490b6512fd';
-const DAI_ABI = require('../abi/DAI_ABI.json');
+// const DAI_CONTRACT_ADDRESS = '0xff795577d9ac8bd7d90ee22b6c1703490b6512fd';
+// const DAI_ABI = require('../abi/DAI_ABI.json');
 
 let raidID = '';
 
@@ -109,7 +109,7 @@ class AppContextProvider extends Component {
   };
 
   connectWallet = async () => {
-    web3Modal.clearCachedProvider();
+    // web3Modal.clearCachedProvider();
 
     const provider = await web3Modal.connect();
     const web3 = new Web3(provider);
@@ -164,16 +164,20 @@ class AppContextProvider extends Component {
     const DAI = new this.state.web3.eth.Contract(DAI_ABI, DAI_CONTRACT_ADDRESS);
     const balance = await DAI.methods.balanceOf(this.state.account).call();
 
-    if (this.state.web3.utils.fromWei(balance) < 1) {
+    if (this.state.web3.utils.fromWei(balance) < 300) {
       this.setState({ notEnoughBalance: true, submitting: false });
       return;
+    } else {
+      this.setState({ notEnoughBalance: false });
     }
+
+    this.setState({ submitting: true });
 
     try {
       await DAI.methods
         .transfer(
           '0x3C3692681cD1c0F42FA68A2521719Cc24CEc3AF3',
-          this.state.web3.utils.toWei('1')
+          this.state.web3.utils.toWei('300')
         )
         .send({
           from: this.state.account
@@ -191,8 +195,7 @@ class AppContextProvider extends Component {
     this.setState({ specificInfo, priority }, async () => {
       if (paymentStatus) {
         await this.connectWallet();
-        if (this.state.chainID === 42 || this.state.chainID === '0x2a') {
-          this.setState({ submitting: true });
+        if (this.state.chainID === 1 || this.state.chainID === '0x1') {
           await this.processPayment();
         }
       } else {

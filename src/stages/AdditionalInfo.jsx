@@ -153,8 +153,8 @@ const AdditionalInfo = () => {
       )}
 
       {context.chainID === '' ||
-      context.chainID === 42 ||
-      context.chainID === '0x2a' ? (
+      context.chainID === 1 ||
+      context.chainID === '0x1' ? (
         <Button
           isLoading={context.submitting}
           loadingText='Submitting'
@@ -185,7 +185,7 @@ const AdditionalInfo = () => {
           {paymentStatus ? 'Pay 300 DAI & Submit' : 'Submit'}
         </Button>
       ) : (
-        <p id='wrong-network-text'>Switch to Kovan</p>
+        <p id='wrong-network-text'>Switch to Mainnet</p>
       )}
     </div>
   );
