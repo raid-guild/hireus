@@ -33,10 +33,12 @@ const HeadsUp = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.5 }}
         >
-          To hire RaidGuild, the first step is to schedule a paid consultation.
-          After paying, our raiders will study any info, specs, docs, and assets
-          sent through this form and get in touch within 48 hours to schedule
-          the date and time for a call.
+          To hire RaidGuild, the first step is to book a paid consultation. The
+          consultation costs 300 DAI and requires a web3 enabled browser. After
+          receiving your request, our raiders will study any info, specs, docs
+          and assets sent along with your proposal. A Cleric of the Guild will
+          reach out to confirm a time and date for the first call within 48
+          hours.
         </motion.p>
 
         <motion.p
@@ -45,10 +47,11 @@ const HeadsUp = () => {
           transition={{ delay: 0.7, duration: 0.5 }}
         >
           In most cases, we use this time (and some time after) to understand
-          your needs and deliver a work proposal a few days after the consult.
-          In all cases, we strive to understand how is it that RaidGuild — with
-          all the expertise available — can better help you solve problems and
-          push your idea forward.
+          your needs and deliver a comprehensive statement of work, ensuring the
+          key points and timeline are locked in before we begin. In all cases,
+          we strive to deeply understand how RaidGuild — with all the expertise
+          available — can better help you solve problems and bring your visions
+          into reality.
         </motion.p>
 
         <motion.p
@@ -56,11 +59,11 @@ const HeadsUp = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.5 }}
         >
-          The consultation costs 300 DAI and requires a web3 enabled browser.
           For more info about the consultation, value and process, check our{' '}
           <button id='faq' onClick={() => context.updateFaqModalStatus(true)}>
-            FAQ
-          </button>
+            FAQ.
+          </button>{' '}
+          We look forward to raiding with you.
         </motion.p>
       </div>
       <div></div>
