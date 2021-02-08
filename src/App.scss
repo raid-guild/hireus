@@ -1,0 +1,393 @@
+@import './utils/constants.scss';
+
+.app {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: $background-color-primary;
+  padding: 10px;
+}
+
+.main {
+  height: 100%;
+  border: 2px solid $theme-color-primary;
+  display: grid;
+  place-items: center;
+}
+
+.step-title {
+  color: $theme-color-primary;
+  text-transform: uppercase;
+  font-family: $secondary-font;
+  font-size: 22px;
+  margin-bottom: 1.5rem;
+}
+
+.window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: $title-color;
+  font-family: $primary-font;
+  h1 {
+    font-size: 2rem;
+    text-transform: uppercase;
+    color: $theme-color-primary;
+    margin-bottom: 2rem;
+  }
+  p {
+    width: 70%;
+    font-size: 1rem;
+    text-align: center;
+    letter-spacing: 1.3px;
+  }
+}
+
+#raidguild-logo {
+  width: 180px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 2.5rem 0 0 2.5rem;
+}
+
+#rg-crest {
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 2rem;
+}
+
+#next-stage-button,
+#prev-stage-button,
+#chakra-button,
+#wrong-network-text {
+  position: fixed;
+  bottom: 0;
+  width: auto;
+  color: $title-color;
+  background-color: $theme-color-primary;
+  border: none;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  font-family: $secondary-font;
+  margin-bottom: 3rem;
+  padding: 10px 30px;
+}
+
+#wrong-network-text {
+  right: 0;
+  margin-left: auto;
+  margin-right: 3rem;
+  background-color: $background-color-secondary;
+}
+
+#chakra-button {
+  line-height: normal;
+  height: auto;
+  border-radius: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: 3rem;
+}
+
+.chakra-toast {
+  font-family: $secondary-font;
+  margin-top: 10px;
+
+  .chakra-alert {
+    background-color: $input-background-color;
+    color: $theme-color-primary;
+    border-radius: 0;
+    padding: 15px;
+  }
+}
+
+.chakra-modal__content {
+  font-family: $primary-font;
+  .chakra-modal__header {
+    text-transform: uppercase;
+  }
+}
+
+.dialog-button-select {
+  width: auto;
+  color: $title-color;
+  background-color: $theme-color-primary;
+  border: 2px solid $theme-color-primary;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-family: $secondary-font;
+  padding: 0.7rem;
+}
+
+.dialog-button-cancel {
+  width: auto;
+  color: $theme-color-primary;
+  background-color: $title-color;
+  border: 2px solid $theme-color-primary;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-family: $secondary-font;
+  padding: 0.7rem;
+  margin-right: 15px;
+}
+
+#prev-stage-button {
+  left: 0;
+  margin-right: auto;
+  margin-left: 3rem;
+}
+
+#next-stage-button {
+  right: 0;
+  margin-left: auto;
+  margin-right: 3rem;
+}
+
+#next-stage-button:hover,
+#prev-stage-button:hover {
+  background-color: $input-background-color;
+  color: $theme-color-primary;
+}
+
+#prev-stage-button:focus,
+#next-stage-button:focus {
+  outline: none;
+}
+
+#faq {
+  color: $theme-color-secondary;
+  text-transform: uppercase;
+  text-decoration: underline;
+  font-family: $secondary-font;
+}
+
+#faq-button {
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: 3rem;
+  width: auto;
+  color: $background-color-primary;
+  background-color: $theme-color-secondary;
+  border: 1px solid $theme-color-secondary;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-family: $secondary-font;
+  margin-top: 3rem;
+  padding: 5px 20px;
+}
+
+#faq-button:hover {
+  background-color: $background-color-primary;
+  color: $theme-color-secondary;
+}
+
+#payment-info-link {
+  position: absolute;
+  bottom: 100px;
+  right: 0;
+  color: $theme-color-primary;
+  font-family: $secondary-font;
+  margin-right: 3rem;
+  cursor: pointer;
+}
+
+#payment-info-link:hover {
+  text-decoration: underline;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 8fr 1fr;
+}
+
+.headsup-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: $subtitle-color;
+  max-width: 820px;
+  margin: 0 auto;
+
+  h1 {
+    font-family: $primary-font;
+    font-size: 2rem;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: $theme-color-primary;
+  }
+  p {
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    font-family: $primary-font;
+    letter-spacing: 1.3px;
+    line-height: 1.5;
+  }
+}
+
+.personal-info-container,
+.project-info-container,
+.required-services-container,
+.additional-info-container,
+.feedback-container {
+  width: 75%;
+  margin: auto;
+  font-family: $primary-font;
+  .chakra-form__label {
+    color: $title-color;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .chakra-radio__label {
+    color: $theme-color-secondary;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .chakra-checkbox__label {
+    color: $title-color;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  input,
+  textarea {
+    background-color: $input-background-color;
+    border: none;
+    border-radius: 0;
+    color: $title-color;
+  }
+  input:focus,
+  textarea:focus {
+    outline: none;
+    box-shadow: none;
+    border: 1px solid $theme-color-primary;
+  }
+  .DayPickerInput {
+    font-family: $secondary-font;
+    input {
+      padding: 0.6rem;
+    }
+  }
+  .DayPicker-Day {
+    border: 2px solid $theme-color-secondary;
+    color: $theme-color-secondary;
+  }
+  .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    background-color: $theme-color-secondary;
+    border-radius: 0;
+  }
+}
+
+.required-services-container {
+  .chakra-checkbox__label {
+    color: $theme-color-secondary;
+    text-transform: none;
+    letter-spacing: 2px;
+    font-family: $secondary-font;
+    margin-bottom: 4px;
+  }
+}
+
+.chakra-modal__content {
+  background: black;
+
+  .chakra-modal__header {
+    color: $theme-color-secondary;
+    font-size: 1.4rem;
+  }
+  .chakra-accordion__item {
+    border: none;
+    outline: none;
+  }
+  .chakra-accordion__button {
+    color: $theme-color-secondary;
+    font-family: $secondary-font;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+  }
+  .chakra-accordion__panel {
+    color: $input-background-color;
+    font-family: $secondary-font;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+  a {
+    color: $theme-color-primary;
+    text-decoration: underline;
+    font-family: $secondary-font;
+  }
+  .chakra-button {
+    background-color: $theme-color-secondary;
+    color: white;
+    border: 1px solid $theme-color-secondary;
+    border-radius: 0;
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-family: $secondary-font;
+    padding: 5px 20px;
+  }
+  .chakra-button:hover {
+    background-color: white;
+    color: $theme-color-secondary;
+    border: 1px solid $theme-color-secondary;
+  }
+}
+
+.confirmation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  h2 {
+    margin-top: 1rem;
+  }
+  #hash-text {
+    font-family: $secondary-font;
+    color: $theme-color-secondary;
+    background-color: $background-color-secondary;
+    padding: 5px 10px;
+  }
+  p {
+    color: $subtitle-color;
+    margin-bottom: 1rem;
+    font-family: $primary-font;
+    font-size: 1rem;
+    letter-spacing: 1.2px;
+    a {
+      margin-right: 5px;
+    }
+  }
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    button {
+      color: $title-color;
+      background-color: $theme-color-primary;
+      border: 2px solid $theme-color-primary;
+      text-transform: uppercase;
+      font-size: 1rem;
+      font-family: $secondary-font;
+      padding: 0.7rem;
+      margin: 25px;
+    }
+    button:hover {
+      background-color: $input-background-color;
+      color: $theme-color-primary;
+    }
+    a {
+      color: $theme-color-primary;
+      font-size: 1rem;
+      font-family: $secondary-font;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+}
