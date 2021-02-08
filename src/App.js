@@ -18,6 +18,8 @@ import './App.scss';
 
 import raidguild__logo from './assets/raidguild__logo.png';
 
+// uses ga4
+
 const App = () => {
   const context = useContext(AppContext);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
