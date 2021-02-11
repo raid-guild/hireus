@@ -47,7 +47,9 @@
 }
 
 #raidguild-logo {
-  width: 180px;
+  img {
+    width: 180px;
+  }
   position: fixed;
   top: 0;
   left: 0;
