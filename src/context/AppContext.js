@@ -12,7 +12,9 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider,
     options: {
-      infuraId: process.env.REACT_APP_MAINNET_NODE_ENDPOINT
+      rpc: {
+        1: process.env.REACT_APP_MAINNET_NODE_ENDPOINT
+      }
     }
   }
 };
