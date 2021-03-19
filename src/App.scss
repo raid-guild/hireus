@@ -63,6 +63,16 @@
   margin: 2rem;
 }
 
+#alchemy-badge {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  img {
+    max-width: none;
+  }
+}
+
 #next-stage-button,
 #prev-stage-button,
 #chakra-button,
