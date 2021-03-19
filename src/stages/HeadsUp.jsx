@@ -65,6 +65,21 @@ const HeadsUp = () => {
           </button>{' '}
           We look forward to raiding with you.
         </motion.p>
+        <motion.a
+          id='alchemy-badge'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9, duration: 0.5 }}
+          href={`https://alchemyapi.io/?r=${process.env.REACT_APP_ALCHEMY_AMPLIFY_ID}`}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          <img
+            style={{ width: '240px', height: '53px' }}
+            src='https://res.cloudinary.com/saimano/image/upload/v1616169091/RaidGuild/alchemy_badge.png'
+            alt='Alchemy Supercharged'
+          />
+        </motion.a>
       </div>
       <div></div>
       <motion.button
