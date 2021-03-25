@@ -75,8 +75,8 @@ const HeadsUp = () => {
           rel='noopener noreferrer'
         >
           <img
-            style={{ width: '240px', height: '53px' }}
-            src='https://res.cloudinary.com/saimano/image/upload/v1616169091/RaidGuild/alchemy_badge.png'
+            style={{ width: '200px', height: '45px' }}
+            src='https://res.cloudinary.com/saimano/image/upload/v1616692584/RaidGuild/alchemy_badge_chromatic.png'
             alt='Alchemy Supercharged'
           />
         </motion.a>
