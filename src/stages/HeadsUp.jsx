@@ -34,7 +34,7 @@ const HeadsUp = () => {
           transition={{ delay: 0.6, duration: 0.5 }}
         >
           To hire RaidGuild, the first step is to book a paid consultation. The
-          consultation costs 300 DAI and requires a web3 enabled browser. After
+          consultation costs 500 DAI and requires a web3 enabled browser. After
           receiving your request, our raiders will study any info, specs, docs
           and assets sent along with your proposal. A Cleric of the Guild will
           reach out to confirm a time and date for the first call within 48
