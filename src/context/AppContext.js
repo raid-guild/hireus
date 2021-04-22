@@ -12,7 +12,9 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider,
     options: {
-      infuraId: process.env.REACT_APP_MAINNET_NODE_ENDPOINT
+      rpc: {
+        1: process.env.REACT_APP_MAINNET_NODE_ENDPOINT
+      }
     }
   }
 };
@@ -164,7 +166,7 @@ class AppContextProvider extends Component {
     const DAI = new this.state.web3.eth.Contract(DAI_ABI, DAI_CONTRACT_ADDRESS);
     const balance = await DAI.methods.balanceOf(this.state.account).call();
 
-    if (this.state.web3.utils.fromWei(balance) < 300) {
+    if (this.state.web3.utils.fromWei(balance) < 500) {
       this.setState({ notEnoughBalance: true, submitting: false });
       return;
     } else {
@@ -177,7 +179,7 @@ class AppContextProvider extends Component {
       await DAI.methods
         .transfer(
           '0x3C3692681cD1c0F42FA68A2521719Cc24CEc3AF3',
-          this.state.web3.utils.toWei('300')
+          this.state.web3.utils.toWei('500')
         )
         .send({
           from: this.state.account

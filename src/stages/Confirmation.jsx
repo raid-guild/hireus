@@ -38,7 +38,7 @@ const Confirmation = () => {
             transition={{ delay: 0.7, duration: 0.5 }}
           >
             <a
-              href={`https://kovan.etherscan.io/tx/${context.hash}`}
+              href={`https://etherscan.io/tx/${context.hash}`}
               target='_blank'
               rel='noopener noreferrer'
             >

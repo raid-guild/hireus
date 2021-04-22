@@ -34,7 +34,7 @@ const HeadsUp = () => {
           transition={{ delay: 0.6, duration: 0.5 }}
         >
           To hire RaidGuild, the first step is to book a paid consultation. The
-          consultation costs 300 DAI and requires a web3 enabled browser. After
+          consultation costs 500 DAI and requires a web3 enabled browser. After
           receiving your request, our raiders will study any info, specs, docs
           and assets sent along with your proposal. A Cleric of the Guild will
           reach out to confirm a time and date for the first call within 48
@@ -65,6 +65,21 @@ const HeadsUp = () => {
           </button>{' '}
           We look forward to raiding with you.
         </motion.p>
+        <motion.a
+          id='alchemy-badge'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9, duration: 0.5 }}
+          href={`https://alchemyapi.io/?r=${process.env.REACT_APP_ALCHEMY_AMPLIFY_ID}`}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          <img
+            style={{ width: '200px', height: '45px' }}
+            src='https://res.cloudinary.com/saimano/image/upload/v1616692584/RaidGuild/alchemy_badge_chromatic.png'
+            alt='Alchemy Supercharged'
+          />
+        </motion.a>
       </div>
       <div></div>
       <motion.button
