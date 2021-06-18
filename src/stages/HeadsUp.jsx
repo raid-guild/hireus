@@ -37,7 +37,7 @@ const HeadsUp = () => {
           consultation costs 500 DAI and requires a web3 enabled browser. After
           receiving your request, our raiders will study any info, specs, docs
           and assets sent along with your proposal. A Cleric of the Guild will
-          reach out to confirm a time and date for the first call within 48
+          reach out to confirm a time and date for the first call within 72
           hours.
         </motion.p>
 
