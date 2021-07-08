@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 
 import { AppContext } from './context/AppContext';
 
+import HiringBoard from './stages/HiringBoard';
 import HeadsUp from './stages/HeadsUp';
 import PersonalInfo from './stages/PersonalInfo';
 import ProjectInfo from './stages/ProjectInfo';
@@ -72,13 +73,14 @@ const App = () => {
               <Switch>
                 <Route path='/' exact>
                   <>
-                    {context.stage === 1 && <HeadsUp />}
-                    {context.stage === 2 && <PersonalInfo />}
-                    {context.stage === 3 && <ProjectInfo />}
-                    {context.stage === 4 && <RequiredServices />}
-                    {context.stage === 5 && <AdditionalInfo />}
-                    {context.stage === 6 && <Confirmation />}
-                    {context.stage === 7 && <Feedback />}
+                    {context.stage === 1 && <HiringBoard />}
+                    {context.stage === 2 && <HeadsUp />}
+                    {context.stage === 3 && <PersonalInfo />}
+                    {context.stage === 4 && <ProjectInfo />}
+                    {context.stage === 5 && <RequiredServices />}
+                    {context.stage === 6 && <AdditionalInfo />}
+                    {context.stage === 7 && <Confirmation />}
+                    {context.stage === 8 && <Feedback />}
 
                     {context.stage !== 1 && context.stage !== 6 && (
                       <button

@@ -66,7 +66,8 @@
 #alchemy-badge {
   position: absolute;
   bottom: 30px;
-  left: 30px;
+  left: 50%;
+  transform: translateX(-50%);
   img {
     max-width: none;
   }
@@ -160,7 +161,8 @@
 }
 
 #next-stage-button:hover,
-#prev-stage-button:hover {
+#prev-stage-button:hover,
+#new-consultation-button:hover {
   background-color: $input-background-color;
   color: $theme-color-primary;
 }
@@ -216,6 +218,61 @@
 .grid-container {
   display: grid;
   grid-template-columns: 1fr 8fr 1fr;
+}
+
+.hiringboard-container {
+  color: $subtitle-color;
+  width: 75%;
+  margin: 0 auto;
+
+  h1 {
+    font-family: $primary-font;
+    font-size: 2rem;
+    text-transform: uppercase;
+    text-align: left;
+    margin-bottom: 4rem;
+    color: $theme-color-primary;
+  }
+  p {
+    margin-bottom: 3rem;
+    font-size: 1rem;
+    font-family: $primary-font;
+    letter-spacing: 1.3px;
+    line-height: 1.5;
+  }
+}
+
+.hiringboard-card-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.hiringboard-card {
+  border: 2px solid $theme-color-primary;
+  height: 300px;
+  padding: 40px;
+  width: 48%;
+
+  div {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      margin-left: 20px;
+    }
+  }
+}
+
+#new-consultation-button {
+  width: auto;
+  color: $title-color;
+  background-color: $theme-color-primary;
+  border: none;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-family: $secondary-font;
+  padding: 10px 30px;
 }
 
 .headsup-container {
