@@ -311,7 +311,12 @@
   display: flex;
 
   p {
-    margin: 0 40px 0 0;
+    font-size: .8rem;
+    margin: 0;
+  }
+
+  p#bounty-detail {
+    width: 100px;
   }
 
   button {

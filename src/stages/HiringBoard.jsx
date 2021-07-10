@@ -1,38 +1,30 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 import { AppContext } from '../context/AppContext';
 
-const dummyData = [
-  {
-    date: '2021-06-11',
-    name: 'Alice project',
-    amount: 500
-  },
-  {
-    date: '2021-06-17',
-    name: 'Charlie project',
-    amount: 450
-  },
-  {
-    date: '2021-06-16',
-    name: 'Bob project',
-    amount: 100
-  },
-  {
-    date: '2021-06-17',
-    name: 'Ellie project',
-    amount: 1
-  },
-  {
-    date: '2021-06-17',
-    name: 'Dan project',
-    amount: 0
-  }
-];
-
 const HiringBoard = () => {
   const context = useContext(AppContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [consultations, setConsultations] = useState([]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch(`https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE}/${process.env.REACT_APP_AIRTABLE_TABLE}?api_key=${process.env.REACT_APP_AIRTABLE_KEY}`)
+      .then((res) => res.json())
+      .then((data) => {
+        const records = data.records;
+        const consultations = records.filter((record) => {
+          return record.fields['Raid Status'] === "Awaiting";
+        });
+        console.log(consultations);
+        setConsultations(consultations);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setIsLoading(false);
+  }, []);
 
   return (
     <div className="hiringboard-container">
@@ -88,20 +80,27 @@ const HiringBoard = () => {
           >
             Highest bounties:
           </motion.h2>
-          <div className="bounty-list">
-            {dummyData.map((item, index) => (
-              <div key={index} className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
-                <div className="bounty-list-item-inner">
-                  <p>{item.date}</p>
-                  <p>{item.name}</p>
+          {isLoading ? <p>Loading...</p> : consultations.length > 0 ? (
+            <div className="bounty-list">
+              {consultations.map((consultation, index) => (
+                <div key={index} className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
+                  <div className="bounty-list-item-inner">
+                    <p id="bounty-detail">{new Date(consultation.fields['Created']).toLocaleDateString()}</p>
+                    <p>
+                      {consultation.fields['Project Name'].length > 18
+                        ? consultation.fields['Project Name'].slice(0, 17) + '...'
+                        : consultation.fields['Project Name']
+                      }
+                    </p>
+                  </div>
+                  <div className="bounty-list-item-inner">
+                    <p id="bounty-detail">0 $RAID</p>
+                    <button>open</button>
+                  </div>
                 </div>
-                <div className="bounty-list-item-inner">
-                  <p>{item.amount} $RAID</p>
-                  <button>open</button>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : <p>There are no bounties.</p>}
         </div>
       </div>
     </div>
