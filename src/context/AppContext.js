@@ -86,6 +86,8 @@ class AppContextProvider extends Component {
     withdrawalAmount: '',
     isApproved: false,
     isDepositPending: false,
+    fundsSufficient: false,
+    isWithdrawPending: false,
   };
 
   inputChangeHandler = (e) => {
@@ -236,6 +238,35 @@ class AppContextProvider extends Component {
     this.setState({ isDepositPending: false});
   }
 
+  onWithdraw = async (consultationId) => {
+    this.setState({ isWithdrawPending: true});
+    console.log(consultationId);
+    try {
+      const QUEUE_CONTRACT = new this.state.web3.eth.Contract(QUEUE_ABI, QUEUE_CONTRACT_ADDRESS);
+      await QUEUE_CONTRACT.methods
+        .withdrawBid(
+          this.state.web3.utils.toWei(this.state.withdrawalAmount),
+          consultationId
+        )
+        .send({
+          from: this.state.account
+        })
+        .once('transactionHash', async (hash) => {
+          this.setState({ hash: hash });
+        })
+        .on('confirmation', async () => {
+          await this.getRaidBalance();
+          this.onChangeWithdrawalAmount('');
+        })
+        .on('error', function(error) {
+          console.error('Could not withdraw tokens', error);
+        });;
+    } catch (err) {
+      console.error('Could not withdraw tokens', err);
+    }
+    this.setState({ isWithdrawPending: false});
+  }
+
   sendData = async (hash = 'not paid') => {
     await axios
       .post('https://guild-keeper.herokuapp.com/hireus-v2/consultation', {
@@ -348,6 +379,7 @@ class AppContextProvider extends Component {
           onChangeWithdrawalAmount: this.onChangeWithdrawalAmount,
           onApprove: this.onApprove,
           onDeposit: this.onDeposit,
+          onWithdraw: this.onWithdraw,
           updateStage: this.updateStage,
           setPersonalData: this.setPersonalData,
           setProjectData: this.setProjectData,

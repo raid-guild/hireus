@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 import React, { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
@@ -123,6 +125,8 @@ const DepositWithdrawCared = ({ consultationDetails }) => {
     onApprove,
     isDepositPending,
     onDeposit,
+    onWithdraw,
+    isWithdrawPending,
   } = useContext(AppContext);
 
   return (
@@ -221,12 +225,19 @@ const DepositWithdrawCared = ({ consultationDetails }) => {
             initial={{ x: '100vw' }}
             animate={{ x: 0 }}
             transition={{ delay: 1.3 }}
-            disabled={withdrawalAmount === '0' || withdrawalAmount === ''}
-            onClick={() => {
-              console.log('Withdraw');
+            disabled={
+              withdrawalAmount === '0' 
+              || withdrawalAmount === '' 
+              || BigInt(utils.toWei(withdrawalAmount)) > BigInt(consultationDetails.amount)
+              || isWithdrawPending}
+            onClick={async () => {
+              await onWithdraw(consultationDetails.bid_id)
+              consultationDetails.amount = (BigInt(consultationDetails.amount) - BigInt(utils.toWei(withdrawalAmount))).toString()
             }}
           >
-            Withdraw Bounty
+            {isWithdrawPending
+            ? <div className="spinner">Loading...</div>
+            : 'Withdraw Bounty'}
           </button>
         </div>
       </div>
