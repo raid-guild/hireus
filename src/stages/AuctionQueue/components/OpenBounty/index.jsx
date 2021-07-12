@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
+import { utils } from 'web3';
 import { shortenAddress } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 
@@ -55,7 +56,7 @@ export const OpenBounty = ({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            Total Bounty: 0 $RAID
+            Total Bounty: {utils.fromWei(consultationDetails.amount)} $RAID
           </motion.p>
         </div>
         {!account ? (

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { utils } from 'web3';
 import './AuctionQueue.scss'
 
 import { useBids } from '../../hooks/useBids';
@@ -10,7 +11,6 @@ const AuctionQueue = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [consultations, setConsultations] = useState([]);
   const [selectedConsultation, setSelectedConsultations] = useState(null);
-  console.log(bids);
 
   useEffect(() => {
     setIsLoading(true);
@@ -24,18 +24,44 @@ const AuctionQueue = () => {
       })
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        data.sort(function(a,b){
+      .then(async (data) => {
+        if (!bids) return;
+        const combinedBids = await combineBids(data, bids);
+        console.log(combinedBids);
+        combinedBids.sort(function(a,b){
           return new Date(b.created) - new Date(a.created);
         });
-        setConsultations(data);
+        setConsultations(combinedBids);
       })
       .catch((error) => {
         console.log(error);
       });
     setIsLoading(false);
-  }, []);
+  }, [bids]);
+
+  const combineBids = async (consultations, bids) => {
+    const combinedBids = [];
+    consultations.forEach((consultation) => {
+      const combinedBid = {
+        project_name: consultation.project_name,
+        created: consultation.created,
+        airtable_id: consultation.id,
+        bid_id: null,
+        amount: '0',
+      }
+      bids.forEach((bid) => {
+        let airtableId = utils.hexToAscii(bid.details);
+        airtableId =  airtableId.replace(/\0.*$/g,'');
+        if (consultation.id === airtableId) {
+          combinedBid.bid_id = bid.id.replace('0x3a9f3147742e51efba1f04ff26e8dc95978dccb4-0x', '');
+          combinedBid.amount = bid.amount;
+        }
+      })
+      combinedBids.push(combinedBid);
+    })
+
+    return combinedBids;
+  }
 
   return (
     <div style={{ width: '100%' }}>
