@@ -67,13 +67,13 @@ export const HiringBoard = ({
           {isLoading ? <p>Loading...</p> : consultations.length > 0 ? (
             <div className="bounty-list">
               {consultations.map((consultation, index) => (
-                <div onClick={() => setSelectedConsultations(consultation.fields['Project Name'])} key={index} className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
+                <div onClick={() => setSelectedConsultations(consultation.project_name)} key={index} className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
                   <div className="bounty-list-item-inner">
-                    <p id="bounty-detail">{new Date(consultation.fields['Created']).toLocaleDateString()}</p>
+                    <p id="bounty-detail">{new Date(consultation.created).toLocaleDateString()}</p>
                     <p>
-                      {consultation.fields['Project Name'].length > 18
-                        ? consultation.fields['Project Name'].slice(0, 17) + '...'
-                        : consultation.fields['Project Name']
+                      {consultation.project_name.length > 18
+                        ? consultation.project_name.slice(0, 17) + '...'
+                        : consultation.project_name
                       }
                     </p>
                   </div>

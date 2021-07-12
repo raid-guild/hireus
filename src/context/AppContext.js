@@ -224,8 +224,8 @@ class AppContextProvider extends Component {
           this.setState({ hash: hash });
         })
         .on('confirmation', async () => {
-            await this.getRaidBalance();
-            this.onChangeDepositAmount('');
+          await this.getRaidBalance();
+          this.onChangeDepositAmount('');
         })
         .on('error', function(error) {
           console.error('Could not submit bid', error);

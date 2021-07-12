@@ -10,15 +10,24 @@ const AuctionQueue = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(`https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE}/${process.env.REACT_APP_AIRTABLE_TABLE}?api_key=${process.env.REACT_APP_AIRTABLE_KEY}`)
+    fetch(`https://guild-keeper.herokuapp.com/hireus-v2/awaiting-raids`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "key":process.env.REACT_APP_KEEPER_KEY
+      })
+    })
       .then((res) => res.json())
       .then((data) => {
-        const records = data.records;
-        const consultations = records.filter((record) => {
-          return record.fields['Raid Status'] === "Awaiting";
+        console.log(data);
+        data.sort(function(a,b){
+          // Turn your strings into dates, and then subtract them
+          // to get a value that is either negative, positive, or zero.
+          return new Date(b.created) - new Date(a.created);
         });
-        console.log(consultations);
-        setConsultations(consultations);
+        setConsultations(data);
       })
       .catch((error) => {
         console.log(error);

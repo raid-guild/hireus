@@ -14,7 +14,7 @@ export const OpenBounty = ({
   React.useEffect(() => {
     if (selectedConsultation && consultations.length > 0) {
       const consultationDetails = consultations.filter(consultation => {
-        return consultation.fields['Project Name'] === selectedConsultation;
+        return consultation.project_name === selectedConsultation;
       })
       setConsultationDetails(consultationDetails[0]);
     } else {
@@ -31,7 +31,7 @@ export const OpenBounty = ({
       >
         Open Bounty
       </motion.h1>
-      {consultationDetails?.fields && <div className="hiringboard-card-container">
+      {consultationDetails && <div className="hiringboard-card-container">
         <div
           className="hiringboard-card"
           style={{ overflow: 'auto', height: 'auto' }}
@@ -41,14 +41,14 @@ export const OpenBounty = ({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            Project Name: {consultationDetails.fields['Project Name']}
+            Project Name: {consultationDetails.project_name}
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            Submitted On: {new Date(consultationDetails.fields['Created']).toLocaleDateString()}
+            Submitted On: {new Date(consultationDetails.created).toLocaleDateString()}
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
