@@ -1,30 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../../../../context/AppContext';
 
-const HiringBoard = () => {
+export const HiringBoard = ({
+  isLoading,
+  consultations,
+  setSelectedConsultations,
+}) => {
   const context = useContext(AppContext);
-  const [isLoading, setIsLoading] = useState(false);
-  const [consultations, setConsultations] = useState([]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    fetch(`https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE}/${process.env.REACT_APP_AIRTABLE_TABLE}?api_key=${process.env.REACT_APP_AIRTABLE_KEY}`)
-      .then((res) => res.json())
-      .then((data) => {
-        const records = data.records;
-        const consultations = records.filter((record) => {
-          return record.fields['Raid Status'] === "Awaiting";
-        });
-        console.log(consultations);
-        setConsultations(consultations);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    setIsLoading(false);
-  }, []);
 
   return (
     <div className="hiringboard-container">
@@ -49,7 +33,7 @@ const HiringBoard = () => {
           </motion.p>
           <div id='consultation-button-container'>
             <button
-              id='new-consultation-button'
+              className='consultation-button'
               initial={{ x: '100vw' }}
               animate={{ x: 0 }}
               transition={{ delay: 1.3 }}
@@ -60,7 +44,7 @@ const HiringBoard = () => {
               Get $RAID
             </button>
             <button
-              id='new-consultation-button'
+              className='consultation-button'
               initial={{ x: '100vw' }}
               animate={{ x: 0 }}
               transition={{ delay: 1.3 }}
@@ -83,7 +67,7 @@ const HiringBoard = () => {
           {isLoading ? <p>Loading...</p> : consultations.length > 0 ? (
             <div className="bounty-list">
               {consultations.map((consultation, index) => (
-                <div key={index} className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
+                <div onClick={() => setSelectedConsultations(consultation.fields['Project Name'])} key={index} className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
                   <div className="bounty-list-item-inner">
                     <p id="bounty-detail">{new Date(consultation.fields['Created']).toLocaleDateString()}</p>
                     <p>
@@ -104,7 +88,5 @@ const HiringBoard = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export default HiringBoard;
+  )
+}

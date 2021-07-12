@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 import { AppContext } from './context/AppContext';
 
-import HiringBoard from './stages/HiringBoard';
+import AuctionQueue from './stages/AuctionQueue';
 import HeadsUp from './stages/HeadsUp';
 import PersonalInfo from './stages/PersonalInfo';
 import ProjectInfo from './stages/ProjectInfo';
@@ -73,7 +73,7 @@ const App = () => {
               <Switch>
                 <Route path='/' exact>
                   <>
-                    {context.stage === 1 && <HiringBoard />}
+                    {context.stage === 1 && <AuctionQueue />}
                     {context.stage === 2 && <HeadsUp />}
                     {context.stage === 3 && <PersonalInfo />}
                     {context.stage === 4 && <ProjectInfo />}

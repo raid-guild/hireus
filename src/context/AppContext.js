@@ -235,6 +235,7 @@ class AppContextProvider extends Component {
       <AppContext.Provider
         value={{
           ...this.state,
+          connectWallet: this.connectWallet,
           updateStage: this.updateStage,
           setPersonalData: this.setPersonalData,
           setProjectData: this.setProjectData,
