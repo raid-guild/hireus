@@ -8,8 +8,9 @@ export const OpenBounty = ({
   selectedConsultation,
   setSelectedConsultations,
 }) => {
-  const { account, connectWallet, disconnectWallet } = useContext(AppContext);
+  const { account, connectWallet, disconnectWallet, raidBalance } = useContext(AppContext);
   const [consultationDetails, setConsultationDetails] = useState(null);
+
   React.useEffect(() => {
     if (selectedConsultation && consultations.length > 0) {
       const consultationDetails = consultations.filter(consultation => {
@@ -93,6 +94,7 @@ export const OpenBounty = ({
           <DepositWithdrawCared
             account={account}
             disconnectWallet={disconnectWallet}
+            raidBalance={raidBalance}
           />
         )}
       </div>}
@@ -111,7 +113,11 @@ export const OpenBounty = ({
   )
 }
 
-const DepositWithdrawCared = ({ account, disconnectWallet }) => {
+const DepositWithdrawCared = ({
+  account,
+  disconnectWallet,
+  raidBalance,
+}) => {
   const [depsoitAmount, setDepositAmount] = React.useState(0);
   const [withdrawAmount, setWithdrawAmount] = React.useState(0);
 
@@ -162,7 +168,7 @@ const DepositWithdrawCared = ({ account, disconnectWallet }) => {
           className="deposit-withdraw-card"
         >
           <p>Wallet Balance:</p>
-          <h2>200 RAID</h2>
+          <h2>{raidBalance} RAID</h2>
           <input
             id={'deposit-amount'}
             placeholder={`0`}

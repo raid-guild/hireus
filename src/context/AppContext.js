@@ -29,6 +29,10 @@ const web3Modal = new Web3Modal({
 const DAI_CONTRACT_ADDRESS = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 const DAI_ABI = require('../abi/DAI_ABI.json');
 
+// RINKEBY
+const RAID_CONTRACT_ADDRESS = '0x982e00b16c313e979c0947b85230907fce45d50e';
+const RAID_ABI = require('../abi/ERC20_ABI.json');
+
 // KOVAN TESTNET
 // const DAI_CONTRACT_ADDRESS = '0xff795577d9ac8bd7d90ee22b6c1703490b6512fd';
 // const DAI_ABI = require('../abi/DAI_ABI.json');
@@ -70,7 +74,9 @@ class AppContextProvider extends Component {
     //Feedback Info state
     feedbackOne: '',
     feedbackTwo: '',
-    rating: ''
+    rating: '',
+
+    raidBalance: '0',
   };
 
   inputChangeHandler = (e) => {
@@ -127,6 +133,7 @@ class AppContextProvider extends Component {
     provider.on('chainChanged', (chainId) => {
       this.setState({ chainID: chainId });
     });
+    await this.getRaidBalance();
   };
 
   disconnectWallet = () => {
@@ -136,6 +143,14 @@ class AppContextProvider extends Component {
       chainID: '',
       web3: '',
     });
+  }
+
+  // Auction Queue Functions
+  getRaidBalance = async () => {
+    const RAID = new this.state.web3.eth.Contract(RAID_ABI, RAID_CONTRACT_ADDRESS);
+    const balance = await RAID.methods.balanceOf(this.state.account).call();
+    const balanceConverted = this.state.web3.utils.fromWei(balance);
+    this.setState({ raidBalance: balanceConverted });
   }
 
   sendData = async (hash = 'not paid') => {
