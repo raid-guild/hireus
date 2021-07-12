@@ -4,7 +4,7 @@ import { Client } from 'urql';
 
 const RETRY_EVERY = 3000;
 
-const graphqlClient = new Client({ url: process.env.REACT_APP_AUCTION_SUBGRAPH_URL ?? '' });
+const graphqlClient = new Client({ url: 'https://api.thegraph.com/subgraphs/name/slgraham/guildauctionqueues-rinkeby' ?? '' });
 
 const BIDS_QUERY = gql`
   query{
@@ -12,6 +12,9 @@ const BIDS_QUERY = gql`
       id
       amount
       details
+      submitter {
+        id
+      }
     }
   }
 `;

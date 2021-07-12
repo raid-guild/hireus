@@ -202,7 +202,10 @@ const DepositWithdrawCared = ({ consultationDetails }) => {
         </div>
         <div className="deposit-withdraw-card">
         <p>You Deposited:</p>
-          <h2>0 RAID</h2>
+          <h2>
+            {consultationDetails.submitter === account 
+            ? utils.fromWei(consultationDetails.amount) : '0'} RAID
+          </h2>
           <input
             id={'deposit-amount'}
             placeholder={`0`}

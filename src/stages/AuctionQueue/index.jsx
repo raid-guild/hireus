@@ -48,6 +48,7 @@ const AuctionQueue = () => {
         airtable_id: consultation.id,
         bid_id: null,
         amount: '0',
+        submitter: '',
       }
       bids.forEach((bid) => {
         let airtableId = utils.hexToAscii(bid.details);
@@ -55,6 +56,7 @@ const AuctionQueue = () => {
         if (consultation.id === airtableId) {
           combinedBid.bid_id = bid.id.replace('0x3a9f3147742e51efba1f04ff26e8dc95978dccb4-0x', '');
           combinedBid.amount = bid.amount;
+          combinedBid.submitter = utils.toChecksumAddress(bid.submitter.id);
         }
       })
       combinedBids.push(combinedBid);
