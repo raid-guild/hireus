@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './AuctionQueue.scss'
 
 import { HiringBoard, OpenBounty } from './components';
 

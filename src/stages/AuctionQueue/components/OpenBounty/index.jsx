@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import { shortenAddress } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
@@ -9,7 +9,7 @@ export const OpenBounty = ({
   setSelectedConsultations,
 }) => {
   const { account, connectWallet, disconnectWallet } = useContext(AppContext);
-  const [consultationDetails, setConsultationDetails] = React.useState(null);
+  const [consultationDetails, setConsultationDetails] = useState(null);
   React.useEffect(() => {
     if (selectedConsultation && consultations.length > 0) {
       const consultationDetails = consultations.filter(consultation => {
@@ -19,7 +19,7 @@ export const OpenBounty = ({
     } else {
       setSelectedConsultations(null);
     }
-  }, [consultations, selectedConsultation]);
+  }, [consultations, selectedConsultation, setSelectedConsultations]);
 
   return (
     <div className="hiringboard-container">
@@ -142,7 +142,7 @@ const DepositWithdrawCared = ({ account, disconnectWallet }) => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            {account}
+            {shortenAddress(account)}
           </motion.p>
         </div>
         <button
