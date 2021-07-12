@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { Component, createContext } from 'react';
 
 import Web3 from 'web3';
@@ -32,6 +33,9 @@ const DAI_ABI = require('../abi/DAI_ABI.json');
 // RINKEBY
 const RAID_CONTRACT_ADDRESS = '0x982e00b16c313e979c0947b85230907fce45d50e';
 const RAID_ABI = require('../abi/ERC20_ABI.json');
+
+const QUEUE_CONTRACT_ADDRESS = '0x3a9F3147742E51EFBa1F04ff26E8DC95978dccB4';
+const QUEUE_ABI = require('../abi/QUEUE_ABI.json');
 
 // KOVAN TESTNET
 // const DAI_CONTRACT_ADDRESS = '0xff795577d9ac8bd7d90ee22b6c1703490b6512fd';
@@ -77,6 +81,11 @@ class AppContextProvider extends Component {
     rating: '',
 
     raidBalance: '0',
+    raidAllowance: '0',
+    depositAmount: '',
+    withdrawalAmount: '',
+    isApproved: false,
+    isApproving: false,
   };
 
   inputChangeHandler = (e) => {
@@ -150,7 +159,52 @@ class AppContextProvider extends Component {
     const RAID = new this.state.web3.eth.Contract(RAID_ABI, RAID_CONTRACT_ADDRESS);
     const balance = await RAID.methods.balanceOf(this.state.account).call();
     const balanceConverted = this.state.web3.utils.fromWei(balance);
-    this.setState({ raidBalance: balanceConverted });
+    const allowance = await RAID.methods.allowance(this.state.account, QUEUE_CONTRACT_ADDRESS).call();
+    const allowanceConverted = this.state.web3.utils.fromWei(allowance);
+    this.setState({ raidBalance: balanceConverted, raidAllowance: allowanceConverted });
+  }
+
+  onChangeDepositAmount = (amount) => {
+    this.setState({ depositAmount: amount });
+    if (amount === '') {
+      this.setState({ isApproved: false });
+    } else if (BigInt(this.state.web3.utils.toWei(amount)) > BigInt(this.state.web3.utils.toWei(this.state.raidAllowance))) {
+      this.setState({ isApproved: false });
+    } else {
+      this.setState({ isApproved: true });
+    }
+  }
+
+  onChangeWithdrawalAmount = (amount) => {
+    this.setState({ withdrawalAmount: amount });
+  }
+
+  onApprove = async () => {
+    this.setState({ isApproving: true});
+    try {
+      const RAID = new this.state.web3.eth.Contract(RAID_ABI, RAID_CONTRACT_ADDRESS);
+      await RAID.methods
+        .approve(
+          QUEUE_CONTRACT_ADDRESS,
+          this.state.web3.utils.toWei('5')
+        )
+        .send({
+          from: this.state.account
+        })
+        .once('transactionHash', async (hash) => {
+          this.setState({ hash: hash });
+        })
+        .on('confirmation', async () => {
+            await this.getRaidBalance();
+            this.onChangeDepositAmount(this.state.depositAmount);
+        })
+        .on('error', function(error) {
+          console.error('Could not approve token', error);
+        });;
+    } catch (err) {
+      console.error('Could not approve token', err);
+    }
+    this.setState({ isApproving: false});
   }
 
   sendData = async (hash = 'not paid') => {
@@ -261,6 +315,9 @@ class AppContextProvider extends Component {
           ...this.state,
           connectWallet: this.connectWallet,
           disconnectWallet: this.disconnectWallet,
+          onChangeDepositAmount: this.onChangeDepositAmount,
+          onChangeWithdrawalAmount: this.onChangeWithdrawalAmount,
+          onApprove: this.onApprove,
           updateStage: this.updateStage,
           setPersonalData: this.setPersonalData,
           setProjectData: this.setProjectData,

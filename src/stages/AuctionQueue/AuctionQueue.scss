@@ -72,6 +72,17 @@ button.consultation-button {
   }
 }
 
+button.consultation-button:hover {
+  background-color: $input-background-color;
+  color: $theme-color-primary;
+}
+
+button.consultation-button:disabled {
+  background-color: $input-background-color;
+  color: $theme-color-primary;
+  cursor: not-allowed;
+}
+
 .bounty-list {
   display: flex;
   flex-direction: column;

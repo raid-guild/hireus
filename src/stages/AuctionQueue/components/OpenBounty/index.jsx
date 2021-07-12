@@ -8,7 +8,7 @@ export const OpenBounty = ({
   selectedConsultation,
   setSelectedConsultations,
 }) => {
-  const { account, connectWallet, disconnectWallet, raidBalance } = useContext(AppContext);
+  const { account, connectWallet } = useContext(AppContext);
   const [consultationDetails, setConsultationDetails] = useState(null);
 
   React.useEffect(() => {
@@ -91,11 +91,7 @@ export const OpenBounty = ({
             </button>
           </div>
         ) : (
-          <DepositWithdrawCared
-            account={account}
-            disconnectWallet={disconnectWallet}
-            raidBalance={raidBalance}
-          />
+          <DepositWithdrawCared />
         )}
       </div>}
       <button
@@ -113,13 +109,19 @@ export const OpenBounty = ({
   )
 }
 
-const DepositWithdrawCared = ({
-  account,
-  disconnectWallet,
-  raidBalance,
-}) => {
-  const [depsoitAmount, setDepositAmount] = React.useState(0);
-  const [withdrawAmount, setWithdrawAmount] = React.useState(0);
+const DepositWithdrawCared = () => {
+  const {
+    account,
+    disconnectWallet,
+    raidBalance,
+    isApproved,
+    depositAmount,
+    withdrawalAmount,
+    onChangeDepositAmount,
+    onChangeWithdrawalAmount,
+    onApprove,
+    isApproving,
+  } = useContext(AppContext);
 
   return (
     <div
@@ -175,8 +177,8 @@ const DepositWithdrawCared = ({
             type={'number'}
             min={'0'}
             step={'0.01'}
-            value={depsoitAmount}
-            onChange={(e) => setDepositAmount(e.target.value)}
+            value={depositAmount}
+            onChange={(e) => onChangeDepositAmount(e.target.value)}
           />
           <button
             className='consultation-button'
@@ -184,11 +186,12 @@ const DepositWithdrawCared = ({
             initial={{ x: '100vw' }}
             animate={{ x: 0 }}
             transition={{ delay: 1.3 }}
+            disabled={depositAmount === '0' || depositAmount === '' || isApproving}
             onClick={() => {
-              console.log('Deposit');
+              isApproved ? console.log('Deposit') : onApprove();
             }}
           >
-            Deposit Bounty
+            {isApproved ? 'Deposit Bounty' : isApproving ? <div className="spinner">Loading...</div> : 'Approve Deposit'}
           </button>
         </div>
         <div className="deposit-withdraw-card">
@@ -200,8 +203,8 @@ const DepositWithdrawCared = ({
             type={'number'}
             min={'0'}
             step={'0.01'}
-            value={withdrawAmount}
-            onChange={(e) => setWithdrawAmount(e.target.value)}
+            value={withdrawalAmount}
+            onChange={(e) => onChangeWithdrawalAmount(e.target.value)}
           />
           <button
             className='consultation-button'
@@ -209,6 +212,7 @@ const DepositWithdrawCared = ({
             initial={{ x: '100vw' }}
             animate={{ x: 0 }}
             transition={{ delay: 1.3 }}
+            disabled={withdrawalAmount === '0' || withdrawalAmount === ''}
             onClick={() => {
               console.log('Withdraw');
             }}
