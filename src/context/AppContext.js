@@ -85,7 +85,7 @@ class AppContextProvider extends Component {
     depositAmount: '',
     withdrawalAmount: '',
     isApproved: false,
-    isApproving: false,
+    isDepositPending: false,
   };
 
   inputChangeHandler = (e) => {
@@ -180,13 +180,13 @@ class AppContextProvider extends Component {
   }
 
   onApprove = async () => {
-    this.setState({ isApproving: true});
+    this.setState({ isDepositPending: true});
     try {
       const RAID = new this.state.web3.eth.Contract(RAID_ABI, RAID_CONTRACT_ADDRESS);
       await RAID.methods
         .approve(
           QUEUE_CONTRACT_ADDRESS,
-          this.state.web3.utils.toWei('5')
+          this.state.web3.utils.toWei(this.state.depositAmount)
         )
         .send({
           from: this.state.account
@@ -204,7 +204,36 @@ class AppContextProvider extends Component {
     } catch (err) {
       console.error('Could not approve token', err);
     }
-    this.setState({ isApproving: false});
+    this.setState({ isDepositPending: false});
+  }
+
+  onDeposit = async (consultationId) => {
+    const hex = this.state.web3.utils.asciiToHex(consultationId);
+    this.setState({ isDepositPending: true});
+    try {
+      const QUEUE_CONTRACT = new this.state.web3.eth.Contract(QUEUE_ABI, QUEUE_CONTRACT_ADDRESS);
+      await QUEUE_CONTRACT.methods
+        .submitBid(
+          this.state.web3.utils.toWei(this.state.depositAmount),
+          hex
+        )
+        .send({
+          from: this.state.account
+        })
+        .once('transactionHash', async (hash) => {
+          this.setState({ hash: hash });
+        })
+        .on('confirmation', async () => {
+            await this.getRaidBalance();
+            this.onChangeDepositAmount('');
+        })
+        .on('error', function(error) {
+          console.error('Could not submit bid', error);
+        });;
+    } catch (err) {
+      console.error('Could not submit bid', err);
+    }
+    this.setState({ isDepositPending: false});
   }
 
   sendData = async (hash = 'not paid') => {
@@ -318,6 +347,7 @@ class AppContextProvider extends Component {
           onChangeDepositAmount: this.onChangeDepositAmount,
           onChangeWithdrawalAmount: this.onChangeWithdrawalAmount,
           onApprove: this.onApprove,
+          onDeposit: this.onDeposit,
           updateStage: this.updateStage,
           setPersonalData: this.setPersonalData,
           setProjectData: this.setProjectData,

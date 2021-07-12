@@ -91,7 +91,7 @@ export const OpenBounty = ({
             </button>
           </div>
         ) : (
-          <DepositWithdrawCared />
+          <DepositWithdrawCared consultationDetails={consultationDetails} />
         )}
       </div>}
       <button
@@ -109,7 +109,7 @@ export const OpenBounty = ({
   )
 }
 
-const DepositWithdrawCared = () => {
+const DepositWithdrawCared = ({ consultationDetails }) => {
   const {
     account,
     disconnectWallet,
@@ -120,7 +120,8 @@ const DepositWithdrawCared = () => {
     onChangeDepositAmount,
     onChangeWithdrawalAmount,
     onApprove,
-    isApproving,
+    isDepositPending,
+    onDeposit,
   } = useContext(AppContext);
 
   return (
@@ -186,12 +187,16 @@ const DepositWithdrawCared = () => {
             initial={{ x: '100vw' }}
             animate={{ x: 0 }}
             transition={{ delay: 1.3 }}
-            disabled={depositAmount === '0' || depositAmount === '' || isApproving}
+            disabled={depositAmount === '0' || depositAmount === '' || isDepositPending}
             onClick={() => {
-              isApproved ? console.log('Deposit') : onApprove();
+              isApproved ? onDeposit(consultationDetails.id) : onApprove();
             }}
           >
-            {isApproved ? 'Deposit Bounty' : isApproving ? <div className="spinner">Loading...</div> : 'Approve Deposit'}
+            {isDepositPending
+            ? <div className="spinner">Loading...</div>
+            : isApproved
+            ? 'Deposit Bounty'
+            : 'Approve Deposit'}
           </button>
         </div>
         <div className="deposit-withdraw-card">
