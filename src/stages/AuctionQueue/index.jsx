@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import './AuctionQueue.scss'
 
+import { useBids } from '../../hooks/useBids';
+
 import { HiringBoard, OpenBounty } from './components';
 
 const AuctionQueue = () => {
+  const { bids } = useBids();
   const [isLoading, setIsLoading] = useState(false);
   const [consultations, setConsultations] = useState([]);
   const [selectedConsultation, setSelectedConsultations] = useState(null);
+  console.log(bids);
 
   useEffect(() => {
     setIsLoading(true);
@@ -23,8 +27,6 @@ const AuctionQueue = () => {
       .then((data) => {
         console.log(data);
         data.sort(function(a,b){
-          // Turn your strings into dates, and then subtract them
-          // to get a value that is either negative, positive, or zero.
           return new Date(b.created) - new Date(a.created);
         });
         setConsultations(data);
