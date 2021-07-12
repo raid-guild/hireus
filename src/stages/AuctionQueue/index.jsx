@@ -53,6 +53,7 @@ const AuctionQueue = () => {
       bids.forEach((bid) => {
         let airtableId = utils.hexToAscii(bid.details);
         airtableId =  airtableId.replace(/\0.*$/g,'');
+        console.log(bid.amount);
         if (consultation.id === airtableId) {
           combinedBid.bid_id = bid.id.replace('0x3a9f3147742e51efba1f04ff26e8dc95978dccb4-0x', '');
           combinedBid.amount = bid.amount;

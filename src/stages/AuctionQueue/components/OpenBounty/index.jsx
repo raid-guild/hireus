@@ -129,6 +129,11 @@ const DepositWithdrawCared = ({ consultationDetails }) => {
     isWithdrawPending,
   } = useContext(AppContext);
 
+  const onDepositAndUpdate = async (id) => {
+    await onDeposit(id);
+    consultationDetails.amount = (BigInt(consultationDetails.amount) + BigInt(utils.toWei(depositAmount))).toString();
+  }
+
   return (
     <div
       className="hiringboard-card"
@@ -194,7 +199,7 @@ const DepositWithdrawCared = ({ consultationDetails }) => {
             transition={{ delay: 1.3 }}
             disabled={depositAmount === '0' || depositAmount === '' || isDepositPending}
             onClick={() => {
-              isApproved ? onDeposit(consultationDetails.id) : onApprove();
+              isApproved ? onDepositAndUpdate(consultationDetails.airtable_id) : onApprove();
             }}
           >
             {isDepositPending
