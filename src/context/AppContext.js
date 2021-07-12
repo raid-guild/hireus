@@ -129,6 +129,15 @@ class AppContextProvider extends Component {
     });
   };
 
+  disconnectWallet = () => {
+    web3Modal.clearCachedProvider();
+    this.setState({
+      account: '',
+      chainID: '',
+      web3: '',
+    });
+  }
+
   sendData = async (hash = 'not paid') => {
     await axios
       .post('https://guild-keeper.herokuapp.com/hireus-v2/consultation', {
@@ -236,6 +245,7 @@ class AppContextProvider extends Component {
         value={{
           ...this.state,
           connectWallet: this.connectWallet,
+          disconnectWallet: this.disconnectWallet,
           updateStage: this.updateStage,
           setPersonalData: this.setPersonalData,
           setProjectData: this.setProjectData,

@@ -8,7 +8,7 @@ export const OpenBounty = ({
   selectedConsultation,
   setSelectedConsultations,
 }) => {
-  const { account, connectWallet } = useContext(AppContext);
+  const { account, connectWallet, disconnectWallet } = useContext(AppContext);
   const [consultationDetails, setConsultationDetails] = React.useState(null);
   React.useEffect(() => {
     if (selectedConsultation && consultations.length > 0) {
@@ -31,7 +31,10 @@ export const OpenBounty = ({
         Open Bounty
       </motion.h1>
       {consultationDetails?.fields && <div className="hiringboard-card-container">
-        <div className="hiringboard-card">
+        <div
+          className="hiringboard-card"
+          style={{ overflow: 'auto', height: 'auto' }}
+        >
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -87,30 +90,10 @@ export const OpenBounty = ({
             </button>
           </div>
         ) : (
-          <div className="hiringboard-card">
-            <motion.p
-              className="connected-account"
-              style={{
-                margin: 0,
-              }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-            >
-              connected as:
-            </motion.p>
-            <motion.p
-              className="connected-account"
-              style={{
-                margin: 0,
-              }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-            >
-              {shortenAddress(account)}
-            </motion.p>
-          </div>
+          <DepositWithdrawCared
+            account={account}
+            disconnectWallet={disconnectWallet}
+          />
         )}
       </div>}
       <button
@@ -124,6 +107,110 @@ export const OpenBounty = ({
       >
         Close
       </button>
+    </div>
+  )
+}
+
+const DepositWithdrawCared = ({ account, disconnectWallet }) => {
+  const [depsoitAmount, setDepositAmount] = React.useState(0);
+  const [withdrawAmount, setWithdrawAmount] = React.useState(0);
+
+  return (
+    <div
+      className="hiringboard-card"
+      style={{ overflow: 'auto', height: 'auto' }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div>
+          <motion.p
+            className="connected-account"
+            style={{
+              margin: 0,
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+          >
+            connected as:
+          </motion.p>
+          <motion.p
+            className="connected-account"
+            style={{
+              margin: 0,
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+          >
+            {account}
+          </motion.p>
+        </div>
+        <button
+          className='consultation-button consultation-button--disconnect'
+          initial={{ x: '100vw' }}
+          animate={{ x: 0 }}
+          transition={{ delay: 1.3 }}
+          onClick={() => {
+            disconnectWallet()
+          }}
+        >
+          Disconnect
+        </button>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div
+          className="deposit-withdraw-card"
+        >
+          <p>Wallet Balance:</p>
+          <h2>200 RAID</h2>
+          <input
+            id={'deposit-amount'}
+            placeholder={`0`}
+            type={'number'}
+            min={'0'}
+            step={'0.01'}
+            value={depsoitAmount}
+            onChange={(e) => setDepositAmount(e.target.value)}
+          />
+          <button
+            className='consultation-button'
+            style={{ margin: '0', width: '100%' }}
+            initial={{ x: '100vw' }}
+            animate={{ x: 0 }}
+            transition={{ delay: 1.3 }}
+            onClick={() => {
+              console.log('Deposit');
+            }}
+          >
+            Deposit Bounty
+          </button>
+        </div>
+        <div className="deposit-withdraw-card">
+        <p>You Deposited:</p>
+          <h2>0 RAID</h2>
+          <input
+            id={'deposit-amount'}
+            placeholder={`0`}
+            type={'number'}
+            min={'0'}
+            step={'0.01'}
+            value={withdrawAmount}
+            onChange={(e) => setWithdrawAmount(e.target.value)}
+          />
+          <button
+            className='consultation-button'
+            style={{ margin: '0', width: '100%' }}
+            initial={{ x: '100vw' }}
+            animate={{ x: 0 }}
+            transition={{ delay: 1.3 }}
+            onClick={() => {
+              console.log('Withdraw');
+            }}
+          >
+            Withdraw Bounty
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
