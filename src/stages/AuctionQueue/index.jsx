@@ -31,6 +31,7 @@ const AuctionQueue = () => {
         combinedBids.sort(function(a,b){
           return new Date(b.created) - new Date(a.created);
         });
+        combinedBids.sort((a,b) => Number(b.amount)-Number(a.amount));
         setConsultations(combinedBids);
       })
       .catch((error) => {
@@ -54,7 +55,7 @@ const AuctionQueue = () => {
         let airtableId = utils.hexToAscii(bid.details);
         airtableId =  airtableId.replace(/\0.*$/g,'');
         if (consultation.id === airtableId) {
-          combinedBid.bid_id = bid.id.replace('0x3a9f3147742e51efba1f04ff26e8dc95978dccb4-0x', '');
+          combinedBid.bid_id = utils.hexToNumber(bid.id.replace('0x3a9f3147742e51efba1f04ff26e8dc95978dccb4-', ''));
           combinedBid.amount = bid.amount;
           combinedBid.submitter = utils.toChecksumAddress(bid.submitter.id);
         }
