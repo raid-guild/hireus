@@ -6,13 +6,17 @@ import { utils } from 'web3';
 import { shortenAddress } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 
+import Snackbar from '../../../../components/Snackbar';
+
 export const OpenBounty = ({
   consultations,
   selectedConsultation,
   setSelectedConsultations,
 }) => {
-  const { account, connectWallet } = useContext(AppContext);
+  const { account, connectWallet, hash } = useContext(AppContext);
   const [consultationDetails, setConsultationDetails] = useState(null);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [txConfirmed, setTxConfirmed] = useState(false);
 
   React.useEffect(() => {
     if (selectedConsultation && consultations.length > 0) {
@@ -94,25 +98,31 @@ export const OpenBounty = ({
             </button>
           </div>
         ) : (
-          <DepositWithdrawCared consultationDetails={consultationDetails} />
+          <DepositWithdrawCared
+            setShowSnackbar={setShowSnackbar}
+            setTxConfirmed={setTxConfirmed}
+            consultationDetails={consultationDetails}
+          />
         )}
       </div>}
       <button
         className='consultation-button consultation-button--close'
-        initial={{ x: '100vw' }}
-        animate={{ x: 0 }}
-        transition={{ delay: 1.3 }}
         onClick={() => {
           setSelectedConsultations(null);
         }}
       >
         Close
       </button>
+      {(showSnackbar && hash !== '') && <Snackbar
+        setShowSnackbar={setShowSnackbar}
+        message={txConfirmed ? 'Transaction Confirmed!' : 'Transaction Pending...'}
+        hash={hash}
+      />}
     </div>
   )
 }
 
-const DepositWithdrawCared = ({ consultationDetails }) => {
+const DepositWithdrawCared = ({ setShowSnackbar, setTxConfirmed, consultationDetails }) => {
   const {
     account,
     disconnectWallet,
@@ -130,8 +140,26 @@ const DepositWithdrawCared = ({ consultationDetails }) => {
   } = useContext(AppContext);
 
   const onDepositAndUpdate = async (id) => {
+    await setTxConfirmed(false);
+    await setShowSnackbar(true);
     await onDeposit(id);
+    setTxConfirmed(true);
     consultationDetails.amount = (BigInt(consultationDetails.amount) + BigInt(utils.toWei(depositAmount))).toString();
+  }
+
+  const onApproveAndUpdate = async () => {
+    await setTxConfirmed(false);
+    await setShowSnackbar(true);
+    await onApprove();
+    setTxConfirmed(true);
+  }
+
+  const onWithdrawAndupdate = async (id) => {
+    await setTxConfirmed(false);
+    await setShowSnackbar(true);
+    await onWithdraw(id);
+    consultationDetails.amount = (BigInt(consultationDetails.amount) - BigInt(utils.toWei(withdrawalAmount))).toString()
+    setTxConfirmed(true);
   }
 
   return (
@@ -199,7 +227,7 @@ const DepositWithdrawCared = ({ consultationDetails }) => {
             transition={{ delay: 1.3 }}
             disabled={depositAmount === '0' || depositAmount === '' || isDepositPending}
             onClick={() => {
-              isApproved ? onDepositAndUpdate(consultationDetails.airtable_id) : onApprove();
+              isApproved ? onDepositAndUpdate(consultationDetails.airtable_id) : onApproveAndUpdate();
             }}
           >
             {isDepositPending
@@ -235,9 +263,8 @@ const DepositWithdrawCared = ({ consultationDetails }) => {
               || withdrawalAmount === '' 
               || BigInt(utils.toWei(withdrawalAmount)) > BigInt(consultationDetails.amount)
               || isWithdrawPending}
-            onClick={async () => {
-              await onWithdraw(consultationDetails.bid_id)
-              consultationDetails.amount = (BigInt(consultationDetails.amount) - BigInt(utils.toWei(withdrawalAmount))).toString()
+            onClick={() => {
+              onWithdrawAndupdate(consultationDetails.bid_id)
             }}
           >
             {isWithdrawPending

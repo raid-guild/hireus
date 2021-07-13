@@ -182,7 +182,7 @@ class AppContextProvider extends Component {
   }
 
   onApprove = async () => {
-    this.setState({ isDepositPending: true});
+    this.setState({ isDepositPending: true, hash: '' });
     try {
       const RAID = new this.state.web3.eth.Contract(RAID_ABI, RAID_CONTRACT_ADDRESS);
       await RAID.methods
@@ -211,7 +211,7 @@ class AppContextProvider extends Component {
 
   onDeposit = async (consultationId) => {
     const hex = this.state.web3.utils.asciiToHex(consultationId);
-    this.setState({ isDepositPending: true});
+    this.setState({ isDepositPending: true, hash: '' });
     try {
       const QUEUE_CONTRACT = new this.state.web3.eth.Contract(QUEUE_ABI, QUEUE_CONTRACT_ADDRESS);
       await QUEUE_CONTRACT.methods
@@ -239,8 +239,7 @@ class AppContextProvider extends Component {
   }
 
   onWithdraw = async (consultationId) => {
-    this.setState({ isWithdrawPending: true});
-    console.log(consultationId);
+    this.setState({ isWithdrawPending: true, hash: ''});
     try {
       const QUEUE_CONTRACT = new this.state.web3.eth.Contract(QUEUE_ABI, QUEUE_CONTRACT_ADDRESS);
       await QUEUE_CONTRACT.methods

@@ -20,7 +20,7 @@ const AuctionQueue = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        "key":process.env.REACT_APP_KEEPER_KEY
+        "key":process.env.REACT_APP_ACCESS_KEY
       })
     })
       .then((res) => res.json())
@@ -53,7 +53,6 @@ const AuctionQueue = () => {
       bids.forEach((bid) => {
         let airtableId = utils.hexToAscii(bid.details);
         airtableId =  airtableId.replace(/\0.*$/g,'');
-        console.log(bid.amount);
         if (consultation.id === airtableId) {
           combinedBid.bid_id = bid.id.replace('0x3a9f3147742e51efba1f04ff26e8dc95978dccb4-0x', '');
           combinedBid.amount = bid.amount;
