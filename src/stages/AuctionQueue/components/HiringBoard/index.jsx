@@ -5,7 +5,6 @@ import { utils } from 'web3';
 import { AppContext } from '../../../../context/AppContext';
 
 export const HiringBoard = ({
-  isLoading,
   consultations,
   setSelectedConsultations,
 }) => {
@@ -65,7 +64,7 @@ export const HiringBoard = ({
           >
             Highest bounties:
           </motion.h2>
-          {isLoading ? <p>Loading...</p> : consultations.length > 0 ? (
+          {!consultations ? <p>Loading...</p> : consultations.length > 0 ? (
             <div className="bounty-list">
               {consultations.map((consultation, index) => (
                 <div onClick={() => setSelectedConsultations(consultation.project_name)} key={index} className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>

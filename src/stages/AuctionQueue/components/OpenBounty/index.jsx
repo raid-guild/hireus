@@ -3,15 +3,16 @@
 import React, { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
-import { shortenAddress } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 
+import DepositWithdrawCared from './DepositWithdrawCard';
 import Snackbar from '../../../../components/Snackbar';
 
 export const OpenBounty = ({
   consultations,
   selectedConsultation,
   setSelectedConsultations,
+  setConsultations,
 }) => {
   const { account, connectWallet, hash } = useContext(AppContext);
   const [consultationDetails, setConsultationDetails] = useState(null);
@@ -102,6 +103,7 @@ export const OpenBounty = ({
             setShowSnackbar={setShowSnackbar}
             setTxConfirmed={setTxConfirmed}
             consultationDetails={consultationDetails}
+            setConsultations={setConsultations}
           />
         )}
       </div>}
@@ -118,161 +120,6 @@ export const OpenBounty = ({
         message={txConfirmed ? 'Transaction Confirmed!' : 'Transaction Pending...'}
         hash={hash}
       />}
-    </div>
-  )
-}
-
-const DepositWithdrawCared = ({ setShowSnackbar, setTxConfirmed, consultationDetails }) => {
-  const {
-    account,
-    disconnectWallet,
-    raidBalance,
-    isApproved,
-    depositAmount,
-    withdrawalAmount,
-    onChangeDepositAmount,
-    onChangeWithdrawalAmount,
-    onApprove,
-    isDepositPending,
-    onDeposit,
-    onWithdraw,
-    isWithdrawPending,
-  } = useContext(AppContext);
-
-  const onDepositAndUpdate = async (id) => {
-    await setTxConfirmed(false);
-    await setShowSnackbar(true);
-    await onDeposit(id);
-    setTxConfirmed(true);
-    consultationDetails.amount = (BigInt(consultationDetails.amount) + BigInt(utils.toWei(depositAmount))).toString();
-  }
-
-  const onApproveAndUpdate = async () => {
-    await setTxConfirmed(false);
-    await setShowSnackbar(true);
-    await onApprove();
-    setTxConfirmed(true);
-  }
-
-  const onWithdrawAndupdate = async (id) => {
-    await setTxConfirmed(false);
-    await setShowSnackbar(true);
-    await onWithdraw(id);
-    consultationDetails.amount = (BigInt(consultationDetails.amount) - BigInt(utils.toWei(withdrawalAmount))).toString()
-    setTxConfirmed(true);
-  }
-
-  return (
-    <div
-      className="hiringboard-card"
-      style={{ overflow: 'auto', height: 'auto' }}
-    >
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div>
-          <motion.p
-            className="connected-account"
-            style={{
-              margin: 0,
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            connected as:
-          </motion.p>
-          <motion.p
-            className="connected-account"
-            style={{
-              margin: 0,
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            {shortenAddress(account)}
-          </motion.p>
-        </div>
-        <button
-          className='consultation-button consultation-button--disconnect'
-          initial={{ x: '100vw' }}
-          animate={{ x: 0 }}
-          transition={{ delay: 1.3 }}
-          onClick={() => {
-            disconnectWallet()
-          }}
-        >
-          Disconnect
-        </button>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div
-          className="deposit-withdraw-card"
-        >
-          <p>Wallet Balance:</p>
-          <h2>{raidBalance} RAID</h2>
-          <input
-            id={'deposit-amount'}
-            placeholder={`0`}
-            type={'number'}
-            min={'0'}
-            step={'0.01'}
-            value={depositAmount}
-            onChange={(e) => onChangeDepositAmount(e.target.value)}
-          />
-          <button
-            className='consultation-button'
-            style={{ margin: '0', width: '100%' }}
-            initial={{ x: '100vw' }}
-            animate={{ x: 0 }}
-            transition={{ delay: 1.3 }}
-            disabled={depositAmount === '0' || depositAmount === '' || isDepositPending}
-            onClick={() => {
-              isApproved ? onDepositAndUpdate(consultationDetails.airtable_id) : onApproveAndUpdate();
-            }}
-          >
-            {isDepositPending
-            ? <div className="spinner">Loading...</div>
-            : isApproved
-            ? 'Deposit Bounty'
-            : 'Approve Deposit'}
-          </button>
-        </div>
-        <div className="deposit-withdraw-card">
-        <p>You Deposited:</p>
-          <h2>
-            {consultationDetails.submitter === account 
-            ? utils.fromWei(consultationDetails.amount) : '0'} RAID
-          </h2>
-          <input
-            id={'deposit-amount'}
-            placeholder={`0`}
-            type={'number'}
-            min={'0'}
-            step={'0.01'}
-            value={withdrawalAmount}
-            onChange={(e) => onChangeWithdrawalAmount(e.target.value)}
-          />
-          <button
-            className='consultation-button'
-            style={{ margin: '0', width: '100%' }}
-            initial={{ x: '100vw' }}
-            animate={{ x: 0 }}
-            transition={{ delay: 1.3 }}
-            disabled={
-              withdrawalAmount === '0' 
-              || withdrawalAmount === '' 
-              || BigInt(utils.toWei(withdrawalAmount)) > BigInt(consultationDetails.amount)
-              || isWithdrawPending}
-            onClick={() => {
-              onWithdrawAndupdate(consultationDetails.bid_id)
-            }}
-          >
-            {isWithdrawPending
-            ? <div className="spinner">Loading...</div>
-            : 'Withdraw Bounty'}
-          </button>
-        </div>
-      </div>
     </div>
   )
 }

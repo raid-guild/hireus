@@ -1,3 +1,5 @@
+import { utils } from 'web3';
+
 /**
  * Shorten an Ethereum address. `charsLength` allows to change the number of
  * characters on both sides of the ellipsis.
@@ -20,4 +22,32 @@
     return address;
   }
   return address.slice(0, charsLength + prefixLength) + '…' + address.slice(-charsLength);
+}
+
+export const combineBids = async (consultations, bids) => {
+  const combinedBids = [];
+  consultations.forEach((consultation) => {
+    const combinedBid = {
+      project_name: consultation.project_name,
+      created: consultation.created,
+      airtable_id: consultation.id,
+      bid_id: null,
+      amount: '0',
+      submitter: '',
+      bidCreated: '0',
+    }
+    bids.forEach((bid) => {
+      let airtableId = utils.hexToAscii(bid.details);
+      airtableId =  airtableId.replace(/\0.*$/g,'');
+      if (consultation.id === airtableId) {
+        combinedBid.bid_id = utils.hexToNumber(bid.id.replace('0x3a9f3147742e51efba1f04ff26e8dc95978dccb4-', ''));
+        combinedBid.amount = bid.amount;
+        combinedBid.submitter = utils.toChecksumAddress(bid.submitter.id);
+        combinedBid.bidCreated = bid.createdAt;
+      }
+    })
+    combinedBids.push(combinedBid);
+  })
+
+  return combinedBids;
 }
