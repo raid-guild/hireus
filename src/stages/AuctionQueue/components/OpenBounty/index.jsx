@@ -64,7 +64,6 @@ export const OpenBounty = ({
       {consultationDetails && <div className="hiringboard-card-container">
         <div
           className="hiringboard-card"
-          style={{ overflow: 'auto', height: 'auto' }}
         >
           <div className="open-bid-details-flex">
             <motion.p
@@ -124,6 +123,23 @@ export const OpenBounty = ({
               <span>Total Bounty:</span>{utils.fromWei(consultationDetails.amount)} $RAID
             </motion.p>
           </div>
+          {consultationDetails.withdraws.length > 0 ? (
+            <div className="bounty-list" style={{ marginTop: '20px' }}>
+              {consultationDetails.withdraws.map((withdraw, index) => (
+                <div className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
+                  <div className="bounty-list-item-inner">
+                    <p id="bounty-detail">{new Date(Number(withdraw.withdrawnAt)).toLocaleDateString()}</p>
+                  </div>
+                  <div className="bounty-list-item-inner">
+                    <p id="bounty-detail">{withdraw.withdrawnBy}</p>
+                  </div>
+                  <div className="bounty-list-item-inner">
+                    <p id="bounty-detail">-{utils.fromWei(withdraw.amount)} $RAID</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : <p>There are no bounties.</p>}
         </div>
         {!account ? (
           <div

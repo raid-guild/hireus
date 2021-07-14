@@ -12,7 +12,7 @@ import { LOCKUP_PERIOD } from '../../../../constants/index';
 const graphqlClient = new Client({ url: 'https://api.thegraph.com/subgraphs/name/slgraham/guildauctionqueues-rinkeby' ?? '' });
 
 const BIDS_QUERY = gql`
-  query{
+  query {
     bids(first: 100) {
       id
       amount
@@ -21,6 +21,15 @@ const BIDS_QUERY = gql`
       createTxHash
       submitter {
         id
+      }
+      increases {
+        increasedAt
+        amount
+        increasedBy
+      }
+      withdraws {
+        withdrawnAt
+        amount
       }
     }
   }
