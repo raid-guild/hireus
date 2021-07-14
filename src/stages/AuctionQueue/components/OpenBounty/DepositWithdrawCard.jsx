@@ -7,6 +7,7 @@ import gql from 'graphql-tag';
 import { Client } from 'urql';
 import { shortenAddress, combineBids } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
+import { LOCKUP_PERIOD } from '../../../../constants/index';
 
 const graphqlClient = new Client({ url: 'https://api.thegraph.com/subgraphs/name/slgraham/guildauctionqueues-rinkeby' ?? '' });
 
@@ -23,8 +24,6 @@ const BIDS_QUERY = gql`
     }
   }
 `;
-
-const LOCKUP_PERIOD = 600000;
 
 const DepositWithdrawCared = ({ setShowSnackbar, setTxConfirmed, consultationDetails, setConsultations }) => {
   const [lockupEnded, setLockupEnded] = useState(false);

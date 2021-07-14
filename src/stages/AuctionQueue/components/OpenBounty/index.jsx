@@ -3,6 +3,8 @@
 import React, { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
+import { shortenAddress } from '../../../../utils';
+import { LOCKUP_PERIOD } from '../../../../constants/index';
 import { AppContext } from '../../../../context/AppContext';
 
 import DepositWithdrawCared from './DepositWithdrawCard';
@@ -18,6 +20,22 @@ export const OpenBounty = ({
   const [consultationDetails, setConsultationDetails] = useState(null);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [txConfirmed, setTxConfirmed] = useState(false);
+  const [lockTime, setLockTime] = useState('');
+
+  React.useEffect(() => {
+    if (!consultationDetails) return;
+    const dateNow = Date.now();
+    const lockupEnds = (Number(consultationDetails.bidCreated) * 1000) + LOCKUP_PERIOD;
+    const timeRemaining = lockupEnds - dateNow;
+    if (timeRemaining > 0) {
+      const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+      const remainingSeconds = Math.floor(timeRemaining % (1000 * 60 * 60 * 24));
+      const hours = Math.floor(remainingSeconds / (1000 * 60 * 60));
+      setLockTime(`${days} days, ${hours} hours left`);
+    } else {
+      setLockTime('Lockup period has ended');
+    }
+  }, [consultationDetails]);
 
   React.useEffect(() => {
     if (selectedConsultation && consultations.length > 0) {
@@ -29,6 +47,8 @@ export const OpenBounty = ({
       setSelectedConsultations(null);
     }
   }, [consultations, selectedConsultation, setSelectedConsultations]);
+
+
 
   return (
     <div className="hiringboard-container">
@@ -49,21 +69,28 @@ export const OpenBounty = ({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            Project Name: {consultationDetails.project_name}
+            <span>Submitter:</span>{shortenAddress(consultationDetails.submitter)}
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            Submitted On: {new Date(consultationDetails.created).toLocaleDateString()}
+            <span>Submitted On:</span>{new Date(Number(consultationDetails.bidCreated) * 1000).toLocaleString()}
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            Total Bounty: {utils.fromWei(consultationDetails.amount)} $RAID
+            <span>Lock Time:</span>{lockTime}
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+          >
+            <span>Total Bounty:</span>{utils.fromWei(consultationDetails.amount)} $RAID
           </motion.p>
         </div>
         {!account ? (

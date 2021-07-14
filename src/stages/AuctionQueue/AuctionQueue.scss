@@ -42,6 +42,15 @@
   padding: 40px;
   position: relative;
   width: 48%;
+  
+  p {
+    margin-bottom: 5px;
+
+    span {
+      display: inline-block;
+      width: 150px;
+    }
+  }
 }
 
 #consultation-button-container {

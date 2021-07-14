@@ -1,0 +1,1 @@
+export const LOCKUP_PERIOD = 600000;
