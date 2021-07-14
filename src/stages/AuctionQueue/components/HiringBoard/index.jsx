@@ -28,7 +28,7 @@ export const HiringBoard = ({
           >
             To hire RaidGuild, you must first request a consultation. 
             Consultations have a base cost of $500 xDai, and are initially 
-            ordered by date (ascending). Anyone can add a bounty (in $RAID) 
+            ordered by date (ascending). Anyone can add a bid (in $RAID) 
             to an open consultation.
           </motion.p>
           <div id='consultation-button-container'>
@@ -62,7 +62,7 @@ export const HiringBoard = ({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7, duration: 0.5 }}
           >
-            Highest bounties:
+            Highest bids:
           </motion.h2>
           {!consultations ? <p>Loading...</p> : consultations.length > 0 ? (
             <div className="bounty-list">

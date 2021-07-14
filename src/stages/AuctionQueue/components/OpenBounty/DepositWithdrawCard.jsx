@@ -158,7 +158,7 @@ const DepositWithdrawCared = ({ setShowSnackbar, setTxConfirmed, consultationDet
           className="deposit-withdraw-card"
         >
           <p>Wallet Balance:</p>
-          <h2>{raidBalance} RAID</h2>
+          <h2>{raidBalance} $RAID</h2>
           <input
             id={'deposit-amount'}
             placeholder={`0`}
@@ -182,15 +182,15 @@ const DepositWithdrawCared = ({ setShowSnackbar, setTxConfirmed, consultationDet
             {isDepositPending
             ? <div className="spinner">Loading...</div>
             : isApproved
-            ? 'Deposit Bounty'
-            : 'Approve Deposit'}
+            ? 'Submit Bid'
+            : 'Approve Bid'}
           </button>
         </div>
         <div className="deposit-withdraw-card">
-        <p>You Deposited:</p>
+        <p>Your bid:</p>
           <h2>
             {consultationDetails.submitter === account 
-            ? utils.fromWei(consultationDetails.amount) : '0'} RAID
+            ? utils.fromWei(consultationDetails.amount) : '0'} $RAID
           </h2>
           <input
             id={'deposit-amount'}
@@ -219,7 +219,7 @@ const DepositWithdrawCared = ({ setShowSnackbar, setTxConfirmed, consultationDet
           >
             {isWithdrawPending
             ? <div className="spinner">Loading...</div>
-            : 'Withdraw Bounty'}
+            : 'Withdraw Bid'}
           </button>
         </div>
       </div>

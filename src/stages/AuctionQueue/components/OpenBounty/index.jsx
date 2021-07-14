@@ -37,7 +37,7 @@ export const OpenBounty = ({
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.5 }}
       >
-        Open Bounty
+        Open Bid
       </motion.h1>
       {consultationDetails && <div className="hiringboard-card-container">
         <div
@@ -81,7 +81,7 @@ export const OpenBounty = ({
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
             >
-              Connect a wallet to add or remove $RAID to this bounty
+              Connect a wallet to add or remove $RAID to this bid
             </motion.p>
             <button
               className='consultation-button consultation-button--close'
