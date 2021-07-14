@@ -18,6 +18,7 @@ const BIDS_QUERY = gql`
       amount
       createdAt
       details
+      createTxHash
       submitter {
         id
       }

@@ -7,6 +7,8 @@ import { shortenAddress } from '../../../../utils';
 import { LOCKUP_PERIOD } from '../../../../constants/index';
 import { AppContext } from '../../../../context/AppContext';
 
+import { ReactComponent as EtherscanSvg } from '../../../../assets/etherscan.svg';
+
 import DepositWithdrawCared from './DepositWithdrawCard';
 import Snackbar from '../../../../components/Snackbar';
 
@@ -64,34 +66,64 @@ export const OpenBounty = ({
           className="hiringboard-card"
           style={{ overflow: 'auto', height: 'auto' }}
         >
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            <span>Submitter:</span>{shortenAddress(consultationDetails.submitter)}
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            <span>Submitted On:</span>{new Date(Number(consultationDetails.bidCreated) * 1000).toLocaleString()}
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            <span>Lock Time:</span>{lockTime}
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            <span>Total Bounty:</span>{utils.fromWei(consultationDetails.amount)} $RAID
-          </motion.p>
+          <div className="open-bid-details-flex">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              <span>Submitter:</span>{shortenAddress(consultationDetails.submitter)}
+            </motion.p>
+            <motion.a
+              href={`https://rinkeby.etherscan.io/address/${consultationDetails.submitter}`}
+              target={'_blank'}
+              rel={'noopener noreferrer'}
+              className="etherscan-container"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              <EtherscanSvg />
+            </motion.a>
+          </div>
+          <div className="open-bid-details-flex">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              <span>Submitted On:</span>{new Date(Number(consultationDetails.bidCreated) * 1000).toLocaleString()}
+            </motion.p>
+            <motion.a
+              href={`https://rinkeby.etherscan.io/tx/${consultationDetails.createTxHash}`}
+              target={'_blank'}
+              rel={'noopener noreferrer'}
+              className="etherscan-container"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              <EtherscanSvg />
+            </motion.a>
+          </div>
+          <div className="open-bid-details-flex">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              <span>Lock Time:</span>{lockTime}
+            </motion.p>
+          </div>
+          <div className="open-bid-details-flex">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              <span>Total Bounty:</span>{utils.fromWei(consultationDetails.amount)} $RAID
+            </motion.p>
+          </div>
         </div>
         {!account ? (
           <div

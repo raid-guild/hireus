@@ -35,6 +35,7 @@ export const combineBids = async (consultations, bids) => {
       amount: '0',
       submitter: '',
       bidCreated: '0',
+      createTxHash: '',
     }
     bids.forEach((bid) => {
       let airtableId = utils.hexToAscii(bid.details);
@@ -44,6 +45,7 @@ export const combineBids = async (consultations, bids) => {
         combinedBid.amount = bid.amount;
         combinedBid.submitter = utils.toChecksumAddress(bid.submitter.id);
         combinedBid.bidCreated = bid.createdAt;
+        combinedBid.createTxHash = bid.createTxHash;
       }
     })
     combinedBids.push(combinedBid);
