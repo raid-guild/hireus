@@ -35,7 +35,13 @@ const BIDS_QUERY = gql`
   }
 `;
 
-const DepositWithdrawCared = ({ setShowSnackbar, setTxConfirmed, consultationDetails, setConsultations }) => {
+const DepositWithdrawCared = ({
+  setShowSnackbar,
+  setTxConfirmed,
+  consultationDetails,
+  setConsultations,
+  lockTime,
+}) => {
   const [lockupEnded, setLockupEnded] = useState(false);
   const {
     account,
@@ -232,6 +238,14 @@ const DepositWithdrawCared = ({ setShowSnackbar, setTxConfirmed, consultationDet
           </button>
         </div>
       </div>
+      <motion.p
+        id="lock-time"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6, duration: 0.5 }}
+      >
+        {lockTime}
+      </motion.p>
     </div>
   )
 }

@@ -36,20 +36,34 @@ export const combineBids = async (consultations, bids) => {
       submitter: '',
       bidCreated: '0',
       createTxHash: '',
-      increases: [],
-      withdraws: [],
+      changes: [],
     }
     bids.forEach((bid) => {
       let airtableId = utils.hexToAscii(bid.details);
       airtableId =  airtableId.replace(/\0.*$/g,'');
+      const changes = [...bid.withdraws, ...bid.increases];
+      const updatedChanges = changes.map(change => {
+        if (change.withdrawnAt) {
+          const updatedChange = change;
+          updatedChange.changedAt = change.withdrawnAt;
+          return updatedChange;
+        } else {
+          const updatedChange = change;
+          updatedChange.changedAt = change.increasedAt;
+          return updatedChange;
+        }
+      });
+
+      updatedChanges.sort(function(a,b){
+        return new Date(Number(b.changedAt)) - new Date(Number(a.changedAt));
+      });
       if (consultation.id === airtableId) {
         combinedBid.bid_id = utils.hexToNumber(bid.id.replace('0x3a9f3147742e51efba1f04ff26e8dc95978dccb4-', ''));
         combinedBid.amount = bid.amount;
         combinedBid.submitter = utils.toChecksumAddress(bid.submitter.id);
         combinedBid.bidCreated = bid.createdAt;
         combinedBid.createTxHash = bid.createTxHash;
-        combinedBid.increases = [...combinedBid.increases, ...bid.increases];
-        combinedBid.withdraws = [...combinedBid.withdraws, ...bid.withdraws];
+        combinedBid.changes = [...combinedBid.changes, ...updatedChanges];
       }
     })
     combinedBids.push(combinedBid);

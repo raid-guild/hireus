@@ -123,18 +123,20 @@ export const OpenBounty = ({
               <span>Total Bounty:</span>{utils.fromWei(consultationDetails.amount)} $RAID
             </motion.p>
           </div>
-          {consultationDetails.withdraws.length > 0 ? (
+          {consultationDetails.changes.length > 0 ? (
             <div className="bounty-list" style={{ marginTop: '20px' }}>
-              {consultationDetails.withdraws.map((withdraw, index) => (
-                <div className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
+              {consultationDetails.changes.map((change, index) => (
+                <div key={index} className={`increase-withdraw-list-item increase-withdraw-list-item${index % 2 !== 0 && '--2'}`}>
                   <div className="bounty-list-item-inner">
-                    <p id="bounty-detail">{new Date(Number(withdraw.withdrawnAt)).toLocaleDateString()}</p>
+                    <p className="bounty-detail">{new Date(Number(change.changedAt ) * 1000).toLocaleDateString()}</p>
                   </div>
                   <div className="bounty-list-item-inner">
-                    <p id="bounty-detail">{withdraw.withdrawnBy}</p>
+                    <p className="bounty-detail">{shortenAddress(change.increasedBy || '')}</p>
                   </div>
                   <div className="bounty-list-item-inner">
-                    <p id="bounty-detail">-{utils.fromWei(withdraw.amount)} $RAID</p>
+                    <p className={`withdraw-amount withdraw-amount--${change.withdrawnAt ? 'red' : 'green'}`}>
+                      {change.withdrawnAt ? '-' : '+'}{utils.fromWei(change.amount)} $RAID
+                    </p>
                   </div>
                 </div>
               ))}
@@ -179,6 +181,7 @@ export const OpenBounty = ({
             setTxConfirmed={setTxConfirmed}
             consultationDetails={consultationDetails}
             setConsultations={setConsultations}
+            lockTime={lockTime}
           />
         )}
       </div>}

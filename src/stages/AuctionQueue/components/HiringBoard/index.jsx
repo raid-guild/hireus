@@ -69,7 +69,7 @@ export const HiringBoard = ({
               {consultations.map((consultation, index) => (
                 <div onClick={() => setSelectedConsultations(consultation.project_name)} key={index} className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
                   <div className="bounty-list-item-inner">
-                    <p id="bounty-detail">{new Date(consultation.created).toLocaleDateString()}</p>
+                    <p className="bounty-detail">{new Date(consultation.created).toLocaleDateString()}</p>
                     <p>
                       {consultation.project_name.length > 18
                         ? consultation.project_name.slice(0, 17) + '...'
@@ -78,7 +78,7 @@ export const HiringBoard = ({
                     </p>
                   </div>
                   <div className="bounty-list-item-inner">
-                    <p id="bounty-detail">{utils.fromWei(consultation.amount)} $RAID</p>
+                    <p className="bounty-detail">{utils.fromWei(consultation.amount)} $RAID</p>
                     <button>open</button>
                   </div>
                 </div>

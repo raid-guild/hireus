@@ -11,7 +11,7 @@
     font-size: 2rem;
     text-transform: uppercase;
     text-align: left;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
     color: $theme-color-primary;
   }
   h2 {
@@ -37,7 +37,8 @@
 
 .hiringboard-card {
   border: 2px solid $theme-color-primary;
-  height: 350px;
+  min-height: 400px;
+  max-height: 450px;
   overflow-y: scroll;
   padding: 40px;
   position: relative;
@@ -115,6 +116,19 @@ button.consultation-button:disabled {
   }
 }
 
+.increase-withdraw-list-item {
+  align-items: center;
+  border: 2px solid transparent;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  transition: all .3s ease;
+
+  &--2 {
+    background: rgba(0, 0, 0, 0.2);
+  }
+}
+
 .bounty-list-item-inner {
   align-items: center;
   display: flex;
@@ -124,8 +138,17 @@ button.consultation-button:disabled {
     margin: 0;
   }
 
-  p#bounty-detail {
+  p.bounty-detail {
     width: 100px;
+  }
+
+  .withdraw-amount {
+    &--red {
+      color: red;
+    }
+    &--green {
+      color: green;
+    }
   }
 
   button {
@@ -176,4 +199,10 @@ button.consultation-button:disabled {
 
 .open-bid-details-flex {
   display: flex;
+}
+
+#lock-time {
+  margin-top: 15px;
+  margin-bottom: 0;
+  text-align: center;
 }
