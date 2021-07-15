@@ -47,7 +47,16 @@ export const OpenBounty = ({
   setSelectedConsultations,
   setConsultations,
 }) => {
-  const { account, connectWallet, hash, onCancel, isCancelPending, shares } = useContext(AppContext);
+  const {
+    account,
+    connectWallet,
+    hash,
+    onCancel,
+    onAccept,
+    isCancelPending,
+    isAcceptPending,
+    shares
+  } = useContext(AppContext);
   const [consultationDetails, setConsultationDetails] = useState(null);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [txConfirmed, setTxConfirmed] = useState(false);
@@ -118,6 +127,14 @@ export const OpenBounty = ({
     setTxConfirmed(false);
     setShowSnackbar(true);
     await onCancel(id);
+    await fetchBids();
+    setTxConfirmed(true);
+  }
+
+  const onAcceptAndUpdate = async (id) => {
+    setTxConfirmed(false);
+    setShowSnackbar(true);
+    await onAccept(id);
     await fetchBids();
     setTxConfirmed(true);
   }
@@ -269,16 +286,19 @@ export const OpenBounty = ({
           >
             Close
           </button>
-          {shares >= 10 && <button
+          {(shares >= 10 && consultationDetails?.bid_id) && <button
             className='consultation-button'
             initial={{ x: '100vw' }}
             animate={{ x: 0 }}
             transition={{ delay: 1.3 }}
+            disabled={isAcceptPending}
             onClick={() => {
-              console.log('Accept');
+              onAcceptAndUpdate(consultationDetails.bid_id);
             }}
           >
-            Accept
+            {isAcceptPending
+            ? <div className="spinner">Loading...</div>
+            : 'Accept'}
           </button>}
         </div>
         {consultationDetails?.submitter === account && <div className="open-bounty-buttons-container">

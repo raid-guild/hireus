@@ -93,6 +93,7 @@ class AppContextProvider extends Component {
     fundsSufficient: false,
     isWithdrawPending: false,
     isCancelPending: false,
+    isAcceptPending: false,
   };
 
   inputChangeHandler = (e) => {
@@ -333,6 +334,34 @@ class AppContextProvider extends Component {
     this.setState({ isCancelPending: false});
   }
 
+  onAccept = async (id) => {
+    this.setState({ isAcceptPending: true, hash: ''});
+    try {
+      const QUEUE_CONTRACT = new this.state.web3.eth.Contract(QUEUE_ABI, QUEUE_CONTRACT_ADDRESS);
+      await QUEUE_CONTRACT.methods
+        .acceptBid(
+          id
+        )
+        .send({
+          from: this.state.account
+        })
+        .once('transactionHash', async (hash) => {
+          this.setState({ hash: hash });
+        })
+        .on('confirmation', async () => {
+          await this.getRaidBalance();
+          this.onChangeWithdrawalAmount('');
+        })
+        .on('error', function(error) {
+          console.error('Could not withdraw tokens', error);
+        });;
+    } catch (err) {
+      console.error('Could not withdraw tokens', err);
+    }
+    this.setState({ isAcceptPending: false});
+  }
+  // End of Auction Queue Functionality
+
   sendData = async (hash = 'not paid') => {
     await axios
       .post('https://guild-keeper.herokuapp.com/hireus-v2/consultation', {
@@ -448,6 +477,7 @@ class AppContextProvider extends Component {
           onIncreaseBid: this.onIncreaseBid,
           onWithdraw: this.onWithdraw,
           onCancel: this.onCancel,
+          onAccept: this.onAccept,
           updateStage: this.updateStage,
           setPersonalData: this.setPersonalData,
           setProjectData: this.setProjectData,
