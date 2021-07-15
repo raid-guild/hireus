@@ -130,7 +130,7 @@ export const OpenBounty = ({
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.5 }}
       >
-        Open Bid
+        Open Bid: {consultationDetails?.project_name}
       </motion.h1>
       {consultationDetails && <div className="hiringboard-card-container">
         <div
