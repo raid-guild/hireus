@@ -55,6 +55,7 @@ const DepositWithdrawCared = ({
     onApprove,
     isDepositPending,
     onDeposit,
+    onIncreaseBid,
     onWithdraw,
     isWithdrawPending,
   } = useContext(AppContext);
@@ -106,7 +107,11 @@ const DepositWithdrawCared = ({
   const onDepositAndUpdate = async (id) => {
     await setTxConfirmed(false);
     await setShowSnackbar(true);
-    await onDeposit(id);
+    if (consultationDetails.bid_id) {
+      await onIncreaseBid(id);
+    } else {
+      await onDeposit(id);
+    }
     await fetchBids();
     setTxConfirmed(true);
   }
@@ -191,7 +196,7 @@ const DepositWithdrawCared = ({
             transition={{ delay: 1.3 }}
             disabled={depositAmount === '0' || depositAmount === '' || isDepositPending}
             onClick={() => {
-              isApproved ? onDepositAndUpdate(consultationDetails.airtable_id) : onApproveAndUpdate();
+              isApproved ? onDepositAndUpdate(consultationDetails.bid_id) : onApproveAndUpdate();
             }}
           >
             {isDepositPending
