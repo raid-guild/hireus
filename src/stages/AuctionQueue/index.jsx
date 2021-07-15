@@ -16,6 +16,7 @@ const BIDS_QUERY = gql`
       createdAt
       details
       createTxHash
+      status
       submitter {
         id
       }

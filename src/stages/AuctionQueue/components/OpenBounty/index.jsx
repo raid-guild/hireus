@@ -9,7 +9,7 @@ import { AppContext } from '../../../../context/AppContext';
 
 import { ReactComponent as EtherscanSvg } from '../../../../assets/etherscan.svg';
 
-import DepositWithdrawCared from './DepositWithdrawCard';
+import DepositWithdrawCard from './DepositWithdrawCard';
 import Snackbar from '../../../../components/Snackbar';
 
 export const OpenBounty = ({
@@ -65,6 +65,7 @@ export const OpenBounty = ({
         <div
           className="hiringboard-card"
         >
+          {consultationDetails.bid_id ? (<>
           <div className="open-bid-details-flex">
             <motion.p
               initial={{ opacity: 0 }}
@@ -122,8 +123,8 @@ export const OpenBounty = ({
             >
               <span>Total Bounty:</span>{utils.fromWei(consultationDetails.amount)} $RAID
             </motion.p>
-          </div>
-          {consultationDetails.changes.length > 0 ? (
+          </div></>) : <p>No bid has been submitted.</p>}
+          {consultationDetails.changes.length > 0 && (
             <div className="bounty-list" style={{ marginTop: '20px' }}>
               {consultationDetails.changes.map((change, index) => (
                 <div key={index} className={`increase-withdraw-list-item increase-withdraw-list-item${index % 2 !== 0 && '--2'}`}>
@@ -141,7 +142,7 @@ export const OpenBounty = ({
                 </div>
               ))}
             </div>
-          ) : <p>There are no bounties.</p>}
+          )}
         </div>
         {!account ? (
           <div
@@ -161,7 +162,7 @@ export const OpenBounty = ({
               Connect a wallet to add or remove $RAID to this bid
             </motion.p>
             <button
-              className='consultation-button consultation-button--close'
+              className='consultation-button'
               initial={{ x: '100vw' }}
               animate={{ x: 0 }}
               transition={{ delay: 1.3 }}
@@ -169,6 +170,7 @@ export const OpenBounty = ({
                 connectWallet()
               }}
               style={{
+                marginTop: '20px',
                 width: '200px',
               }}
             >
@@ -176,7 +178,7 @@ export const OpenBounty = ({
             </button>
           </div>
         ) : (
-          <DepositWithdrawCared
+          <DepositWithdrawCard
             setShowSnackbar={setShowSnackbar}
             setTxConfirmed={setTxConfirmed}
             consultationDetails={consultationDetails}
@@ -185,14 +187,42 @@ export const OpenBounty = ({
           />
         )}
       </div>}
-      <button
-        className='consultation-button consultation-button--close'
-        onClick={() => {
-          setSelectedConsultations(null);
-        }}
-      >
-        Close
-      </button>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className="open-bounty-buttons-container">
+          <button
+            className='consultation-button consultation-button--close'
+            onClick={() => {
+              setSelectedConsultations(null);
+            }}
+          >
+            Close
+          </button>
+          {/* <button
+            className='consultation-button'
+            initial={{ x: '100vw' }}
+            animate={{ x: 0 }}
+            transition={{ delay: 1.3 }}
+            onClick={() => {
+              console.log('Accept');
+            }}
+          >
+            Accept
+          </button> */}
+        </div>
+        {consultationDetails?.submitter === account && <div className="open-bounty-buttons-container">
+          <button
+            className='consultation-button'
+            initial={{ x: '100vw' }}
+            animate={{ x: 0 }}
+            transition={{ delay: 1.3 }}
+            onClick={() => {
+              console.log('Accept');
+            }}
+          >
+            Cancel
+          </button>
+        </div>}
+      </div>
       {(showSnackbar && hash !== '') && <Snackbar
         setShowSnackbar={setShowSnackbar}
         message={txConfirmed ? 'Transaction Confirmed!' : 'Transaction Pending...'}

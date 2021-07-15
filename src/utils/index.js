@@ -38,7 +38,8 @@ export const combineBids = async (consultations, bids) => {
       createTxHash: '',
       changes: [],
     }
-    bids.forEach((bid) => {
+    const openBids = bids.filter(bid => bid.status !== 'canceled');
+    openBids.forEach((bid) => {
       let airtableId = utils.hexToAscii(bid.details);
       airtableId =  airtableId.replace(/\0.*$/g,'');
       const changes = [...bid.withdraws, ...bid.increases];
@@ -64,8 +65,10 @@ export const combineBids = async (consultations, bids) => {
         combinedBid.bidCreated = bid.createdAt;
         combinedBid.createTxHash = bid.createTxHash;
         combinedBid.changes = [...combinedBid.changes, ...updatedChanges];
+        combinedBid.status = bid.status;
       }
     })
+
     combinedBids.push(combinedBid);
   })
 

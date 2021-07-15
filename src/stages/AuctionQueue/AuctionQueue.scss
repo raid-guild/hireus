@@ -75,6 +75,9 @@ button.consultation-button {
 
   &--close {
     margin: 20px 0 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
 
   &--disconnect {
@@ -205,4 +208,13 @@ button.consultation-button:disabled {
   margin-top: 15px;
   margin-bottom: 0;
   text-align: center;
+}
+
+.open-bounty-buttons-container {
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  margin-top: 20px;
+  position: relative;
+  width: 48%;
 }

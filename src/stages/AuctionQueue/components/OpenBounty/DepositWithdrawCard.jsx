@@ -19,6 +19,7 @@ const BIDS_QUERY = gql`
       createdAt
       details
       createTxHash
+      status
       submitter {
         id
       }
@@ -196,7 +197,11 @@ const DepositWithdrawCared = ({
             transition={{ delay: 1.3 }}
             disabled={depositAmount === '0' || depositAmount === '' || isDepositPending}
             onClick={() => {
-              isApproved ? onDepositAndUpdate(consultationDetails.bid_id) : onApproveAndUpdate();
+              isApproved
+                ? onDepositAndUpdate(consultationDetails.bid_id
+                ? consultationDetails.bid_id
+                : consultationDetails.airtable_id)
+                : onApproveAndUpdate();
             }}
           >
             {isDepositPending
@@ -243,14 +248,14 @@ const DepositWithdrawCared = ({
           </button>
         </div>
       </div>
-      <motion.p
+      {consultationDetails.bid_id && <motion.p
         id="lock-time"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6, duration: 0.5 }}
       >
         {lockTime}
-      </motion.p>
+      </motion.p>}
     </div>
   )
 }
