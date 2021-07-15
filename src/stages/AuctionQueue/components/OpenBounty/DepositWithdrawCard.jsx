@@ -106,8 +106,8 @@ const DepositWithdrawCared = ({
   }
 
   const onDepositAndUpdate = async (id) => {
-    await setTxConfirmed(false);
-    await setShowSnackbar(true);
+    setTxConfirmed(false);
+    setShowSnackbar(true);
     if (consultationDetails.bid_id) {
       await onIncreaseBid(id);
     } else {
@@ -118,15 +118,15 @@ const DepositWithdrawCared = ({
   }
 
   const onApproveAndUpdate = async () => {
-    await setTxConfirmed(false);
-    await setShowSnackbar(true);
+    setTxConfirmed(false);
+    setShowSnackbar(true);
     await onApprove();
     setTxConfirmed(true);
   }
 
   const onWithdrawAndupdate = async (id) => {
-    await setTxConfirmed(false);
-    await setShowSnackbar(true);
+    setTxConfirmed(false);
+    setShowSnackbar(true);
     await onWithdraw(id);
     await fetchBids();
     setTxConfirmed(true);

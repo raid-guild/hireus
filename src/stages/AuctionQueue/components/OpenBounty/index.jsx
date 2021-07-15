@@ -3,7 +3,9 @@
 import React, { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
-import { shortenAddress } from '../../../../utils';
+import gql from 'graphql-tag';
+import { Client } from 'urql';
+import { shortenAddress, combineBids } from '../../../../utils';
 import { LOCKUP_PERIOD } from '../../../../constants/index';
 import { AppContext } from '../../../../context/AppContext';
 
@@ -12,13 +14,40 @@ import { ReactComponent as EtherscanSvg } from '../../../../assets/etherscan.svg
 import DepositWithdrawCard from './DepositWithdrawCard';
 import Snackbar from '../../../../components/Snackbar';
 
+const graphqlClient = new Client({ url: 'https://api.thegraph.com/subgraphs/name/slgraham/guildauctionqueues-rinkeby' ?? '' });
+
+const BIDS_QUERY = gql`
+  query {
+    bids(first: 100) {
+      id
+      amount
+      createdAt
+      details
+      createTxHash
+      status
+      submitter {
+        id
+      }
+      increases {
+        increasedAt
+        amount
+        increasedBy
+      }
+      withdraws {
+        withdrawnAt
+        amount
+      }
+    }
+  }
+`;
+
 export const OpenBounty = ({
   consultations,
   selectedConsultation,
   setSelectedConsultations,
   setConsultations,
 }) => {
-  const { account, connectWallet, hash } = useContext(AppContext);
+  const { account, connectWallet, hash, onCancel, isCancelPending } = useContext(AppContext);
   const [consultationDetails, setConsultationDetails] = useState(null);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [txConfirmed, setTxConfirmed] = useState(false);
@@ -50,7 +79,49 @@ export const OpenBounty = ({
     }
   }, [consultations, selectedConsultation, setSelectedConsultations]);
 
+  const fetchBids = async () => {
+    console.log('Fetching...');
+    try {
+      const result = await graphqlClient.query(BIDS_QUERY).toPromise();
+      if (!result?.data) {
+        return;
+      }
+      const contractBids = result.data.bids;
+      fetch(`https://guild-keeper.herokuapp.com/hireus-v2/awaiting-raids`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "key":process.env.REACT_APP_ACCESS_KEY
+      })
+    })
+      .then((res) => res.json())
+      .then(async (data) => {
+        if (!contractBids) return;
+        const combinedBids = await combineBids(data, contractBids);
+        combinedBids.sort(function(a,b){
+          return new Date(b.created) - new Date(a.created);
+        });
+        combinedBids.sort((a,b) => Number(b.amount)-Number(a.amount));
+        console.log(combinedBids);
+        setConsultations(combinedBids);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
+  const onCancelAndUpdate = async (id) => {
+    setTxConfirmed(false);
+    setShowSnackbar(true);
+    await onCancel(id);
+    await fetchBids();
+    setTxConfirmed(true);
+  }
 
   return (
     <div className="hiringboard-container">
@@ -123,7 +194,7 @@ export const OpenBounty = ({
             >
               <span>Total Bounty:</span>{utils.fromWei(consultationDetails.amount)} $RAID
             </motion.p>
-          </div></>) : <p>No bid has been submitted.</p>}
+          </div></>) : <p>No bid has been submitted for this consultation.</p>}
           {consultationDetails.changes.length > 0 && (
             <div className="bounty-list" style={{ marginTop: '20px' }}>
               {consultationDetails.changes.map((change, index) => (
@@ -215,11 +286,14 @@ export const OpenBounty = ({
             initial={{ x: '100vw' }}
             animate={{ x: 0 }}
             transition={{ delay: 1.3 }}
+            disabled={isCancelPending}
             onClick={() => {
-              console.log('Accept');
+              onCancelAndUpdate(consultationDetails.bid_id);
             }}
           >
-            Cancel
+            {isCancelPending
+            ? <div className="spinner">Loading...</div>
+            : 'Cancel'}
           </button>
         </div>}
       </div>
