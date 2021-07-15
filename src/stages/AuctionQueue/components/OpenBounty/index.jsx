@@ -203,7 +203,9 @@ export const OpenBounty = ({
                     <p className="bounty-detail">{new Date(Number(change.changedAt ) * 1000).toLocaleDateString()}</p>
                   </div>
                   <div className="bounty-list-item-inner">
-                    <p className="bounty-detail">{shortenAddress(change.increasedBy || '')}</p>
+                    <p className="bounty-detail">
+                      {shortenAddress(change.increasedBy || consultationDetails.submitter)}
+                    </p>
                   </div>
                   <div className="bounty-list-item-inner">
                     <p className={`withdraw-amount withdraw-amount--${change.withdrawnAt ? 'red' : 'green'}`}>
