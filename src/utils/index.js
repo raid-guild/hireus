@@ -38,7 +38,7 @@ export const combineBids = async (consultations, bids) => {
       createTxHash: '',
       changes: [],
     }
-    const openBids = bids.filter(bid => bid.status !== 'canceled');
+    const openBids = bids.filter(bid => bid.status !== 'canceled' && bid.status !== 'accepted');
     openBids.forEach((bid) => {
       let airtableId = utils.hexToAscii(bid.details);
       airtableId =  airtableId.replace(/\0.*$/g,'');
