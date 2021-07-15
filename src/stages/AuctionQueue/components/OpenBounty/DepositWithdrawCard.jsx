@@ -98,7 +98,7 @@ const DepositWithdrawCared = ({
         setConsultations(combinedBids);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
     } catch (err) {
       console.error(err);

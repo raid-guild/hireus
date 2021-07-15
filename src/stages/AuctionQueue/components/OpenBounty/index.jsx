@@ -47,7 +47,7 @@ export const OpenBounty = ({
   setSelectedConsultations,
   setConsultations,
 }) => {
-  const { account, connectWallet, hash, onCancel, isCancelPending } = useContext(AppContext);
+  const { account, connectWallet, hash, onCancel, isCancelPending, shares } = useContext(AppContext);
   const [consultationDetails, setConsultationDetails] = useState(null);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [txConfirmed, setTxConfirmed] = useState(false);
@@ -104,11 +104,10 @@ export const OpenBounty = ({
           return new Date(b.created) - new Date(a.created);
         });
         combinedBids.sort((a,b) => Number(b.amount)-Number(a.amount));
-        console.log(combinedBids);
         setConsultations(combinedBids);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
     } catch (err) {
       console.error(err);
@@ -270,7 +269,7 @@ export const OpenBounty = ({
           >
             Close
           </button>
-          {/* <button
+          {shares >= 10 && <button
             className='consultation-button'
             initial={{ x: '100vw' }}
             animate={{ x: 0 }}
@@ -280,7 +279,7 @@ export const OpenBounty = ({
             }}
           >
             Accept
-          </button> */}
+          </button>}
         </div>
         {consultationDetails?.submitter === account && <div className="open-bounty-buttons-container">
           <button

@@ -37,6 +37,9 @@ const RAID_ABI = require('../abi/ERC20_ABI.json');
 const QUEUE_CONTRACT_ADDRESS = '0x3a9F3147742E51EFBa1F04ff26E8DC95978dccB4';
 const QUEUE_ABI = require('../abi/QUEUE_ABI.json');
 
+const DAO_ADDRESS = '0xE189A9C5AcFD2e53C4663150b2703b9fFAd224ff';
+const MOLOCH_ABI = require('../abi/MOLOCH_ABI.json');
+
 // KOVAN TESTNET
 // const DAI_CONTRACT_ADDRESS = '0xff795577d9ac8bd7d90ee22b6c1703490b6512fd';
 // const DAI_ABI = require('../abi/DAI_ABI.json');
@@ -81,6 +84,7 @@ class AppContextProvider extends Component {
     rating: '',
 
     raidBalance: '0',
+    shares: 0,
     raidAllowance: '0',
     depositAmount: '',
     withdrawalAmount: '',
@@ -146,6 +150,7 @@ class AppContextProvider extends Component {
       this.setState({ chainID: chainId });
     });
     await this.getRaidBalance();
+    await this.getShares();
   };
 
   disconnectWallet = () => {
@@ -165,6 +170,12 @@ class AppContextProvider extends Component {
     const allowance = await RAID.methods.allowance(this.state.account, QUEUE_CONTRACT_ADDRESS).call();
     const allowanceConverted = this.state.web3.utils.fromWei(allowance);
     this.setState({ raidBalance: balanceConverted, raidAllowance: allowanceConverted });
+  }
+
+  getShares = async () => {
+    const DAO = new this.state.web3.eth.Contract(MOLOCH_ABI, DAO_ADDRESS);
+    const members = await DAO.methods.members(this.state.account).call();
+    this.setState({ shares: Number(members['1'] || 0) });
   }
 
   onChangeDepositAmount = (amount) => {
