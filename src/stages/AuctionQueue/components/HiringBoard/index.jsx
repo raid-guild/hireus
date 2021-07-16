@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
 
-import { round } from '../../../../utils';
+import { round, shortenAddress } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 
 export const HiringBoard = ({
@@ -72,9 +72,9 @@ export const HiringBoard = ({
                   <div className="bounty-list-item-inner">
                     <p className="bounty-detail">{new Date(consultation.created).toLocaleDateString()}</p>
                     <p>
-                      {consultation.project_name.length > 18
-                        ? consultation.project_name.slice(0, 17) + '...'
-                        : consultation.project_name
+                      {consultation.submitter
+                        ? shortenAddress(consultation.submitter)
+                        : consultation.project_name.slice(0, 17) + '...'
                       }
                     </p>
                   </div>
