@@ -11,6 +11,7 @@ import { AppContext } from '../../../../context/AppContext';
 
 import { ReactComponent as EtherscanSvg } from '../../../../assets/etherscan.svg';
 
+import ConfirmCancel from '../../../../components/ConfirmCancel';
 import DepositWithdrawCard from './DepositWithdrawCard';
 import Snackbar from '../../../../components/Snackbar';
 
@@ -309,6 +310,12 @@ export const OpenBounty = ({
         message={txConfirmed ? 'Transaction Confirmed!' : 'Transaction Pending...'}
         hash={hash}
       />}
+      <ConfirmCancel
+        consultationDetails={consultationDetails}
+        setTxConfirmed={setTxConfirmed}
+        setShowSnackbar={setShowSnackbar}
+        setConsultations={setConsultations}
+      />
     </div>
   )
 }

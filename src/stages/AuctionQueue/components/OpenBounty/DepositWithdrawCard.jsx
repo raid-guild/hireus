@@ -61,8 +61,8 @@ const DepositWithdrawCared = ({
     onIncreaseBid,
     onWithdraw,
     isWithdrawPending,
-    onCancel,
     isCancelPending,
+    updateCancelModalStatus,
   } = useContext(AppContext);
 
   React.useEffect(() => {
@@ -132,14 +132,6 @@ const DepositWithdrawCared = ({
     setTxConfirmed(false);
     setShowSnackbar(true);
     await onWithdraw(id);
-    await fetchBids();
-    setTxConfirmed(true);
-  }
-
-  const onCancelAndUpdate = async (id) => {
-    setTxConfirmed(false);
-    setShowSnackbar(true);
-    await onCancel(id);
     await fetchBids();
     setTxConfirmed(true);
   }
@@ -284,7 +276,7 @@ const DepositWithdrawCared = ({
             transition={{ delay: 1.3 }}
             disabled={isCancelPending}
             onClick={() => {
-              onCancelAndUpdate(consultationDetails.bid_id);
+              updateCancelModalStatus(true);
             }}
           >
             {isCancelPending

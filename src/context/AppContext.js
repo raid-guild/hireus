@@ -94,6 +94,7 @@ class AppContextProvider extends Component {
     isWithdrawPending: false,
     isCancelPending: false,
     isAcceptPending: false,
+    cancelModalStatus: false,
   };
 
   inputChangeHandler = (e) => {
@@ -360,6 +361,10 @@ class AppContextProvider extends Component {
     }
     this.setState({ isAcceptPending: false});
   }
+
+  updateCancelModalStatus = (status) => {
+    this.setState({ cancelModalStatus: status });
+  };
   // End of Auction Queue Functionality
 
   sendData = async (hash = 'not paid') => {
@@ -478,6 +483,7 @@ class AppContextProvider extends Component {
           onWithdraw: this.onWithdraw,
           onCancel: this.onCancel,
           onAccept: this.onAccept,
+          updateCancelModalStatus: this.updateCancelModalStatus,
           updateStage: this.updateStage,
           setPersonalData: this.setPersonalData,
           setProjectData: this.setProjectData,
