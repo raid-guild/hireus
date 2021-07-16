@@ -209,7 +209,7 @@ const DepositWithdrawCared = ({
               ? <div className="spinner">Loading...</div>
               : isApproved
               ? 'Submit Bid'
-              : 'Approve Bid'}
+              : 'Approve $RAID'}
             </button>
           </div>
         </div>
