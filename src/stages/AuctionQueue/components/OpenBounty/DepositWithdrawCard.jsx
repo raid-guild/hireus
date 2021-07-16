@@ -289,7 +289,7 @@ const DepositWithdrawCared = ({
           >
             {isCancelPending
             ? <div className="spinner">Loading...</div>
-            : 'Cancel'}
+            : 'Cancel Bid'}
           </button>
         </div>}
       </div>
