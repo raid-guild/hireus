@@ -137,7 +137,10 @@ const DepositWithdrawCared = ({
   return (
     <div
       className="hiringboard-card"
-      style={{ overflow: 'auto', height: 'auto' }}
+      style={{
+        overflow: 'hidden',
+        height: 'auto'
+      }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div>
