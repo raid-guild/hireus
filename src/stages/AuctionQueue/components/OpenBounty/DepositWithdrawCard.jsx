@@ -61,6 +61,8 @@ const DepositWithdrawCared = ({
     onIncreaseBid,
     onWithdraw,
     isWithdrawPending,
+    onCancel,
+    isCancelPending,
   } = useContext(AppContext);
 
   React.useEffect(() => {
@@ -130,6 +132,14 @@ const DepositWithdrawCared = ({
     setTxConfirmed(false);
     setShowSnackbar(true);
     await onWithdraw(id);
+    await fetchBids();
+    setTxConfirmed(true);
+  }
+
+  const onCancelAndUpdate = async (id) => {
+    setTxConfirmed(false);
+    setShowSnackbar(true);
+    await onCancel(id);
     await fetchBids();
     setTxConfirmed(true);
   }
@@ -258,7 +268,7 @@ const DepositWithdrawCared = ({
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        {consultationDetails.bid_id && <motion.p
+        {(consultationDetails.bid_id && !lockupEnded) && <motion.p
           id="lock-time"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -266,6 +276,22 @@ const DepositWithdrawCared = ({
         >
           Bid locked for: {lockTime}
         </motion.p>}
+        {(consultationDetails?.submitter === account && lockupEnded) && <div className="open-bounty-buttons-container">
+          <button
+            className='consultation-button'
+            initial={{ x: '100vw' }}
+            animate={{ x: 0 }}
+            transition={{ delay: 1.3 }}
+            disabled={isCancelPending}
+            onClick={() => {
+              onCancelAndUpdate(consultationDetails.bid_id);
+            }}
+          >
+            {isCancelPending
+            ? <div className="spinner">Loading...</div>
+            : 'Cancel'}
+          </button>
+        </div>}
       </div>
     </div>
   )

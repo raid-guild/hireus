@@ -53,9 +53,7 @@ export const OpenBounty = ({
     account,
     connectWallet,
     hash,
-    onCancel,
     onAccept,
-    isCancelPending,
     isAcceptPending,
     shares
   } = useContext(AppContext);
@@ -127,14 +125,6 @@ export const OpenBounty = ({
     } catch (err) {
       console.error(err);
     }
-  }
-
-  const onCancelAndUpdate = async (id) => {
-    setTxConfirmed(false);
-    setShowSnackbar(true);
-    await onCancel(id);
-    await fetchBids();
-    setTxConfirmed(true);
   }
 
   const onAcceptAndUpdate = async (id) => {
@@ -296,7 +286,7 @@ export const OpenBounty = ({
               setSelectedConsultations(null);
             }}
           >
-            Close
+            Back
           </button>
           {(shares >= 10 && consultationDetails?.bid_id) && <button
             className='consultation-button'
@@ -313,22 +303,6 @@ export const OpenBounty = ({
             : 'Accept'}
           </button>}
         </div>
-        {consultationDetails?.submitter === account && <div className="open-bounty-buttons-container">
-          <button
-            className='consultation-button'
-            initial={{ x: '100vw' }}
-            animate={{ x: 0 }}
-            transition={{ delay: 1.3 }}
-            disabled={isCancelPending}
-            onClick={() => {
-              onCancelAndUpdate(consultationDetails.bid_id);
-            }}
-          >
-            {isCancelPending
-            ? <div className="spinner">Loading...</div>
-            : 'Cancel'}
-          </button>
-        </div>}
       </div>
       {(showSnackbar && hash !== '') && <Snackbar
         setShowSnackbar={setShowSnackbar}
