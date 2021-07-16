@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
 
-import { round, shortenAddress } from '../../../../utils';
+import { round } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 
 export const HiringBoard = ({
@@ -45,6 +45,7 @@ export const HiringBoard = ({
               Get $RAID
             </button>
             <button
+              style={{ marginLeft: '20px' }}
               className='consultation-button'
               initial={{ x: '100vw' }}
               animate={{ x: 0 }}
@@ -72,10 +73,7 @@ export const HiringBoard = ({
                   <div className="bounty-list-item-inner">
                     <p className="bounty-detail">{new Date(consultation.created).toLocaleDateString()}</p>
                     <p>
-                      {consultation.submitter
-                        ? shortenAddress(consultation.submitter)
-                        : consultation.project_name.slice(0, 17) + '...'
-                      }
+                      {consultation.airtable_id}
                     </p>
                   </div>
                   <div className="bounty-list-item-inner">

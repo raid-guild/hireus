@@ -266,10 +266,11 @@ const DepositWithdrawCared = ({
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.5 }}
         >
-          Bid locked for: {lockTime}
+          {lockTime}
         </motion.p>}
-        {(consultationDetails?.submitter === account && lockupEnded) && <div className="open-bounty-buttons-container">
+        {(consultationDetails?.submitter === account && lockupEnded) && <div>
           <button
+            style={{ marginTop: '20px' }}
             className='consultation-button'
             initial={{ x: '100vw' }}
             animate={{ x: 0 }}

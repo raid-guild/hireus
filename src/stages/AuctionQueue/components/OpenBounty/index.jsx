@@ -6,7 +6,7 @@ import { utils } from 'web3';
 import gql from 'graphql-tag';
 import { Client } from 'urql';
 import { shortenAddress, combineBids, round } from '../../../../utils';
-import { LOCKUP_PERIOD } from '../../../../constants/index';
+import { LOCKUP_PERIOD, RAID_CONTRACT_ADDRESS } from '../../../../constants/index';
 import { AppContext } from '../../../../context/AppContext';
 
 import { ReactComponent as EtherscanSvg } from '../../../../assets/etherscan.svg';
@@ -73,12 +73,12 @@ export const OpenBounty = ({
       const remainingSeconds = Math.floor(timeRemaining % (1000 * 60 * 60 * 24));
       const hours = Math.floor(remainingSeconds / (1000 * 60 * 60));
       if (days === 0 && hours === 0) {
-        setLockTime(`< 1 hour`);
+        setLockTime(`$RAID locked for < 1 hour`);
       } else {
-        setLockTime(`${days} days, ${hours} hours left`);
+        setLockTime(`$RAID locked for ${days} days, ${hours} hours`);
       }
     } else {
-      setLockTime('Lockup period has ended');
+      setLockTime('Bid can be withdrawn or canceled');
     }
   }, [consultationDetails]);
 
@@ -143,7 +143,7 @@ export const OpenBounty = ({
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.5 }}
       >
-        Open Bid
+        Bid Details
       </motion.h1>
       {consultationDetails && <div className="hiringboard-card-container">
         <div
@@ -196,7 +196,7 @@ export const OpenBounty = ({
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
             >
-              <span>Lock Time:</span>{lockTime}
+              <span>Status:</span>{lockTime}
             </motion.p>
           </div>
           <div className="open-bid-details-flex">
@@ -207,6 +207,17 @@ export const OpenBounty = ({
             >
               <span>Total Bounty:</span>{round(utils.fromWei(consultationDetails.amount), 4)} $RAID
             </motion.p>
+            <motion.a
+              href={`https://rinkeby.etherscan.io/address/${RAID_CONTRACT_ADDRESS}`}
+              target={'_blank'}
+              rel={'noopener noreferrer'}
+              className="etherscan-container"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              <EtherscanSvg />
+            </motion.a>
           </div></>) : <p>No bid has been submitted for this consultation.</p>}
           {consultationDetails.changes.length > 0 && (
             <div className="bounty-list" style={{ marginTop: '20px' }}>

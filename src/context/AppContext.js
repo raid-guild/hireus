@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 import React, { Component, createContext } from 'react';
-
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import { DAO_ADDRESS, QUEUE_CONTRACT_ADDRESS, RAID_CONTRACT_ADDRESS } from '../constants/index';
 
 export const AppContext = createContext();
 
@@ -31,13 +31,8 @@ const DAI_CONTRACT_ADDRESS = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 const DAI_ABI = require('../abi/DAI_ABI.json');
 
 // RINKEBY
-const RAID_CONTRACT_ADDRESS = '0x982e00b16c313e979c0947b85230907fce45d50e';
 const RAID_ABI = require('../abi/ERC20_ABI.json');
-
-const QUEUE_CONTRACT_ADDRESS = '0x3a9F3147742E51EFBa1F04ff26E8DC95978dccB4';
 const QUEUE_ABI = require('../abi/QUEUE_ABI.json');
-
-const DAO_ADDRESS = '0xE189A9C5AcFD2e53C4663150b2703b9fFAd224ff';
 const MOLOCH_ABI = require('../abi/MOLOCH_ABI.json');
 
 // KOVAN TESTNET
