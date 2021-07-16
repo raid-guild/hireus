@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { utils } from 'web3';
 import gql from 'graphql-tag';
 import { Client } from 'urql';
-import { shortenAddress, combineBids } from '../../../../utils';
+import { shortenAddress, combineBids, round } from '../../../../utils';
 import { LOCKUP_PERIOD } from '../../../../constants/index';
 import { AppContext } from '../../../../context/AppContext';
 
@@ -208,7 +208,7 @@ export const OpenBounty = ({
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
             >
-              <span>Total Bounty:</span>{utils.fromWei(consultationDetails.amount)} $RAID
+              <span>Total Bounty:</span>{round(utils.fromWei(consultationDetails.amount), 4)} $RAID
             </motion.p>
           </div></>) : <p>No bid has been submitted for this consultation.</p>}
           {consultationDetails.changes.length > 0 && (

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { utils } from 'web3';
 import gql from 'graphql-tag';
 import { Client } from 'urql';
-import { shortenAddress, combineBids } from '../../../../utils';
+import { shortenAddress, combineBids, round } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 import { LOCKUP_PERIOD } from '../../../../constants/index';
 
@@ -179,73 +179,77 @@ const DepositWithdrawCared = ({
           className="deposit-withdraw-card"
         >
           <p>Wallet Balance:</p>
-          <h2>{raidBalance} $RAID</h2>
-          <input
-            id={'deposit-amount'}
-            placeholder={`0`}
-            type={'number'}
-            min={'0'}
-            step={'0.01'}
-            value={depositAmount}
-            onChange={(e) => onChangeDepositAmount(e.target.value)}
-          />
-          <button
-            className='consultation-button'
-            style={{ margin: '0', width: '100%' }}
-            initial={{ x: '100vw' }}
-            animate={{ x: 0 }}
-            transition={{ delay: 1.3 }}
-            disabled={depositAmount === '0' || depositAmount === '' || isDepositPending}
-            onClick={() => {
-              isApproved
-                ? onDepositAndUpdate(consultationDetails.bid_id
-                ? consultationDetails.bid_id
-                : consultationDetails.airtable_id)
-                : onApproveAndUpdate();
-            }}
-          >
-            {isDepositPending
-            ? <div className="spinner">Loading...</div>
-            : isApproved
-            ? 'Submit Bid'
-            : 'Approve Bid'}
-          </button>
+          <h2>{round(raidBalance, 4)} $RAID</h2>
+          <div>
+            <input
+              id={'deposit-amount'}
+              placeholder={`0`}
+              type={'number'}
+              min={'0'}
+              step={'0.01'}
+              value={depositAmount}
+              onChange={(e) => onChangeDepositAmount(e.target.value)}
+            />
+            <button
+              className='consultation-button'
+              style={{ margin: '0', width: '100%' }}
+              initial={{ x: '100vw' }}
+              animate={{ x: 0 }}
+              transition={{ delay: 1.3 }}
+              disabled={depositAmount === '0' || depositAmount === '' || isDepositPending}
+              onClick={() => {
+                isApproved
+                  ? onDepositAndUpdate(consultationDetails.bid_id
+                  ? consultationDetails.bid_id
+                  : consultationDetails.airtable_id)
+                  : onApproveAndUpdate();
+              }}
+            >
+              {isDepositPending
+              ? <div className="spinner">Loading...</div>
+              : isApproved
+              ? 'Submit Bid'
+              : 'Approve Bid'}
+            </button>
+          </div>
         </div>
         <div className="deposit-withdraw-card">
-        <p>Your bid:</p>
+          <p>Your bid:</p>
           <h2>
             {consultationDetails.submitter === account 
-            ? utils.fromWei(consultationDetails.amount) : '0'} $RAID
+            ? round(utils.fromWei(consultationDetails.amount), 4) : '0'} $RAID
           </h2>
-          <input
-            id={'deposit-amount'}
-            placeholder={`0`}
-            type={'number'}
-            min={'0'}
-            step={'0.01'}
-            value={withdrawalAmount}
-            onChange={(e) => onChangeWithdrawalAmount(e.target.value)}
-          />
-          <button
-            className='consultation-button'
-            style={{ margin: '0', width: '100%' }}
-            initial={{ x: '100vw' }}
-            animate={{ x: 0 }}
-            transition={{ delay: 1.3 }}
-            disabled={
-              withdrawalAmount === '0' 
-              || withdrawalAmount === '' 
-              || BigInt(utils.toWei(withdrawalAmount)) > BigInt(consultationDetails.amount)
-              || isWithdrawPending
-              || !lockupEnded}
-            onClick={() => {
-              onWithdrawAndupdate(consultationDetails.bid_id)
-            }}
-          >
-            {isWithdrawPending
-            ? <div className="spinner">Loading...</div>
-            : 'Withdraw Bid'}
-          </button>
+          <div>
+            <input
+              id={'deposit-amount'}
+              placeholder={`0`}
+              type={'number'}
+              min={'0'}
+              step={'0.01'}
+              value={withdrawalAmount}
+              onChange={(e) => onChangeWithdrawalAmount(e.target.value)}
+            />
+            <button
+              className='consultation-button'
+              style={{ margin: '0', width: '100%' }}
+              initial={{ x: '100vw' }}
+              animate={{ x: 0 }}
+              transition={{ delay: 1.3 }}
+              disabled={
+                withdrawalAmount === '0' 
+                || withdrawalAmount === '' 
+                || BigInt(utils.toWei(withdrawalAmount)) > BigInt(consultationDetails.amount)
+                || isWithdrawPending
+                || !lockupEnded}
+              onClick={() => {
+                onWithdrawAndupdate(consultationDetails.bid_id)
+              }}
+            >
+              {isWithdrawPending
+              ? <div className="spinner">Loading...</div>
+              : 'Withdraw Bid'}
+            </button>
+          </div>
         </div>
       </div>
       {consultationDetails.bid_id && <motion.p

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
 
+import { round } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 
 export const HiringBoard = ({
@@ -78,7 +79,7 @@ export const HiringBoard = ({
                     </p>
                   </div>
                   <div className="bounty-list-item-inner">
-                    <p className="bounty-detail">{utils.fromWei(consultation.amount)} $RAID</p>
+                    <p className="bounty-detail">{round(utils.fromWei(consultation.amount), 4)} $RAID</p>
                     <button>open</button>
                   </div>
                 </div>
