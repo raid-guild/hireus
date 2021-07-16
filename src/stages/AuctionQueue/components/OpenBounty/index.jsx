@@ -73,7 +73,11 @@ export const OpenBounty = ({
       const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
       const remainingSeconds = Math.floor(timeRemaining % (1000 * 60 * 60 * 24));
       const hours = Math.floor(remainingSeconds / (1000 * 60 * 60));
-      setLockTime(`${days} days, ${hours} hours left`);
+      if (days === 0 && hours === 0) {
+        setLockTime(`< 1 hour`);
+      } else {
+        setLockTime(`${days} days, ${hours} hours left`);
+      }
     } else {
       setLockTime('Lockup period has ended');
     }

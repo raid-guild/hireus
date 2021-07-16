@@ -197,9 +197,14 @@ button.consultation-button:disabled {
 }
 
 #lock-time {
-  margin-top: 15px;
-  margin-bottom: 0;
+  display: inline-block;
+  border: 1px solid #666666;
+  color: #666666;
+  font-size: .8rem;
+  margin: 15px auto 0;
+  padding: 5px 10px;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .open-bounty-buttons-container {

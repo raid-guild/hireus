@@ -257,14 +257,16 @@ const DepositWithdrawCared = ({
           </div>
         </div>
       </div>
-      {consultationDetails.bid_id && <motion.p
-        id="lock-time"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6, duration: 0.5 }}
-      >
-        {lockTime}
-      </motion.p>}
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        {consultationDetails.bid_id && <motion.p
+          id="lock-time"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+        >
+          Bid locked for: {lockTime}
+        </motion.p>}
+      </div>
     </div>
   )
 }
