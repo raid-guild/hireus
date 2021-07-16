@@ -35,7 +35,7 @@ const HeadsUp = () => {
         >
           To hire RaidGuild, you must first request a consultation. 
           Consultations have a base cost of $500 xDai, and are initially 
-          ordered by date (ascending). Anyone can add a bounty (in $RAID) 
+          ordered by date (ascending). Anyone can add a bid (in $RAID) 
           to an open consultation.
         </motion.p>
 
@@ -44,9 +44,9 @@ const HeadsUp = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7, duration: 0.5 }}
         >
-          Raid Guild will prioritize the highest bounties when time and 
+          Raid Guild will prioritize the highest bids when time and 
           specialists become available for new consultations. In times of 
-          high demand, this might mean consultations with low or no bounty 
+          high demand, this might mean consultations with low or no bid 
           have a longer turnaround.
         </motion.p>
 
