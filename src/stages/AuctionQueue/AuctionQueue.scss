@@ -119,19 +119,6 @@ button.consultation-button:disabled {
   }
 }
 
-.increase-withdraw-list-item {
-  align-items: center;
-  border: 2px solid transparent;
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  transition: all .3s ease;
-
-  &--2 {
-    background: rgba(0, 0, 0, 0.2);
-  }
-}
-
 .bounty-list-item-inner {
   align-items: center;
   display: flex;
@@ -148,9 +135,11 @@ button.consultation-button:disabled {
   .withdraw-amount {
     &--red {
       color: red;
+      font-size: 1rem;
     }
     &--green {
       color: green;
+      font-size: 1rem;
     }
   }
 
@@ -174,10 +163,10 @@ button.consultation-button:disabled {
 }
 
 .deposit-withdraw-card {
+  border: 2px solid $theme-color-primary;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 2px solid $theme-color-primary;
   margin-top: 40px;
   padding: 20px;
   width: 48%;

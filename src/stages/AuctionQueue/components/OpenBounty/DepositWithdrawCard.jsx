@@ -27,10 +27,12 @@ const BIDS_QUERY = gql`
         increasedAt
         amount
         increasedBy
+        increaseTxHash
       }
       withdraws {
         withdrawnAt
         amount
+        withdrawTxHash
       }
     }
   }

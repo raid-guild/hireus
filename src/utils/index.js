@@ -47,10 +47,12 @@ export const combineBids = async (consultations, bids) => {
         if (change.withdrawnAt) {
           const updatedChange = change;
           updatedChange.changedAt = change.withdrawnAt;
+          updatedChange.txHash = change.withdrawTxHash;
           return updatedChange;
         } else {
           const updatedChange = change;
           updatedChange.changedAt = change.increasedAt;
+          updatedChange.txHash = change.increaseTxHash;
           return updatedChange;
         }
       });

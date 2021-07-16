@@ -32,10 +32,12 @@ const BIDS_QUERY = gql`
         increasedAt
         amount
         increasedBy
+        increaseTxHash
       }
       withdraws {
         withdrawnAt
         amount
+        withdrawTxHash
       }
     }
   }
@@ -214,7 +216,13 @@ export const OpenBounty = ({
           {consultationDetails.changes.length > 0 && (
             <div className="bounty-list" style={{ marginTop: '20px' }}>
               {consultationDetails.changes.map((change, index) => (
-                <div key={index} className={`increase-withdraw-list-item increase-withdraw-list-item${index % 2 !== 0 && '--2'}`}>
+                <a
+                  href={`https://rinkeby.etherscan.io/tx/${change.txHash}`}
+                  target={'_blank'}
+                  rel={'noopener noreferrer'}
+                  key={index}
+                  className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}
+                >
                   <div className="bounty-list-item-inner">
                     <p className="bounty-detail">{new Date(Number(change.changedAt ) * 1000).toLocaleDateString()}</p>
                   </div>
@@ -228,7 +236,7 @@ export const OpenBounty = ({
                       {change.withdrawnAt ? '-' : '+'}{utils.fromWei(change.amount)} $RAID
                     </p>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           )}
