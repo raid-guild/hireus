@@ -56,7 +56,8 @@ export const OpenBounty = ({
     hash,
     onAccept,
     isAcceptPending,
-    shares
+    shares,
+    txFailed,
   } = useContext(AppContext);
   const [consultationDetails, setConsultationDetails] = useState(null);
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -318,7 +319,7 @@ export const OpenBounty = ({
       </div>
       {(showSnackbar && hash !== '') && <Snackbar
         setShowSnackbar={setShowSnackbar}
-        message={txConfirmed ? 'Transaction Confirmed!' : 'Transaction Pending...'}
+        message={txConfirmed ? txFailed ? 'Transaction Failed' : 'Transaction Confirmed!' : 'Transaction Pending...'}
         hash={hash}
       />}
       <ConfirmCancel

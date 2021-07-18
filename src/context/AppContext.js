@@ -89,6 +89,7 @@ class AppContextProvider extends Component {
     isWithdrawPending: false,
     isCancelPending: false,
     isAcceptPending: false,
+    txFailed: false,
     cancelModalStatus: false,
   };
 
@@ -209,7 +210,8 @@ class AppContextProvider extends Component {
             await this.getRaidBalance();
             this.onChangeDepositAmount(this.state.depositAmount);
         })
-        .on('error', function(error) {
+        .on('error', async (error) => {
+          this.setState({ txFailed: true });
           console.error('Could not approve token', error);
         });;
     } catch (err) {
@@ -238,7 +240,8 @@ class AppContextProvider extends Component {
           await this.getRaidBalance();
           this.onChangeDepositAmount('');
         })
-        .on('error', function(error) {
+        .on('error', async (error) => {
+          this.setState({ txFailed: true });
           console.error('Could not submit bid', error);
         });;
     } catch (err) {
@@ -266,7 +269,8 @@ class AppContextProvider extends Component {
           await this.getRaidBalance();
           this.onChangeDepositAmount('');
         })
-        .on('error', function(error) {
+        .on('error', async (error) => {
+          this.setState({ txFailed: true });
           console.error('Could not submit bid', error);
         });;
     } catch (err) {
@@ -294,7 +298,8 @@ class AppContextProvider extends Component {
           await this.getRaidBalance();
           this.onChangeWithdrawalAmount('');
         })
-        .on('error', function(error) {
+        .on('error', async (error) => {
+          this.setState({ txFailed: true });
           console.error('Could not withdraw tokens', error);
         });;
     } catch (err) {
@@ -321,7 +326,8 @@ class AppContextProvider extends Component {
           await this.getRaidBalance();
           this.onChangeWithdrawalAmount('');
         })
-        .on('error', function(error) {
+        .on('error', async (error) => {
+          this.setState({ txFailed: true });
           console.error('Could not withdraw tokens', error);
         });;
     } catch (err) {
@@ -348,7 +354,8 @@ class AppContextProvider extends Component {
           await this.getRaidBalance();
           this.onChangeWithdrawalAmount('');
         })
-        .on('error', function(error) {
+        .on('error', async (error) => {
+          this.setState({ txFailed: true });
           console.error('Could not withdraw tokens', error);
         });;
     } catch (err) {
