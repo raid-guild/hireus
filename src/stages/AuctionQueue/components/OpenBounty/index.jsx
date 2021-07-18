@@ -3,8 +3,7 @@
 import React, { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
-import gql from 'graphql-tag';
-import { Client } from 'urql';
+import { BIDS_QUERY, graphqlClient } from '../../../../constants/index';
 import { shortenAddress, combineBids, round } from '../../../../utils';
 import { LOCKUP_PERIOD, RAID_CONTRACT_ADDRESS } from '../../../../constants/index';
 import { AppContext } from '../../../../context/AppContext';
@@ -14,35 +13,6 @@ import { ReactComponent as EtherscanSvg } from '../../../../assets/etherscan.svg
 import ConfirmCancel from '../../../../components/ConfirmCancel';
 import DepositWithdrawCard from './DepositWithdrawCard';
 import Snackbar from '../../../../components/Snackbar';
-
-const graphqlClient = new Client({ url: 'https://api.thegraph.com/subgraphs/name/slgraham/guildauctionqueues-rinkeby' ?? '' });
-
-const BIDS_QUERY = gql`
-  query {
-    bids(first: 100) {
-      id
-      amount
-      createdAt
-      details
-      createTxHash
-      status
-      submitter {
-        id
-      }
-      increases {
-        increasedAt
-        amount
-        increasedBy
-        increaseTxHash
-      }
-      withdraws {
-        withdrawnAt
-        amount
-        withdrawTxHash
-      }
-    }
-  }
-`;
 
 export const OpenBounty = ({
   consultations,

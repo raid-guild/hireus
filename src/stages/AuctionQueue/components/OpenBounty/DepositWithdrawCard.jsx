@@ -3,40 +3,10 @@
 import React, { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
-import gql from 'graphql-tag';
-import { Client } from 'urql';
+import { BIDS_QUERY, graphqlClient } from '../../../../constants/index';
 import { shortenAddress, combineBids, round } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 import { LOCKUP_PERIOD } from '../../../../constants/index';
-
-const graphqlClient = new Client({ url: 'https://api.thegraph.com/subgraphs/name/slgraham/guildauctionqueues-rinkeby' ?? '' });
-
-const BIDS_QUERY = gql`
-  query {
-    bids(first: 100) {
-      id
-      amount
-      createdAt
-      details
-      createTxHash
-      status
-      submitter {
-        id
-      }
-      increases {
-        increasedAt
-        amount
-        increasedBy
-        increaseTxHash
-      }
-      withdraws {
-        withdrawnAt
-        amount
-        withdrawTxHash
-      }
-    }
-  }
-`;
 
 const DepositWithdrawCared = ({
   setShowSnackbar,
