@@ -8,41 +8,10 @@ import {
   ModalFooter,
   Button
 } from '@chakra-ui/react';
-import gql from 'graphql-tag';
-import { Client } from 'urql';
+import { BIDS_QUERY, graphqlClient } from '../constants/index';
 import { combineBids } from '../utils'
 
 import { AppContext } from '../context/AppContext';
-
-
-const graphqlClient = new Client({ url: 'https://api.thegraph.com/subgraphs/name/slgraham/guildauctionqueues-rinkeby' ?? '' });
-
-const BIDS_QUERY = gql`
-  query {
-    bids(first: 100) {
-      id
-      amount
-      createdAt
-      details
-      createTxHash
-      status
-      submitter {
-        id
-      }
-      increases {
-        increasedAt
-        amount
-        increasedBy
-        increaseTxHash
-      }
-      withdraws {
-        withdrawnAt
-        amount
-        withdrawTxHash
-      }
-    }
-  }
-`;
 
 const ConfirmCancel = ({
   consultationDetails,
