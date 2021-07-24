@@ -79,7 +79,8 @@
   overflow-y: scroll;
   padding: 40px;
   position: relative;
-  width: 58%;
+  max-width: 58%;
+  min-width: 58%;
   
   p {
     margin-bottom: 5px;

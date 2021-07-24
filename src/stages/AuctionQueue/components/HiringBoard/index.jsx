@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
 
-import { round } from '../../../../utils';
+import { round, shortenAddress } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 
 export const HiringBoard = ({
@@ -114,25 +114,29 @@ export const HiringBoard = ({
           {!consultations ? <p>Loading...</p> : consultations.length > 0 ? (
             <div className="bounty-list">
               {consultations.map((consultation, index) => (
-                <div onClick={() => setSelectedConsultations(consultation.project_name)} key={index} className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
-                  <div className="bounty-list-item-inner">
-                    <p
-                      style={{
-                        marginRight: '20px',
-                      }}
-                    >
-                      #{index < 9 ? `0${index + 1}` : index + 1}
-                    </p>
-                    <p className="bounty-detail">{new Date(consultation.created).toLocaleDateString()}</p>
-                    <p>
-                      {consultation.airtable_id}
-                    </p>
-                  </div>
-                  <div className="bounty-list-item-inner">
-                    <p className="bounty-detail">{round(utils.fromWei(consultation.amount), 4)} $RAID</p>
-                    <button>open</button>
-                  </div>
-                </div>
+                <>
+                  {consultation.from && (
+                    <div onClick={() => setSelectedConsultations(consultation.project_name)} key={index} className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
+                      <div className="bounty-list-item-inner">
+                        <p
+                          style={{
+                            marginRight: '20px',
+                          }}
+                        >
+                          #{index < 9 ? `0${index + 1}` : index + 1}
+                        </p>
+                        <p className="bounty-detail">{new Date(consultation.created).toLocaleDateString()}</p>
+                        <p>
+                          {consultation.from === context.address ? consultation.project_name : shortenAddress(consultation.from, 4)}
+                        </p>
+                      </div>
+                      <div className="bounty-list-item-inner">
+                        <p className="bounty-detail">{round(utils.fromWei(consultation.amount), 4)} $RAID</p>
+                        <button>open</button>
+                      </div>
+                    </div>
+                  )}
+                </>
               ))}
             </div>
           ) : <p>There are no bounties.</p>}

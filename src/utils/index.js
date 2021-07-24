@@ -1,4 +1,4 @@
-import { utils } from 'web3';
+import web3, { utils } from 'web3';
 
 /**
  * Shorten an Ethereum address. `charsLength` allows to change the number of
@@ -25,8 +25,10 @@ import { utils } from 'web3';
 }
 
 export const combineBids = async (consultations, bids) => {
-  const combinedBids = [];
-  consultations.forEach((consultation) => {
+  const web3js = new web3(process.env.REACT_APP_MAINNET_NODE_ENDPOINT);
+  let combinedBids = [];
+  if (!consultations) return;
+  combinedBids = await Promise.all(consultations.map((consultation) => {
     const combinedBid = {
       project_name: consultation.project_name,
       created: consultation.created,
@@ -38,42 +40,47 @@ export const combineBids = async (consultations, bids) => {
       createTxHash: '',
       changes: [],
     }
-    const openBids = bids.filter(bid => bid.status !== 'canceled' && bid.status !== 'accepted');
-    openBids.forEach((bid) => {
-      let airtableId = utils.hexToAscii(bid.details);
-      airtableId =  airtableId.replace(/\0.*$/g,'');
-      const changes = [...bid.withdraws, ...bid.increases];
-      const updatedChanges = changes.map(change => {
-        if (change.withdrawnAt) {
-          const updatedChange = change;
-          updatedChange.changedAt = change.withdrawnAt;
-          updatedChange.txHash = change.withdrawTxHash;
-          return updatedChange;
-        } else {
-          const updatedChange = change;
-          updatedChange.changedAt = change.increasedAt;
-          updatedChange.txHash = change.increaseTxHash;
-          return updatedChange;
-        }
-      });
-
-      updatedChanges.sort(function(a,b){
-        return new Date(Number(b.changedAt)) - new Date(Number(a.changedAt));
-      });
-      if (consultation.id === airtableId) {
-        combinedBid.bid_id = utils.hexToNumber(bid.id.replace('0x3a9f3147742e51efba1f04ff26e8dc95978dccb4-', ''));
-        combinedBid.amount = bid.amount;
-        combinedBid.submitter = utils.toChecksumAddress(bid.submitter.id);
-        combinedBid.bidCreated = bid.createdAt;
-        combinedBid.createTxHash = bid.createTxHash;
-        combinedBid.changes = [...combinedBid.changes, ...updatedChanges];
-        combinedBid.status = bid.status;
+    web3js.eth.getTransaction(consultation.consultation_hash, (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        combinedBid['from'] = result.from;
+        const openBids = bids.filter(bid => bid.status !== 'canceled' && bid.status !== 'accepted');
+        openBids.forEach((bid) => {
+          let airtableId = utils.hexToAscii(bid.details);
+          airtableId =  airtableId.replace(/\0.*$/g,'');
+          const changes = [...bid.withdraws, ...bid.increases];
+          const updatedChanges = changes.map(change => {
+            if (change.withdrawnAt) {
+              const updatedChange = change;
+              updatedChange.changedAt = change.withdrawnAt;
+              updatedChange.txHash = change.withdrawTxHash;
+              return updatedChange;
+            } else {
+              const updatedChange = change;
+              updatedChange.changedAt = change.increasedAt;
+              updatedChange.txHash = change.increaseTxHash;
+              return updatedChange;
+            }
+          });
+    
+          updatedChanges.sort(function(a,b){
+            return new Date(Number(b.changedAt)) - new Date(Number(a.changedAt));
+          });
+          if (consultation.id === airtableId) {
+            combinedBid.bid_id = utils.hexToNumber(bid.id.replace('0x3a9f3147742e51efba1f04ff26e8dc95978dccb4-', ''));
+            combinedBid.amount = bid.amount;
+            combinedBid.submitter = utils.toChecksumAddress(bid.submitter.id);
+            combinedBid.bidCreated = bid.createdAt;
+            combinedBid.createTxHash = bid.createTxHash;
+            combinedBid.changes = [...combinedBid.changes, ...updatedChanges];
+            combinedBid.status = bid.status;
+          }
+        })
       }
-    })
-
-    combinedBids.push(combinedBid);
-  })
-
+    });
+    return combinedBid;
+  }));
   return combinedBids;
 }
 
