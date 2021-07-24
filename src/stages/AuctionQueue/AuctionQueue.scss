@@ -2,13 +2,19 @@
 
 .hiringboard-container {
   color: $subtitle-color;
-  min-width: 85%;
-  max-width: 85%;
+  min-width: 90%;
+  max-width: 90%;
   margin: 0 auto;
+  padding-top: 40px;
+
+  @media screen and (min-width: 1200px) {
+    min-width: 80%;
+    max-width: 80%;
+  }
 
   h1 {
     font-family: $primary-font;
-    font-size: 2rem;
+    font-size: 1.6rem;
     text-transform: uppercase;
     text-align: left;
     margin-bottom: 20px;
@@ -16,7 +22,7 @@
   }
   h2 {
     font-family: $primary-font;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     text-align: left;
     margin-bottom: 2rem;
   }
@@ -25,8 +31,13 @@
     font-size: 1rem;
     font-family: $primary-font;
     letter-spacing: 1.3px;
-    line-height: 1.5;
+    line-height: 1.2;
   }
+}
+
+.hiringboard-link {
+  color: $theme-color-primary;
+  text-decoration: underline;
 }
 
 .hiringboard-card-container {
@@ -35,15 +46,40 @@
   justify-content: space-between;
 }
 
+.hiringboard-description-container {
+  width: 35%;
+}
+
+#hiringboard-button-container {
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (min-width: 1200px) {
+    flex-direction: row;
+
+    button:first-child {
+      margin-right: 10px;
+    }
+  }
+}
+
+#hiringboard-button-container * button:first-child {
+  margin-bottom: 16px;
+  @media screen and (min-width: 1200px) {
+    margin-bottom: 0;
+    margin-right: 16px;
+  }
+}
+
 .hiringboard-card {
   border: 2px solid $theme-color-primary;
   border-radius: 4px;
-  min-height: 480px;
-  max-height: 480px;
+  min-height: 70vh;
+  max-height: 70vh;
   overflow-y: scroll;
   padding: 40px;
   position: relative;
-  width: 48%;
+  width: 58%;
   
   p {
     margin-bottom: 5px;
