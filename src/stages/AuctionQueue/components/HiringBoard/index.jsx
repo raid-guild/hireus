@@ -13,6 +13,24 @@ export const HiringBoard = ({
 
   return (
     <div className="hiringboard-container">
+      <button
+        className='consultation-button'
+        initial={{ x: '100vw' }}
+        animate={{ x: 0 }}
+        transition={{ delay: 1.3 }}
+        onClick={() => {
+          context.connectWallet()
+        }}
+        style={{
+          marginTop: '20px',
+          position: 'absolute',
+          right: '40px',
+          top: '16px',
+          width: '200px',
+        }}
+      >
+        {context.account ? shortenAddress(context.account) : 'Connect'}
+      </button>
       <div className="hiringboard-card-container">
         <div className="hiringboard-description-container">
           <motion.h1
@@ -114,34 +132,48 @@ export const HiringBoard = ({
           {!consultations ? <p>Loading...</p> : consultations.length > 0 ? (
             <div className="bounty-list">
               {consultations.map((consultation, index) => (
-                <>
-                  {consultation.from && (
-                    <div onClick={() => setSelectedConsultations(consultation.project_name)} key={index} className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
-                      <div className="bounty-list-item-inner">
-                        <p
-                          style={{
-                            marginRight: '20px',
-                          }}
-                        >
-                          #{index < 9 ? `0${index + 1}` : index + 1}
-                        </p>
-                        <p className="bounty-detail">{new Date(consultation.created).toLocaleDateString()}</p>
-                        <p>
-                          {consultation.from === context.address ? consultation.project_name : shortenAddress(consultation.from, 4)}
-                        </p>
-                      </div>
-                      <div className="bounty-list-item-inner">
-                        <p className="bounty-detail">{round(utils.fromWei(consultation.amount), 4)} $RAID</p>
-                        <button>open</button>
-                      </div>
-                    </div>
-                  )}
-                </>
+                <BidListItem
+                  key={index}
+                  context={context}
+                  consultation={consultation}
+                  index={index}
+                  setSelectedConsultations={setSelectedConsultations}
+                />
               ))}
             </div>
           ) : <p>There are no bounties.</p>}
         </div>
       </div>
+    </div>
+  )
+}
+
+const BidListItem = ({ context, consultation, index, setSelectedConsultations }) => {
+  return (
+    <div key={index}>
+      {consultation.from && (
+        <div onClick={() => setSelectedConsultations(consultation.project_name)} className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
+          <div className="bounty-list-item-inner">
+            <p
+              style={{
+                marginRight: '20px',
+              }}
+            >
+              #{index < 9 ? `0${index + 1}` : index + 1}
+            </p>
+            <p className="bounty-detail">{new Date(consultation.created).toLocaleDateString()}</p>
+            <p>
+              {consultation.from === context.account
+              ? consultation.project_name
+              : shortenAddress(consultation.from)}
+            </p>
+          </div>
+          <div className="bounty-list-item-inner">
+            <p className="bounty-detail">{round(utils.fromWei(consultation.amount), 4)} $RAID</p>
+            <button>open</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
