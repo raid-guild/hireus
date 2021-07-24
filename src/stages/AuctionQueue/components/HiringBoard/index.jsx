@@ -24,8 +24,8 @@ export const HiringBoard = ({
         style={{
           marginTop: '20px',
           position: 'absolute',
-          right: '40px',
-          top: '16px',
+          right: '60px',
+          top: '24px',
           width: '200px',
         }}
       >

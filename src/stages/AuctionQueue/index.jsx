@@ -6,7 +6,7 @@ import { combineBids } from '../../utils';
 import { HiringBoard, OpenBounty } from './components';
 
 const AuctionQueue = () => {
-  const [consultations, setConsultations] = useState([]);
+  const [consultations, setConsultations] = useState(null);
   const [selectedConsultation, setSelectedConsultations] = useState(null);
 
   React.useEffect(() => {
