@@ -109,20 +109,61 @@ export const OpenBounty = ({
 
   return (
     <div className="hiringboard-container">
-      <motion.h1
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 0.5 }}
+       <button
+        className='consultation-button'
+        style={{
+          marginTop: '20px',
+          position: 'absolute',
+          right: '275px',
+          top: '24px',
+        }}
+        onClick={() => {
+          setSelectedConsultations(null);
+        }}
       >
-        Bid Details
-      </motion.h1>
+        Back
+      </button>
+      <button
+        className='consultation-button'
+        initial={{ x: '100vw' }}
+        animate={{ x: 0 }}
+        transition={{ delay: 1.3 }}
+        onClick={() => {
+          connectWallet()
+        }}
+        style={{
+          marginTop: '20px',
+          position: 'absolute',
+          right: '60px',
+          top: '24px',
+          width: '200px',
+        }}
+      >
+        {account ? shortenAddress(account) : 'Connect'}
+      </button>
+      {/* <DepositWithdrawCard
+        setShowSnackbar={setShowSnackbar}
+        setTxConfirmed={setTxConfirmed}
+        consultationDetails={consultationDetails}
+        setConsultations={setConsultations}
+        lockTime={lockTime}
+      /> */}
       {consultationDetails && <div className="hiringboard-card-container">
+        <div>Left Column</div>
         <div
           className="hiringboard-card"
         >
-          {consultationDetails.bid_id ? (<>
-          <div className="open-bid-details-flex">
-            <motion.p
+          {consultationDetails.bid_id ? (
+            <div className="open-bid-details-flex">
+              <motion.h1
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+              >
+                Bid History
+              </motion.h1>
+            </div>
+            /* <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
@@ -188,8 +229,8 @@ export const OpenBounty = ({
               transition={{ delay: 0.6, duration: 0.5 }}
             >
               <EtherscanSvg />
-            </motion.a>
-          </div></>) : <p>No bid has been submitted for this consultation.</p>}
+            </motion.a> */
+          ) : <p>No bid has been submitted for this consultation.</p>}
           {consultationDetails.changes.length > 0 && (
             <div className="bounty-list" style={{ marginTop: '20px' }}>
               {consultationDetails.changes.map((change, index) => (
@@ -201,11 +242,23 @@ export const OpenBounty = ({
                   className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}
                 >
                   <div className="bounty-list-item-inner">
-                    <p className="bounty-detail">{new Date(Number(change.changedAt ) * 1000).toLocaleDateString()}</p>
+                    <motion.a
+                      href={`https://rinkeby.etherscan.io/address/${consultationDetails.submitter}`}
+                      target={'_blank'}
+                      rel={'noopener noreferrer'}
+                      className="etherscan-container"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.6, duration: 0.5 }}
+                      style={{ marginRight: '16px' }}
+                    >
+                      <EtherscanSvg />
+                    </motion.a>
+                    <p>{new Date(Number(change.changedAt ) * 1000).toLocaleDateString()}</p>
                   </div>
                   <div className="bounty-list-item-inner">
-                    <p className="bounty-detail">
-                      {shortenAddress(change.increasedBy || consultationDetails.submitter)}
+                    <p>
+                      {shortenAddress(change.increasedBy || consultationDetails.submitter, 8)}
                     </p>
                   </div>
                   <div className="bounty-list-item-inner">
@@ -218,59 +271,9 @@ export const OpenBounty = ({
             </div>
           )}
         </div>
-        {!account ? (
-          <div
-            className="hiringboard-card"
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-            >
-              Connect a wallet to add or remove $RAID to this bid
-            </motion.p>
-            <button
-              className='consultation-button'
-              initial={{ x: '100vw' }}
-              animate={{ x: 0 }}
-              transition={{ delay: 1.3 }}
-              onClick={() => {
-                connectWallet()
-              }}
-              style={{
-                marginTop: '20px',
-                width: '200px',
-              }}
-            >
-              Connect
-            </button>
-          </div>
-        ) : (
-          <DepositWithdrawCard
-            setShowSnackbar={setShowSnackbar}
-            setTxConfirmed={setTxConfirmed}
-            consultationDetails={consultationDetails}
-            setConsultations={setConsultations}
-            lockTime={lockTime}
-          />
-        )}
       </div>}
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div className="open-bounty-buttons-container">
-          <button
-            className='consultation-button consultation-button--close'
-            onClick={() => {
-              setSelectedConsultations(null);
-            }}
-          >
-            Back
-          </button>
           {(shares >= 10 && consultationDetails?.bid_id) && <button
             className='consultation-button'
             initial={{ x: '100vw' }}

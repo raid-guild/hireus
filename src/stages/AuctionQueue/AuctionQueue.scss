@@ -182,17 +182,6 @@ button.consultation-button {
   font-size: .8rem;
   font-family: $secondary-font;
   padding: 10px 30px;
-
-  &--close {
-    margin: 20px 0 0;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
-
-  &--disconnect {
-    margin: 0;
-  }
 }
 
 button.consultation-button:hover {
