@@ -1,4 +1,4 @@
-import web3, { utils } from 'web3';
+import { utils } from 'web3';
 import { ethers } from 'ethers';
 
 /**

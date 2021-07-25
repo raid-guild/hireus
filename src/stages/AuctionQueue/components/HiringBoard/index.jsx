@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
 
@@ -10,6 +10,23 @@ export const HiringBoard = ({
   setSelectedConsultations,
 }) => {
   const context = useContext(AppContext);
+  const [showMySubmissions, setShowMySubmissions] = React.useState(false);
+  const [filteredConsultations, setFilteredConsultations] = React.useState(consultations || []);
+
+  useEffect(() => {
+    if (!consultations) return;
+    if (showMySubmissions) {
+      if (!context.account) {
+        context.connectWallet();
+      }
+      const filteredConsultations = consultations.filter((consultation) => {
+        return (consultation.from === context.account);
+      })
+      setFilteredConsultations(filteredConsultations);
+    } else {
+      setFilteredConsultations(consultations);
+    }
+  }, [consultations, context, showMySubmissions]);
 
   return (
     <div className="hiringboard-container">
@@ -122,16 +139,25 @@ export const HiringBoard = ({
           </div>
         </div>
         <div className="hiringboard-card">
-          <motion.h1
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7, duration: 0.5 }}
-          >
-            Open bids:
-          </motion.h1>
-          {!consultations ? <p>Loading...</p> : consultations.length > 0 ? (
+          <div style={{ alignItems: 'center', display: 'flex', justifyContent: 'space-between' }}>
+            <motion.h1
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7, duration: 0.5 }}
+            >
+              Open bids:
+            </motion.h1>
+            <div id="switch-container">
+              <p>My submissions:</p>
+              <label className="switch">
+                <input type="checkbox" onChange={() => setShowMySubmissions(!showMySubmissions)} />
+                <span className="slider round"></span>
+              </label>
+            </div>
+          </div>
+          {!consultations ? <p>Loading...</p> : filteredConsultations.length > 0 ? (
             <div className="bounty-list">
-              {consultations.map((consultation, index) => (
+              {filteredConsultations.map((consultation, index) => (
                 <BidListItem
                   key={index}
                   context={context}
