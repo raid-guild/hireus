@@ -6,7 +6,6 @@ import { utils } from 'web3';
 import { BIDS_QUERY, graphqlClient } from '../../../../constants/index';
 import { shortenAddress, combineBids, round } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
-import { LOCKUP_PERIOD } from '../../../../constants/index';
 
 const DepositWithdrawCared = ({
   setShowSnackbar,
@@ -14,6 +13,7 @@ const DepositWithdrawCared = ({
   consultationDetails,
   setConsultations,
   lockTime,
+  lockupEnded,
 }) => {
   const {
     account,
@@ -94,54 +94,9 @@ const DepositWithdrawCared = ({
   }
 
   return (
-    <div
-      className="hiringboard-card"
-      style={{
-        overflow: 'hidden',
-        height: 'auto'
-      }}
-    >
+    <div id="deposit-withdraw-card">
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div>
-          <motion.p
-            className="connected-account"
-            style={{
-              margin: 0,
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            connected as:
-          </motion.p>
-          <motion.p
-            className="connected-account"
-            style={{
-              margin: 0,
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            {shortenAddress(account)}
-          </motion.p>
-        </div>
-        <button
-          className='consultation-button consultation-button--disconnect'
-          initial={{ x: '100vw' }}
-          animate={{ x: 0 }}
-          transition={{ delay: 1.3 }}
-          onClick={() => {
-            disconnectWallet()
-          }}
-        >
-          Disconnect
-        </button>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div
-          className="deposit-withdraw-card"
-        >
+        <div style={{ width: '48%' }}>
           <p>Wallet Balance:</p>
           <h2>{round(raidBalance, 4)} $RAID</h2>
           <div>
@@ -177,8 +132,8 @@ const DepositWithdrawCared = ({
             </button>
           </div>
         </div>
-        <div className="deposit-withdraw-card">
-          <p>Your bid:</p>
+        <div style={{ width: '48%' }}>
+          <p>You deposited:</p>
           <h2>
             {consultationDetails.submitter === account 
             ? round(utils.fromWei(consultationDetails.amount), 4) : '0'} $RAID
