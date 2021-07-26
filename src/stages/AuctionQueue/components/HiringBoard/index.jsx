@@ -4,6 +4,7 @@ import { utils } from 'web3';
 
 import { round, shortenAddress } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
+import Slider from '../../../../components/Slider';
 
 export const HiringBoard = ({
   consultations,
@@ -148,10 +149,10 @@ export const HiringBoard = ({
             </motion.h1>
             <div id="switch-container">
               <p>My submissions:</p>
-              <label className="switch">
-                <input type="checkbox" onChange={() => setShowMySubmissions(!showMySubmissions)} />
-                <span className="slider round"></span>
-              </label>
+              <Slider
+                setToggleState={setShowMySubmissions}
+                toggleState={showMySubmissions}
+              />
             </div>
           </div>
           {!consultations ? <p>Loading...</p> : filteredConsultations.length > 0 ? (
