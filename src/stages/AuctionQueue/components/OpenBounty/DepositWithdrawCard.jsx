@@ -1,10 +1,9 @@
 /* eslint-disable no-undef */
-
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
 import { BIDS_QUERY, graphqlClient } from '../../../../constants/index';
-import { shortenAddress, combineBids, round } from '../../../../utils';
+import { combineBids, round } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 
 const DepositWithdrawCared = ({
@@ -17,7 +16,6 @@ const DepositWithdrawCared = ({
 }) => {
   const {
     account,
-    disconnectWallet,
     raidBalance,
     isApproved,
     depositAmount,

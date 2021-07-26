@@ -49,7 +49,7 @@ export const HiringBoard = ({
         {context.account ? shortenAddress(context.account) : 'Connect'}
       </button>
       <div className="hiringboard-card-container">
-        <div className="hiringboard-description-container">
+        <div style={{ width: '35%' }}>
           <motion.h1
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -111,7 +111,6 @@ export const HiringBoard = ({
           <div id='hiringboard-button-container'>
             <div>
               <button
-                id='raid-token-button'
                 className='consultation-button'
                 initial={{ x: '100vw' }}
                 animate={{ x: 0 }}
@@ -178,7 +177,10 @@ const BidListItem = ({ context, consultation, index, setSelectedConsultations })
   return (
     <div key={index}>
       {consultation.from && (
-        <div onClick={() => setSelectedConsultations(consultation.project_name)} className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}>
+        <div
+          onClick={() => setSelectedConsultations(consultation.project_name)}
+          className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}
+        >
           <div className="bounty-list-item-inner">
             <p
               style={{

@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-
 import React, { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
@@ -156,78 +155,80 @@ export const OpenBounty = ({
       >
         {account ? shortenAddress(account) : 'Connect'}
       </button>
-      {consultationDetails && <div className="hiringboard-card-container">
-        <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-          <ConsultationRequestCard 
-            account={account}
-            consultationDetails={consultationDetails}
-            lockTime={lockTime}
-            lockupEnded={lockupEnded}
-            shares={shares}
-            isAcceptPending={isAcceptPending}
-            onAcceptAndUpdate={onAcceptAndUpdate}
-            updateCancelModalStatus={updateCancelModalStatus}
-            isCancelPending={isCancelPending}
-          />
-          {account && <DepositWithdrawCard
-            setShowSnackbar={setShowSnackbar}
-            setTxConfirmed={setTxConfirmed}
-            consultationDetails={consultationDetails}
-            setConsultations={setConsultations}
-            lockTime={lockTime}
-            lockupEnded={lockupEnded}
-          />}
-        </div>
-        <div className="hiringboard-card">
-          {consultationDetails.bid_id ? (
-            <div className="open-bid-details-flex">
-              <motion.h2
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-              >
-                Bid History:
-              </motion.h2>
-            </div>
-          ) : <p>No bid has been submitted for this consultation. {!account && 'Connect wallet to submit a bid.'}</p>}
-          {consultationDetails.changes.length > 0 && (
-            <div className="bounty-list" style={{ marginTop: '20px' }}>
-              {consultationDetails.changes.map((change, index) => (
-                <a
-                  href={`https://rinkeby.etherscan.io/tx/${change.txHash}`}
-                  target={'_blank'}
-                  rel={'noopener noreferrer'}
-                  key={index}
-                  className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}
+      {consultationDetails && (
+        <div className="hiringboard-card-container">
+          <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <ConsultationRequestCard 
+              account={account}
+              consultationDetails={consultationDetails}
+              lockTime={lockTime}
+              lockupEnded={lockupEnded}
+              shares={shares}
+              isAcceptPending={isAcceptPending}
+              onAcceptAndUpdate={onAcceptAndUpdate}
+              updateCancelModalStatus={updateCancelModalStatus}
+              isCancelPending={isCancelPending}
+            />
+            {account && <DepositWithdrawCard
+              setShowSnackbar={setShowSnackbar}
+              setTxConfirmed={setTxConfirmed}
+              consultationDetails={consultationDetails}
+              setConsultations={setConsultations}
+              lockTime={lockTime}
+              lockupEnded={lockupEnded}
+            />}
+          </div>
+          <div className="hiringboard-card">
+            {consultationDetails.bid_id ? (
+              <div className="open-bid-details-flex">
+                <motion.h2
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
                 >
-                  <div className="bounty-list-item-inner">
-                    <div
-                      className="etherscan-container"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.6, duration: 0.5 }}
-                      style={{ marginRight: '16px' }}
-                    >
-                      <EtherscanSvg />
+                  Bid History:
+                </motion.h2>
+              </div>
+            ) : <p>No bid has been submitted for this consultation. {!account && 'Connect wallet to submit a bid.'}</p>}
+            {consultationDetails.changes.length > 0 && (
+              <div className="bounty-list" style={{ marginTop: '20px' }}>
+                {consultationDetails.changes.map((change, index) => (
+                  <a
+                    href={`https://rinkeby.etherscan.io/tx/${change.txHash}`}
+                    target={'_blank'}
+                    rel={'noopener noreferrer'}
+                    key={index}
+                    className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}
+                  >
+                    <div className="bounty-list-item-inner">
+                      <div
+                        className="etherscan-container"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.6, duration: 0.5 }}
+                        style={{ marginRight: '16px' }}
+                      >
+                        <EtherscanSvg />
+                      </div>
+                      <p>{new Date(Number(change.changedAt ) * 1000).toLocaleDateString()}</p>
                     </div>
-                    <p>{new Date(Number(change.changedAt ) * 1000).toLocaleDateString()}</p>
-                  </div>
-                  <div className="bounty-list-item-inner">
-                    <p>
-                      {shortenAddress(change.increasedBy || consultationDetails.submitter, 8)}
-                    </p>
-                  </div>
-                  <div className="bounty-list-item-inner">
-                    <p className={`withdraw-amount withdraw-amount--${change.withdrawnAt ? 'red' : 'green'}`}>
-                      {change.withdrawnAt ? '-' : '+'}{utils.fromWei(change.amount)} $RAID
-                    </p>
-                  </div>
-                </a>
-              ))}
-            </div>
-          )}
+                    <div className="bounty-list-item-inner">
+                      <p>
+                        {shortenAddress(change.increasedBy || consultationDetails.submitter, 8)}
+                      </p>
+                    </div>
+                    <div className="bounty-list-item-inner">
+                      <p className={`withdraw-amount withdraw-amount--${change.withdrawnAt ? 'red' : 'green'}`}>
+                        {change.withdrawnAt ? '-' : '+'}{utils.fromWei(change.amount)} $RAID
+                      </p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-      </div>}
+      )}
       {(showSnackbar && hash !== '') && <Snackbar
         setShowSnackbar={setShowSnackbar}
         message={txConfirmed ? txFailed ? 'Transaction Failed' : 'Transaction Confirmed!' : 'Transaction Pending...'}
