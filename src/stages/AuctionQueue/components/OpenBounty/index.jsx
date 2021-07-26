@@ -169,14 +169,14 @@ export const OpenBounty = ({
             updateCancelModalStatus={updateCancelModalStatus}
             isCancelPending={isCancelPending}
           />
-          <DepositWithdrawCard
+          {account && <DepositWithdrawCard
             setShowSnackbar={setShowSnackbar}
             setTxConfirmed={setTxConfirmed}
             consultationDetails={consultationDetails}
             setConsultations={setConsultations}
             lockTime={lockTime}
             lockupEnded={lockupEnded}
-          />
+          />}
         </div>
         <div className="hiringboard-card">
           {consultationDetails.bid_id ? (
@@ -189,7 +189,7 @@ export const OpenBounty = ({
                 Bid History:
               </motion.h2>
             </div>
-          ) : <p>No bid has been submitted for this consultation.</p>}
+          ) : <p>No bid has been submitted for this consultation. {!account && 'Connect wallet to submit a bid.'}</p>}
           {consultationDetails.changes.length > 0 && (
             <div className="bounty-list" style={{ marginTop: '20px' }}>
               {consultationDetails.changes.map((change, index) => (
