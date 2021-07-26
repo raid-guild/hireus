@@ -26,13 +26,27 @@ export const OpenBounty = ({
     hash,
     onAccept,
     isAcceptPending,
+    isCancelPending,
+    updateCancelModalStatus,
     shares,
     txFailed,
   } = useContext(AppContext);
+  const [lockupEnded, setLockupEnded] = useState(false);
   const [consultationDetails, setConsultationDetails] = useState(null);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [txConfirmed, setTxConfirmed] = useState(false);
   const [lockTime, setLockTime] = useState('');
+
+  React.useEffect(() => {
+    if (!consultationDetails) return;
+    const dateNow = Date.now();
+    const lockupEnds = (Number(consultationDetails.bidCreated) * 1000) + LOCKUP_PERIOD;
+    if (dateNow > lockupEnds) {
+      setLockupEnded(true);
+    } else {
+      setLockupEnded(false);
+    }
+  }, [consultationDetails]);
 
   React.useEffect(() => {
     if (!consultationDetails) return;
@@ -149,26 +163,28 @@ export const OpenBounty = ({
         lockTime={lockTime}
       /> */}
       {consultationDetails && <div className="hiringboard-card-container">
-        <div>Left Column</div>
-        <div
-          className="hiringboard-card"
-        >
-          {consultationDetails.bid_id ? (
-            <div className="open-bid-details-flex">
-              <motion.h1
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-              >
-                Bid History
-              </motion.h1>
-            </div>
-            /* <motion.p
+        <div id="consultation-request-card">
+          <motion.h2
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            Consultation request:
+          </motion.h2>
+          <div className="open-bid-details-flex">
+            <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
             >
-              <span>Submitter:</span>{shortenAddress(consultationDetails.submitter)}
+              <span>Submitter:</span>
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              {shortenAddress(consultationDetails.submitter)}
             </motion.p>
             <motion.a
               href={`https://rinkeby.etherscan.io/address/${consultationDetails.submitter}`}
@@ -188,7 +204,14 @@ export const OpenBounty = ({
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
             >
-              <span>Submitted On:</span>{new Date(Number(consultationDetails.bidCreated) * 1000).toLocaleString()}
+              <span>Submitted On:</span>
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              {new Date(Number(consultationDetails.bidCreated) * 1000).toLocaleString()}
             </motion.p>
             <motion.a
               href={`https://rinkeby.etherscan.io/tx/${consultationDetails.createTxHash}`}
@@ -208,7 +231,14 @@ export const OpenBounty = ({
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
             >
-              <span>Status:</span>{lockTime}
+              <span>Status:</span>
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              {lockTime}
             </motion.p>
           </div>
           <div className="open-bid-details-flex">
@@ -217,7 +247,14 @@ export const OpenBounty = ({
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
             >
-              <span>Total Bounty:</span>{round(utils.fromWei(consultationDetails.amount), 4)} $RAID
+              <span>Total Bounty:</span>
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              {round(utils.fromWei(consultationDetails.amount), 4)} $RAID
             </motion.p>
             <motion.a
               href={`https://rinkeby.etherscan.io/address/${RAID_CONTRACT_ADDRESS}`}
@@ -229,7 +266,52 @@ export const OpenBounty = ({
               transition={{ delay: 0.6, duration: 0.5 }}
             >
               <EtherscanSvg />
-            </motion.a> */
+            </motion.a>
+          </div>
+          <div className="open-bounty-buttons-container">
+            {(shares >= 10 && consultationDetails?.bid_id) && <button
+              className='consultation-button'
+              initial={{ x: '100vw' }}
+              animate={{ x: 0 }}
+              transition={{ delay: 1.3 }}
+              disabled={isAcceptPending}
+              onClick={() => {
+                onAcceptAndUpdate(consultationDetails.bid_id);
+              }}
+            >
+              {isAcceptPending
+              ? <div className="spinner">Loading...</div>
+              : 'Accept Request'}
+            </button>}
+            {(consultationDetails?.submitter === account && lockupEnded) && <div>
+            <button
+              className='consultation-button'
+              initial={{ x: '100vw' }}
+              animate={{ x: 0 }}
+              transition={{ delay: 1.3 }}
+              disabled={isCancelPending}
+              onClick={() => {
+                updateCancelModalStatus(true);
+              }}
+            >
+              {isCancelPending
+              ? <div className="spinner">Loading...</div>
+              : 'Cancel Bid'}
+            </button>
+          </div>}
+          </div>
+        </div>
+        <div className="hiringboard-card">
+          {consultationDetails.bid_id ? (
+            <div className="open-bid-details-flex">
+              <motion.h2
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+              >
+                Bid History:
+              </motion.h2>
+            </div>
           ) : <p>No bid has been submitted for this consultation.</p>}
           {consultationDetails.changes.length > 0 && (
             <div className="bounty-list" style={{ marginTop: '20px' }}>
@@ -242,10 +324,7 @@ export const OpenBounty = ({
                   className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}
                 >
                   <div className="bounty-list-item-inner">
-                    <motion.a
-                      href={`https://rinkeby.etherscan.io/address/${consultationDetails.submitter}`}
-                      target={'_blank'}
-                      rel={'noopener noreferrer'}
+                    <div
                       className="etherscan-container"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -253,7 +332,7 @@ export const OpenBounty = ({
                       style={{ marginRight: '16px' }}
                     >
                       <EtherscanSvg />
-                    </motion.a>
+                    </div>
                     <p>{new Date(Number(change.changedAt ) * 1000).toLocaleDateString()}</p>
                   </div>
                   <div className="bounty-list-item-inner">
@@ -272,24 +351,6 @@ export const OpenBounty = ({
           )}
         </div>
       </div>}
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div className="open-bounty-buttons-container">
-          {(shares >= 10 && consultationDetails?.bid_id) && <button
-            className='consultation-button'
-            initial={{ x: '100vw' }}
-            animate={{ x: 0 }}
-            transition={{ delay: 1.3 }}
-            disabled={isAcceptPending}
-            onClick={() => {
-              onAcceptAndUpdate(consultationDetails.bid_id);
-            }}
-          >
-            {isAcceptPending
-            ? <div className="spinner">Loading...</div>
-            : 'Accept'}
-          </button>}
-        </div>
-      </div>
       {(showSnackbar && hash !== '') && <Snackbar
         setShowSnackbar={setShowSnackbar}
         message={txConfirmed ? txFailed ? 'Transaction Failed' : 'Transaction Confirmed!' : 'Transaction Pending...'}

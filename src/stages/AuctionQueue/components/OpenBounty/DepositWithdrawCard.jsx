@@ -15,7 +15,6 @@ const DepositWithdrawCared = ({
   setConsultations,
   lockTime,
 }) => {
-  const [lockupEnded, setLockupEnded] = useState(false);
   const {
     account,
     disconnectWallet,
@@ -31,19 +30,7 @@ const DepositWithdrawCared = ({
     onIncreaseBid,
     onWithdraw,
     isWithdrawPending,
-    isCancelPending,
-    updateCancelModalStatus,
   } = useContext(AppContext);
-
-  React.useEffect(() => {
-    const dateNow = Date.now();
-    const lockupEnds = (Number(consultationDetails.bidCreated) * 1000) + LOCKUP_PERIOD;
-    if (dateNow > lockupEnds) {
-      setLockupEnded(true);
-    } else {
-      setLockupEnded(false);
-    }
-  }, [consultationDetails]);
 
   const fetchBids = async () => {
     try {
@@ -238,23 +225,6 @@ const DepositWithdrawCared = ({
         >
           {lockTime}
         </motion.p>}
-        {(consultationDetails?.submitter === account && lockupEnded) && <div>
-          <button
-            style={{ marginTop: '20px' }}
-            className='consultation-button'
-            initial={{ x: '100vw' }}
-            animate={{ x: 0 }}
-            transition={{ delay: 1.3 }}
-            disabled={isCancelPending}
-            onClick={() => {
-              updateCancelModalStatus(true);
-            }}
-          >
-            {isCancelPending
-            ? <div className="spinner">Loading...</div>
-            : 'Cancel Bid'}
-          </button>
-        </div>}
       </div>
     </div>
   )
