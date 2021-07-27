@@ -1,3 +1,6 @@
-import { Client } from 'urql';
+import { createClient, dedupExchange, fetchExchange } from 'urql';
 
-export const CLIENT = new Client({ url: 'https://api.thegraph.com/subgraphs/name/slgraham/guildauctionqueues-rinkeby' ?? '' });
+export const CLIENT = createClient({
+  url: 'https://api.thegraph.com/subgraphs/name/slgraham/guildauctionqueues-rinkeby' ?? '',
+  exchanges: [dedupExchange, fetchExchange],
+});

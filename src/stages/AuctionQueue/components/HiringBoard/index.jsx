@@ -159,7 +159,7 @@ export const HiringBoard = ({
               />
             </div>
           </div>
-          {!consultations ? <p>Loading...</p> : filteredConsultations.length > 0 ? (
+          {!consultations ? <div className="spinner">Loading...</div> : filteredConsultations.length > 0 ? (
             <div className="bounty-list">
               {filteredConsultations.map((consultation, index) => (
                 <BidListItem

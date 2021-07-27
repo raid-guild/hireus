@@ -6,7 +6,6 @@ import { round } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 
 const DepositWithdrawCared = ({
-  fetchBids,
   setShowSnackbar,
   setTxConfirmed,
   consultationDetails,
@@ -37,7 +36,6 @@ const DepositWithdrawCared = ({
     } else {
       await onDeposit(id);
     }
-    await fetchBids();
     setTxConfirmed(true);
   }
 
@@ -52,7 +50,6 @@ const DepositWithdrawCared = ({
     setTxConfirmed(false);
     setShowSnackbar(true);
     await onWithdraw(id);
-    await fetchBids();
     setTxConfirmed(true);
   }
 

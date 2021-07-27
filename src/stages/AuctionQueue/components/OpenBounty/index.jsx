@@ -15,7 +15,6 @@ import Snackbar from '../../../../components/Snackbar';
 
 export const OpenBounty = ({
   consultations,
-  fetchBids,
   selectedConsultation,
   setSelectedConsultations,
   setConsultations,
@@ -82,7 +81,6 @@ export const OpenBounty = ({
     setTxConfirmed(false);
     setShowSnackbar(true);
     await onAccept(id);
-    await fetchBids();
     setTxConfirmed(true);
   }
 
@@ -135,7 +133,6 @@ export const OpenBounty = ({
               isCancelPending={isCancelPending}
             />
             {account && <DepositWithdrawCard
-              fetchBids={fetchBids}
               setShowSnackbar={setShowSnackbar}
               setTxConfirmed={setTxConfirmed}
               consultationDetails={consultationDetails}
