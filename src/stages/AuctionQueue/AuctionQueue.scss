@@ -49,6 +49,13 @@
   }
 }
 
+.hiringboard-respond {
+  @media screen and (min-width: 1200px) {
+    min-width: 80%;
+    max-width: 80%;
+  }
+}
+
 .hiringboard-link {
   color: $theme-color-primary;
   text-decoration: underline;

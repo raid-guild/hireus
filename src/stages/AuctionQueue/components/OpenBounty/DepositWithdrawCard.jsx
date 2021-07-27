@@ -2,15 +2,14 @@
 import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
-import { BIDS_QUERY, graphqlClient } from '../../../../constants/index';
-import { combineBids, round } from '../../../../utils';
+import { round } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 
 const DepositWithdrawCared = ({
+  fetchBids,
   setShowSnackbar,
   setTxConfirmed,
   consultationDetails,
-  setConsultations,
   lockTime,
   lockupEnded,
 }) => {
@@ -29,40 +28,6 @@ const DepositWithdrawCared = ({
     onWithdraw,
     isWithdrawPending,
   } = useContext(AppContext);
-
-  const fetchBids = async () => {
-    try {
-      const result = await graphqlClient.query(BIDS_QUERY).toPromise();
-      if (!result?.data) {
-        return;
-      }
-      const contractBids = result.data.bids;
-      fetch(`https://guild-keeper.herokuapp.com/hireus-v2/awaiting-raids`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        "key":process.env.REACT_APP_ACCESS_KEY
-      })
-    })
-      .then((res) => res.json())
-      .then(async (data) => {
-        if (!contractBids) return;
-        const combinedBids = await combineBids(data, contractBids);
-        combinedBids.sort(function(a,b){
-          return new Date(b.created) - new Date(a.created);
-        });
-        combinedBids.sort((a,b) => Number(b.amount)-Number(a.amount));
-        setConsultations(combinedBids);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }
 
   const onDepositAndUpdate = async (id) => {
     setTxConfirmed(false);

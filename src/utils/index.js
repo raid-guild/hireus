@@ -32,7 +32,6 @@ export const combineBids = async (consultations, bids) => {
       const combinedBid = await addFromAddress(consultation, bids);
       return combinedBid;
     } catch (e) {
-      console.log(e);
       return false;
     }
   }));

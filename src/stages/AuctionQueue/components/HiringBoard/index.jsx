@@ -10,34 +10,38 @@ export const HiringBoard = ({
   consultations,
   setSelectedConsultations,
 }) => {
-  const context = useContext(AppContext);
+  const {
+    account,
+    connectWallet,
+    updateStage,
+  } = useContext(AppContext);
   const [showMySubmissions, setShowMySubmissions] = React.useState(false);
   const [filteredConsultations, setFilteredConsultations] = React.useState(consultations || []);
 
   useEffect(() => {
     if (!consultations) return;
     if (showMySubmissions) {
-      if (!context.account) {
-        context.connectWallet();
+      if (!account) {
+        connectWallet();
       }
       const filteredConsultations = consultations.filter((consultation) => {
-        return (consultation.from === context.account);
+        return (consultation.from === account);
       })
       setFilteredConsultations(filteredConsultations);
     } else {
       setFilteredConsultations(consultations);
     }
-  }, [consultations, context, showMySubmissions]);
+  }, [account, connectWallet, consultations, showMySubmissions]);
 
   return (
-    <div className="hiringboard-container">
+    <div className="hiringboard-container hiringboard-respond">
       <button
         className='consultation-button'
         initial={{ x: '100vw' }}
         animate={{ x: 0 }}
         transition={{ delay: 1.3 }}
         onClick={() => {
-          context.connectWallet()
+          connectWallet()
         }}
         style={{
           marginTop: '20px',
@@ -47,7 +51,7 @@ export const HiringBoard = ({
           width: '200px',
         }}
       >
-        {context.account ? shortenAddress(context.account) : 'Connect'}
+        {account ? shortenAddress(account) : 'Connect'}
       </button>
       <div className="hiringboard-card-container">
         <div style={{ width: '35%' }}>
@@ -130,7 +134,7 @@ export const HiringBoard = ({
                 animate={{ x: 0 }}
                 transition={{ delay: 1.3 }}
                 onClick={() => {
-                  context.updateStage('next');
+                  updateStage('next');
                 }}
               >
                 New Consultation
@@ -160,7 +164,7 @@ export const HiringBoard = ({
               {filteredConsultations.map((consultation, index) => (
                 <BidListItem
                   key={index}
-                  context={context}
+                  account={account}
                   consultation={consultation}
                   index={index}
                   setSelectedConsultations={setSelectedConsultations}
@@ -174,7 +178,7 @@ export const HiringBoard = ({
   )
 }
 
-const BidListItem = ({ context, consultation, index, setSelectedConsultations }) => {
+const BidListItem = ({ account, consultation, index, setSelectedConsultations }) => {
   return (
     <div key={index}>
       {consultation.from && (
@@ -192,7 +196,7 @@ const BidListItem = ({ context, consultation, index, setSelectedConsultations })
             </p>
             <p className="bounty-detail">{new Date(consultation.created).toLocaleDateString()}</p>
             <p>
-              {consultation.from === context.account
+              {consultation.from === account
               ? consultation.project_name
               : shortenAddress(consultation.from)}
             </p>

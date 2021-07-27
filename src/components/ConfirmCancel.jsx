@@ -8,8 +8,9 @@ import {
   ModalFooter,
   Button
 } from '@chakra-ui/react';
-import { BIDS_QUERY, graphqlClient } from '../constants/index';
 import { combineBids } from '../utils'
+
+import { useBids } from '../hooks/useBids';
 
 import { AppContext } from '../context/AppContext';
 
@@ -19,16 +20,15 @@ const ConfirmCancel = ({
   setShowSnackbar,
   setConsultations,
 }) => {
+  const { contractBids } = useBids();
   const context = useContext(AppContext);
 
   const fetchBids = async () => {
     console.log('Fetching...');
     try {
-      const result = await graphqlClient.query(BIDS_QUERY).toPromise();
-      if (!result?.data) {
+      if (!contractBids) {
         return;
       }
-      const contractBids = result.data.bids;
       fetch(`https://guild-keeper.herokuapp.com/hireus-v2/awaiting-raids`, {
       method: 'POST',
       headers: {

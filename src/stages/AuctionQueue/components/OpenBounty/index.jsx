@@ -2,8 +2,7 @@
 import React, { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
-import { BIDS_QUERY, graphqlClient } from '../../../../constants/index';
-import { shortenAddress, combineBids } from '../../../../utils';
+import { shortenAddress } from '../../../../utils';
 import { LOCKUP_PERIOD } from '../../../../constants/index';
 import { AppContext } from '../../../../context/AppContext';
 
@@ -16,6 +15,7 @@ import Snackbar from '../../../../components/Snackbar';
 
 export const OpenBounty = ({
   consultations,
+  fetchBids,
   selectedConsultation,
   setSelectedConsultations,
   setConsultations,
@@ -78,41 +78,6 @@ export const OpenBounty = ({
     }
   }, [consultations, selectedConsultation, setSelectedConsultations]);
 
-  const fetchBids = async () => {
-    console.log('Fetching...');
-    try {
-      const result = await graphqlClient.query(BIDS_QUERY).toPromise();
-      if (!result?.data) {
-        return;
-      }
-      const contractBids = result.data.bids;
-      fetch(`https://guild-keeper.herokuapp.com/hireus-v2/awaiting-raids`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        "key":process.env.REACT_APP_ACCESS_KEY
-      })
-    })
-      .then((res) => res.json())
-      .then(async (data) => {
-        if (!contractBids) return;
-        const combinedBids = await combineBids(data, contractBids);
-        combinedBids.sort(function(a,b){
-          return new Date(b.created) - new Date(a.created);
-        });
-        combinedBids.sort((a,b) => Number(b.amount)-Number(a.amount));
-        setConsultations(combinedBids);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
   const onAcceptAndUpdate = async (id) => {
     setTxConfirmed(false);
     setShowSnackbar(true);
@@ -170,6 +135,7 @@ export const OpenBounty = ({
               isCancelPending={isCancelPending}
             />
             {account && <DepositWithdrawCard
+              fetchBids={fetchBids}
               setShowSnackbar={setShowSnackbar}
               setTxConfirmed={setTxConfirmed}
               consultationDetails={consultationDetails}
