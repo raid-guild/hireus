@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
 import { shortenAddress, round } from '../../../../utils';
-import { RAID_CONTRACT_ADDRESS } from '../../../../constants/index';
+import { MIN_NUMBER_OF_SHARES, RAID_CONTRACT_ADDRESS } from '../../../../constants/index';
 
 import { ReactComponent as EtherscanSvg } from '../../../../assets/etherscan.svg';
 
@@ -127,7 +127,7 @@ const ConsultationRequestCard = ({
           </div>
           {account && (
             <div className="open-bounty-buttons-container">
-              {(shares >= 10 && consultationDetails?.bid_id) && <button
+              {(shares >= MIN_NUMBER_OF_SHARES && consultationDetails?.bid_id) && <button
                 className='consultation-button'
                 initial={{ x: '100vw' }}
                 animate={{ x: 0 }}

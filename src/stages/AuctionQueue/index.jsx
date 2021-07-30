@@ -1,18 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import './AuctionQueue.scss'
 import { combineBids } from '../../utils';
 
 import { getBids } from '../../graphql/getBids';
-import { AppContext } from '../../context/AppContext';
 
 import { HiringBoard, OpenBounty } from './components';
 
 const POLL_INTERVAL = 5000;
 
 const AuctionQueue = () => {
-  const {
-    raidBalance,
-  } = useContext(AppContext);
   const [consultations, setConsultations] = useState(null);
   const [selectedConsultation, setSelectedConsultations] = useState(null);
 
@@ -38,7 +34,6 @@ const AuctionQueue = () => {
             });
             combinedBids.sort((a,b) => Number(b.amount)-Number(a.amount));
             setConsultations(combinedBids);
-            console.log(combinedBids);
           })
         }
       });

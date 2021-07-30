@@ -9,7 +9,7 @@ export default function Snackbar(props) {
         <div id="snackbar-container">
           <div style={{ display: 'flex' }}>
             <motion.a
-              href={`https://rinkeby.etherscan.io/tx/${props.hash}`}
+              href={`https://blockscout.com/xdai/mainnet/tx/${props.hash}`}
               target={'_blank'}
               rel={'noopener noreferrer'}
               id="snackbar-link"

@@ -132,7 +132,7 @@ const DepositWithdrawCared = ({
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        {(consultationDetails.bid_id && !lockupEnded) && <motion.p
+        {(!!consultationDetails.bid_id && !lockupEnded) && <motion.p
           id="lock-time"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

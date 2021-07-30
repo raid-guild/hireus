@@ -1,5 +1,6 @@
 import { utils } from 'web3';
 import { ethers } from 'ethers';
+import { QUEUE_CONTRACT_ADDRESS } from '../constants';
 
 /**
  * Shorten an Ethereum address. `charsLength` allows to change the number of
@@ -87,7 +88,7 @@ const getData = async (combinedBid, consultation, bids) => {
       return new Date(Number(b.changedAt)) - new Date(Number(a.changedAt));
     });
     if (consultation.id === airtableId) {
-      combinedBid.bid_id = utils.hexToNumber(bid.id.replace('0x3a9f3147742e51efba1f04ff26e8dc95978dccb4-', ''));
+      combinedBid.bid_id = utils.hexToNumber(bid.id.replace(`${QUEUE_CONTRACT_ADDRESS.toLowerCase()}-`, ''));
       combinedBid.amount = bid.amount;
       combinedBid.submitter = utils.toChecksumAddress(bid.submitter.id);
       combinedBid.bidCreated = bid.createdAt;
