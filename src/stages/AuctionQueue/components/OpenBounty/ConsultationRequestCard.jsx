@@ -137,6 +137,7 @@ const ConsultationRequestCard = ({
             <div className="open-bounty-buttons-container">
               {(shares >= MIN_NUMBER_OF_SHARES && consultationDetails?.bid_id) && <button
                 className='consultation-button'
+                style={{ marginTop: '20px' }}
                 initial={{ x: '100vw' }}
                 animate={{ x: 0 }}
                 transition={{ delay: 1.3 }}
@@ -153,6 +154,7 @@ const ConsultationRequestCard = ({
                 <div>
                   <button
                     className='consultation-button'
+                    style={{ marginTop: '20px' }}
                     initial={{ x: '100vw' }}
                     animate={{ x: 0 }}
                     transition={{ delay: 1.3 }}
