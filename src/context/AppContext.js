@@ -52,6 +52,7 @@ class AppContextProvider extends Component {
     hash: '',
     notEnoughBalance: false,
     faqModalStatus: false,
+    feePaid: false,
     // Personal Info state
     name: '',
     email: '',
@@ -78,6 +79,7 @@ class AppContextProvider extends Component {
     feedbackTwo: '',
     rating: '',
 
+    // Consultation Queue
     raidBalance: '0',
     shares: 0,
     raidAllowance: '0',
@@ -439,6 +441,7 @@ class AppContextProvider extends Component {
         await this.connectWallet();
         if (this.state.chainID === 1 || this.state.chainID === '0x1') {
           await this.processPayment();
+          this.setState({ feePaid: true });
         }
       } else {
         this.setState({ submitting: true });

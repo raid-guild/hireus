@@ -48,29 +48,55 @@ const Confirmation = () => {
           </motion.p>
         )}
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-          style={{ textAlign: 'center' }}
-        >
-          Your request has been added to the end of the queue. 
-          A member of the Guild will be in touch with you once 
-          we’ve worked our way down the queue. For a faster 
-          response, you are welcome to{' '}
-          <a
-            className="hiringboard-link"
-            href="/"
-          >add a $RAID token 
-          bid to your submission</a> to move higher up the queue.
-        </motion.p>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
-        >
-          While we work, your feedback can help us level up.
-        </motion.p>
+        {context.feePaid ? (
+          <>
+            <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+            style={{ textAlign: 'center' }}
+          >
+            Your request has been added to the end of the queue. 
+            A member of the Guild will be in touch with you once 
+            we’ve worked our way down the queue. For a faster 
+            response, you are welcome to{' '}
+            <a
+              className="hiringboard-link"
+              href="/"
+            >add a $RAID token 
+            bid to your submission</a> to move higher up the queue.
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+          >
+            While we work, your feedback can help us level up.
+          </motion.p>
+          </>
+        ) : (
+          <>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+              style={{ textAlign: 'center' }}
+            >
+              Your request is on its way. Please note that since you 
+              chose not to include the 500 DAI payment with your 
+              request, we cannot guarantee a response. To add payment 
+              to your submission, please reach out to a member of 
+              the Guild.
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8, duration: 0.5 }}
+            >
+              While we work, your feedback can help us level up.
+            </motion.p>
+          </>
+        )}
 
         <motion.div
           className='button-container'
