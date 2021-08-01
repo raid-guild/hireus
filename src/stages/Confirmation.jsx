@@ -51,10 +51,25 @@ const Confirmation = () => {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+          style={{ textAlign: 'center' }}
+        >
+          Your request has been added to the end of the queue. 
+          A member of the Guild will be in touch with you once 
+          we’ve worked our way down the queue. For a faster 
+          response, you are welcome to{' '}
+          <a
+            className="hiringboard-link"
+            href="/"
+          >add a $RAID token 
+          bid to your submission</a> to move higher up the queue.
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.5 }}
         >
-          Your request is on its way. Expect a response from the Guild within 48
-          hours. While we work, your feedback can help us level up.
+          While we work, your feedback can help us level up.
         </motion.p>
 
         <motion.div

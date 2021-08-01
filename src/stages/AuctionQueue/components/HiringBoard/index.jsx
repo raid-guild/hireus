@@ -68,33 +68,45 @@ export const HiringBoard = ({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            Every consultation has a base fee of $500{' '}
-            <a
-              href="https://blockscout.com/xdai/mainnet/tokens/0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hiringboard-link"
-            >
-              wxDai
-            </a>
-            {' '}(on the{' '}
-            <a
-              href="https://www.xdaichain.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hiringboard-link"
-            >
-              xDai chain
-            </a>
-            ). 
+            The first step to hiring Raid Guild is to submit a request for a consultation. 
+            During the consultation, we will discuss your needs, whether Raid Guild can meet 
+            them, and collectively determine how best to proceed.
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.5 }}
           >
-            The demand for our work has been often high, so we’ve created a bidding 
-            system to prioritize consultations, for which we use{' '}
+            Since demand for our services is high, Raid Guild selects the next consultation 
+            to take from a queue (see right). To add your request to queue, you can submit 
+            a payment of 500{' '}
+          <a
+            href="https://blockscout.com/xdai/mainnet/tokens/0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hiringboard-link"
+          >
+            wxDai
+          </a>
+          {' '}(on xDAI Chain) or{' '}
+          <a
+            href="https://etherscan.io/token/0x6b175474e89094c44da98b954eedeac495271d0f"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hiringboard-link"
+          >
+            DAI
+          </a>
+          {' '}(on mainnet). Your request will 
+            be placed at the bottom of the queue.
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 0.5 }}
+          >
+            If you’d like to get prioritized access to our services, you can move your 
+            submission up in the queue by bidding{' '}
             <a
               href={`https://blockscout.com/xdai/mainnet/address/${RAID_CONTRACT_ADDRESS}`}
               target="_blank"
@@ -102,17 +114,18 @@ export const HiringBoard = ({
               className="hiringboard-link"
             >
               $RAID
-            </a>.
+            </a>
+            {' '}tokens. Raid Guild will accept 
+            the consultation request with the highest bid in $RAID.
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 0.5 }}
+            transition={{ delay: 1.2, duration: 0.5 }}
           >
-            Adding a bid to a consultation submission is not required, but in periods 
-            of high demand it might take longer to respond to consultation requests 
-            without bids. There is a 7-day lockup period before you can withraw your 
-            bids and/or cancel the submission.
+            Your bid will be locked for 7 days. After 7 days, you may decrease or cancel 
+            your bid if you’d like. You are welcome to increase your bid at any time to 
+            move further up the queue.
           </motion.p>
           <div id='hiringboard-button-container'>
             <div>
@@ -125,7 +138,7 @@ export const HiringBoard = ({
                   console.log('Link to raid');
                 }}
               >
-                $RAID Token
+                About $RAID
               </button>
             </div>
             <div>
