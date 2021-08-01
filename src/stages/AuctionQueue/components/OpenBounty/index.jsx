@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
 import { shortenAddress } from '../../../../utils';
-import { LOCKUP_PERIOD } from '../../../../constants/index';
+import { BLOCK_EXPLORER_URL, LOCKUP_PERIOD } from '../../../../constants/index';
 import { AppContext } from '../../../../context/AppContext';
 
 import { ReactComponent as EtherscanSvg } from '../../../../assets/etherscan.svg';
@@ -157,7 +157,7 @@ export const OpenBounty = ({
               <div className="bounty-list" style={{ marginTop: '20px' }}>
                 {consultationDetails.changes.map((change, index) => (
                   <a
-                    href={`https://rinkeby.etherscan.io/tx/${change.txHash}`}
+                    href={`${BLOCK_EXPLORER_URL}tx/${change.txHash}`}
                     target={'_blank'}
                     rel={'noopener noreferrer'}
                     key={index}

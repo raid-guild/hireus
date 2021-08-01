@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
 
+import { RAID_CONTRACT_ADDRESS } from '../../../../constants';
 import { round, shortenAddress } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 import Slider from '../../../../components/Slider';
@@ -95,7 +96,7 @@ export const HiringBoard = ({
             The demand for our work has been often high, so we’ve created a bidding 
             system to prioritize consultations, for which we use{' '}
             <a
-              href="https://rinkeby.etherscan.io/token/0x982e00b16c313e979c0947b85230907fce45d50e"
+              href={`https://blockscout.com/xdai/mainnet/address/${RAID_CONTRACT_ADDRESS}`}
               target="_blank"
               rel="noopener noreferrer"
               className="hiringboard-link"

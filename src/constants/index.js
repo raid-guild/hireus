@@ -4,3 +4,5 @@ export const QUEUE_CONTRACT_ADDRESS = '0x6FE12999D11e02423fb57Cc75566BCDd4EB98DD
 export const DAO_ADDRESS = '0x26ff888b86d18793fb1420f2a4108c19bfc65a6e';
 export const MIN_NUMBER_OF_SHARES = 1;
 export const SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/slgraham/guildauctionqueues-xdai';
+export const BLOCK_EXPLORER_URL = 'https://blockscout.com/xdai/mainnet/';
+export const GUILD_KEEPER_ENDPOING = 'https://guild-keeper.herokuapp.com/hireus-v2/awaiting-raids';

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
 import { shortenAddress, round } from '../../../../utils';
-import { MIN_NUMBER_OF_SHARES, RAID_CONTRACT_ADDRESS } from '../../../../constants/index';
+import { BLOCK_EXPLORER_URL, MIN_NUMBER_OF_SHARES, RAID_CONTRACT_ADDRESS } from '../../../../constants/index';
 
 import { ReactComponent as EtherscanSvg } from '../../../../assets/etherscan.svg';
 
@@ -44,7 +44,7 @@ const ConsultationRequestCard = ({
               {shortenAddress(consultationDetails.submitter)}
             </motion.p>
             <motion.a
-              href={`https://rinkeby.etherscan.io/address/${consultationDetails.submitter}`}
+              href={`${BLOCK_EXPLORER_URL}address/${consultationDetails.submitter}`}
               target={'_blank'}
               rel={'noopener noreferrer'}
               className="etherscan-container"
@@ -71,7 +71,7 @@ const ConsultationRequestCard = ({
               {new Date(Number(consultationDetails.bidCreated) * 1000).toLocaleString()}
             </motion.p>
             <motion.a
-              href={`https://rinkeby.etherscan.io/tx/${consultationDetails.createTxHash}`}
+              href={`${BLOCK_EXPLORER_URL}tx/${consultationDetails.createTxHash}`}
               target={'_blank'}
               rel={'noopener noreferrer'}
               className="etherscan-container"
@@ -114,7 +114,7 @@ const ConsultationRequestCard = ({
               {round(utils.fromWei(consultationDetails.amount), 4)} $RAID
             </motion.p>
             <motion.a
-              href={`https://rinkeby.etherscan.io/address/${RAID_CONTRACT_ADDRESS}`}
+              href={`${BLOCK_EXPLORER_URL}address/${RAID_CONTRACT_ADDRESS}`}
               target={'_blank'}
               rel={'noopener noreferrer'}
               className="etherscan-container"

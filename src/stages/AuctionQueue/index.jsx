@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './AuctionQueue.scss'
+import { GUILD_KEEPER_ENDPOING } from '../../constants';
 import { combineBids } from '../../utils';
 
 import { getBids } from '../../graphql/getBids';
@@ -17,7 +18,7 @@ const AuctionQueue = () => {
     const interval = setInterval(() => {
       getBids().then(bids => {
         if (isSubscribed && bids) {
-          fetch(`https://guild-keeper.herokuapp.com/hireus-v2/awaiting-raids`, {
+          fetch(`${GUILD_KEEPER_ENDPOING}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

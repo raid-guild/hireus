@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import './snackbar.scss'
+import { BLOCK_EXPLORER_URL } from '../../constants';
 import { ReactComponent as EtherscanSvg } from '../../assets/etherscan.svg';
 
 export default function Snackbar(props) {
@@ -9,7 +10,7 @@ export default function Snackbar(props) {
         <div id="snackbar-container">
           <div style={{ display: 'flex' }}>
             <motion.a
-              href={`https://blockscout.com/xdai/mainnet/tx/${props.hash}`}
+              href={`${BLOCK_EXPLORER_URL}tx/${props.hash}`}
               target={'_blank'}
               rel={'noopener noreferrer'}
               id="snackbar-link"
