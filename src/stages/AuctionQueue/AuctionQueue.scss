@@ -247,8 +247,9 @@ button.consultation-button:disabled {
 }
 
 .open-bid-details-flex {
-  align-items: flex-start;
+  align-items: center;
   display: flex;
+  margin-bottom: 12px;
 }
 
 .open-bid-details-flex span {

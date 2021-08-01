@@ -6,7 +6,7 @@ import { shortenAddress } from '../../../../utils';
 import { BLOCK_EXPLORER_URL, LOCKUP_PERIOD } from '../../../../constants/index';
 import { AppContext } from '../../../../context/AppContext';
 
-import { ReactComponent as EtherscanSvg } from '../../../../assets/etherscan.svg';
+import { ReactComponent as XDaiSvg } from '../../../../assets/xdai.svg';
 
 import ConfirmCancel from '../../../../components/ConfirmCancel';
 import DepositWithdrawCard from './DepositWithdrawCard';
@@ -171,7 +171,7 @@ export const OpenBounty = ({
                         transition={{ delay: 0.6, duration: 0.5 }}
                         style={{ marginRight: '16px' }}
                       >
-                        <EtherscanSvg />
+                        <XDaiSvg />
                       </div>
                       <p>{new Date(Number(change.changedAt ) * 1000).toLocaleDateString()}</p>
                     </div>

@@ -4,7 +4,7 @@ import { utils } from 'web3';
 import { shortenAddress, round } from '../../../../utils';
 import { BLOCK_EXPLORER_URL, MIN_NUMBER_OF_SHARES, RAID_CONTRACT_ADDRESS } from '../../../../constants/index';
 
-import { ReactComponent as EtherscanSvg } from '../../../../assets/etherscan.svg';
+import { ReactComponent as XDaiSvg } from '../../../../assets/xdai.svg';
 
 const ConsultationRequestCard = ({
   account,
@@ -33,6 +33,7 @@ const ConsultationRequestCard = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
+              style={{ marginBottom: 0 }}
             >
               <span>Submitter:</span>
             </motion.p>
@@ -40,6 +41,7 @@ const ConsultationRequestCard = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
+              style={{ marginBottom: 0 }}
             >
               {shortenAddress(consultationDetails.submitter)}
             </motion.p>
@@ -52,7 +54,7 @@ const ConsultationRequestCard = ({
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
             >
-              <EtherscanSvg />
+              <XDaiSvg />
             </motion.a>
           </div>
           <div className="open-bid-details-flex">
@@ -60,6 +62,7 @@ const ConsultationRequestCard = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
+              style={{ marginBottom: 0 }}
             >
               <span>Submitted On:</span>
             </motion.p>
@@ -67,6 +70,7 @@ const ConsultationRequestCard = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
+              style={{ marginBottom: 0 }}
             >
               {new Date(Number(consultationDetails.bidCreated) * 1000).toLocaleString()}
             </motion.p>
@@ -79,7 +83,7 @@ const ConsultationRequestCard = ({
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
             >
-              <EtherscanSvg />
+              <XDaiSvg />
             </motion.a>
           </div>
           <div className="open-bid-details-flex">
@@ -87,6 +91,7 @@ const ConsultationRequestCard = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
+              style={{ marginBottom: 0 }}
             >
               <span>Status:</span>
             </motion.p>
@@ -94,6 +99,7 @@ const ConsultationRequestCard = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
+              style={{ marginBottom: 0 }}
             >
               {lockTime}
             </motion.p>
@@ -103,6 +109,7 @@ const ConsultationRequestCard = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
+              style={{ marginBottom: 0 }}
             >
               <span>Total Bounty:</span>
             </motion.p>
@@ -110,6 +117,7 @@ const ConsultationRequestCard = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
+              style={{ marginBottom: 0 }}
             >
               {round(utils.fromWei(consultationDetails.amount), 4)} $RAID
             </motion.p>
@@ -122,7 +130,7 @@ const ConsultationRequestCard = ({
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
             >
-              <EtherscanSvg />
+              <XDaiSvg />
             </motion.a>
           </div>
           {account && (
