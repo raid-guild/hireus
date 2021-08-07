@@ -120,6 +120,11 @@ const AdditionalInfo = () => {
             <AlertDialogBody>
               You may submit this form without paying, but we can’t guarantee
               that you will receive a response.
+              <br />
+              <br />
+              There’s currently a long waitlist for paid submissions, so it’s
+              highly unlikely you will receive a response without paying the
+              fee.
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -182,7 +187,7 @@ const AdditionalInfo = () => {
             }
           }}
         >
-          {paymentStatus ? 'Pay 300 DAI & Submit' : 'Submit'}
+          {paymentStatus ? 'Pay 500 DAI & Submit' : 'Submit'}
         </Button>
       ) : (
         <p id='wrong-network-text'>Switch to Mainnet</p>

@@ -20,13 +20,11 @@ import { AppContext } from '../context/AppContext';
 const faq_items = [
   {
     q: 'What happens after I pay and submit?',
-    a:
-      'After you pay and submit, we’ll receive a notification of your submission and a Raider will get in touch with you within 48 hours (business days) to schedule a consultation.'
+    a: 'After you pay and submit, we’ll receive a notification of your submission and a Raider will get in touch with you within 72 hours (business days) to schedule a consultation.'
   },
   {
     q: 'What is the consultation?',
-    a:
-      'The consultation is an online call, usually through Discord or Google Meet, with one of our project managers and possibly some extra Raiders. The consultation itself lasts around 45 minutes and in it we will assess the challenges and discuss possible solution paths for your project.'
+    a: 'The consultation is an online call, usually through Discord or Google Meet, with one of our project managers and possibly some extra Raiders. The consultation itself lasts around 45 minutes and in it we will assess the challenges and discuss possible solution paths for your project.'
   },
   {
     q: 'What are the deliverables?',
@@ -37,8 +35,7 @@ const faq_items = [
   },
   {
     q: 'What happens after the consultation?',
-    a:
-      'You will hear back from RaidGuild within 3-5 days with either a project proposal with quote, or recommendations for how to move forward with your idea. If we decide Raid Guild is not a good fit for your needs, we will offer you alternative paths forward.'
+    a: 'You will hear back from RaidGuild within 3-5 days with either a project proposal with quote, or recommendations for how to move forward with your idea. If we decide Raid Guild is not a good fit for your needs, we will offer you alternative paths forward.'
   },
   {
     q: 'Why should I pay?',
