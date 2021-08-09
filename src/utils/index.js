@@ -36,7 +36,7 @@ export const combineBids = async (consultations, bids) => {
       return false;
     }
   }));
-  return combinedBids;
+  return combinedBids.filter(bid => bid);
 }
 
 export function round(value, decimals) {

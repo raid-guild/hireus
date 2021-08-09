@@ -81,15 +81,6 @@ export const HiringBoard = ({
             to take from a queue (see right). To add your request to queue, you can submit 
             a payment of 500{' '}
           <a
-            href="https://blockscout.com/xdai/mainnet/tokens/0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hiringboard-link"
-          >
-            wxDai
-          </a>
-          {' '}(on xDAI Chain) or{' '}
-          <a
             href="https://etherscan.io/token/0x6b175474e89094c44da98b954eedeac495271d0f"
             target="_blank"
             rel="noopener noreferrer"
@@ -115,7 +106,7 @@ export const HiringBoard = ({
             >
               $RAID
             </a>
-            {' '}tokens. Raid Guild will accept 
+            {' '}tokens (on xDAI). Raid Guild will accept 
             the consultation request with the highest bid in $RAID.
           </motion.p>
           <motion.p

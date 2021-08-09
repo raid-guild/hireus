@@ -51,15 +51,6 @@ const HeadsUp = () => {
           Once you’ve filled out the form, you will also have an 
           opportunity to add the 500{' '}
           <a
-            href="https://blockscout.com/xdai/mainnet/tokens/0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hiringboard-link"
-          >
-            wxDai
-          </a>
-          {' '}(or{' '}
-          <a
             href="https://etherscan.io/token/0x6b175474e89094c44da98b954eedeac495271d0f"
             target="_blank"
             rel="noopener noreferrer"
@@ -67,7 +58,7 @@ const HeadsUp = () => {
           >
             DAI
           </a>
-          {' '}, if on mainnet) fee 
+          {' '} fee 
           to be added to the consultation queue. After that, you can 
           return to the queue page itself to add a{' '}
           <a
