@@ -3,7 +3,7 @@ import { CLIENT } from './client';
 
 const bidsQuery = gql`
   query {
-    bids(first: 100) {
+    bids(first: 100, where: {queue: "0xD880b00877726c2B76173aCEc061b29C27D5d791"}) {
       id
       amount
       createdAt
