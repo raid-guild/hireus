@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './AuctionQueue.scss'
-import { GUILD_KEEPER_ENDPOING } from '../../constants';
+import { GUILD_KEEPER_ENDPOINT } from '../../constants';
 import { combineBids } from '../../utils';
 
 import { getBids } from '../../graphql/getBids';
@@ -18,7 +18,7 @@ const AuctionQueue = () => {
     const interval = setInterval(() => {
       getBids().then(bids => {
         if (isSubscribed && bids) {
-          fetch(`${GUILD_KEEPER_ENDPOING}`, {
+          fetch(`${GUILD_KEEPER_ENDPOINT}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
