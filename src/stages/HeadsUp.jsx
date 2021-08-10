@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 
+import { RAID_CONTRACT_ADDRESS } from '../constants';
 import { AppContext } from '../context/AppContext';
 
 import rg__crest from '../assets/rg__crest.png';
@@ -33,12 +34,13 @@ const HeadsUp = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.5 }}
         >
-          To hire RaidGuild, the first step is to book a paid consultation. The
-          consultation costs 500 DAI and requires a web3 enabled browser. After
-          receiving your request, our raiders will study any info, specs, docs
-          and assets sent along with your proposal. A Cleric of the Guild will
-          reach out to confirm a time and date for the first call within 72
-          hours.
+          To request a consultation, please fill out the form starting on 
+          the next screen (click Start). The more information you can 
+          provide about the work you want to hire Raid Guild for, the 
+          better. The form will have space for information about you / 
+          your team, background and description for your project, specs 
+          for the work, as well as a few questions to give us an initial 
+          feel for your needs.
         </motion.p>
 
         <motion.p
@@ -46,12 +48,29 @@ const HeadsUp = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7, duration: 0.5 }}
         >
-          In most cases, we use this time (and some time after) to understand
-          your needs and deliver a comprehensive statement of work, ensuring the
-          key points and timeline are locked in before we begin. In all cases,
-          we strive to deeply understand how RaidGuild — with all the expertise
-          available — can better help you solve problems and bring your visions
-          into reality.
+          Once you’ve filled out the form, you will also have an 
+          opportunity to add the 500{' '}
+          <a
+            href="https://etherscan.io/token/0x6b175474e89094c44da98b954eedeac495271d0f"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hiringboard-link"
+          >
+            DAI
+          </a>
+          {' '} fee 
+          to be added to the consultation queue. After that, you can 
+          return to the queue page itself to add a{' '}
+          <a
+            href={`https://blockscout.com/xdai/mainnet/address/${RAID_CONTRACT_ADDRESS}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hiringboard-link"
+          >
+            $RAID
+          </a>
+          {' '}bid to move 
+          up in the queue.
         </motion.p>
 
         <motion.p
@@ -59,11 +78,10 @@ const HeadsUp = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.5 }}
         >
-          For more info about the consultation, value and process, check our{' '}
+          For more info about the consultation process, please refer to our{' '}
           <button id='faq' onClick={() => context.updateFaqModalStatus(true)}>
-            FAQ.
-          </button>{' '}
-          We look forward to raiding with you.
+            docs
+          </button>{'.'}
         </motion.p>
         <motion.a
           id='alchemy-badge'

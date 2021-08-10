@@ -1,0 +1,280 @@
+@import '../../utils/constants.scss';
+
+#switch-container {
+  align-items: center;
+  background: #111111;
+  display: flex;
+  padding: 8px 12px;
+}
+
+#switch-container p {
+  color: #CCCCCC;
+  font-size: 12px;
+  margin-right: 12px;
+  text-transform: uppercase;
+}
+
+.hiringboard-container {
+  color: $subtitle-color;
+  min-width: 90%;
+  max-width: 90%;
+  margin: 0 auto;
+  padding-top: 40px;
+
+  @media screen and (min-width: 1200px) {
+    min-width: 80%;
+    max-width: 80%;
+  }
+
+  h1 {
+    font-family: $primary-font;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    text-align: left;
+    margin-bottom: 20px;
+    color: $theme-color-primary;
+  }
+  h2 {
+    font-family: $primary-font;
+    font-size: 1.4rem;
+    text-align: left;
+    margin-bottom: 2rem;
+  }
+  p {
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    font-family: $primary-font;
+    letter-spacing: 1.3px;
+    line-height: 1.2;
+  }
+}
+
+.hiringboard-respond {
+  @media screen and (min-width: 1200px) {
+    min-width: 90%;
+    max-width: 90%;
+  }
+}
+
+.hiringboard-link {
+  color: $theme-color-primary;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.hiringboard-card-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#hiringboard-button-container {
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (min-width: 1200px) {
+    flex-direction: row;
+
+    button:first-child {
+      margin-right: 10px;
+    }
+  }
+}
+
+#hiringboard-button-container * button:first-child {
+  margin-bottom: 16px;
+  @media screen and (min-width: 1200px) {
+    margin-bottom: 0;
+    margin-right: 16px;
+  }
+}
+
+.hiringboard-card {
+  border: 2px solid $theme-color-primary;
+  border-radius: 4px;
+  min-height: 70vh;
+  max-height: 70vh;
+  overflow-y: scroll;
+  padding: 32px;
+  max-width: 58%;
+  min-width: 58%;
+  
+  p {
+    margin-bottom: 5px;
+
+    span {
+      display: inline-block;
+      width: 150px;
+    }
+  }
+}
+
+#deposit-withdraw-card {
+  border: 2px solid $theme-color-primary;
+  border-radius: 4px;
+  overflow-y: scroll;
+  margin-top: 24px;
+  padding: 32px;
+  width: 95%;
+  
+  p {
+    margin-bottom: 5px;
+
+    span {
+      display: inline-block;
+      width: 150px;
+    }
+  }
+
+  input {
+    background: #000;
+    color: #fff;
+    font-family: $secondary-font;
+    border: 2px solid $theme-color-primary;
+    font-size: 1rem;
+    height: 40px;
+    margin-bottom: 20px;
+    padding: 4px 8px;
+    width: 100%;
+  }
+}
+
+#consultation-request-card {
+  border: 2px solid $theme-color-primary;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  width: 95%;
+
+  p {
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+}
+
+#consultation-button-container {
+  bottom: 40px;
+  display: flex;
+  position: absolute;
+  right: 40px;
+  justify-content: flex-end;
+}
+
+button.consultation-button {
+  width: auto;
+  color: $title-color;
+  background-color: $theme-color-primary;
+  border: none;
+  text-transform: uppercase;
+  font-size: .8rem;
+  font-family: $secondary-font;
+  padding: 10px 30px;
+}
+
+button.consultation-button:hover {
+  background-color: $input-background-color;
+  color: $theme-color-primary;
+}
+
+button.consultation-button:disabled {
+  background-color: $input-background-color;
+  color: $theme-color-primary;
+  cursor: not-allowed;
+}
+
+.bounty-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.bounty-list-item {
+  align-items: center;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  transition: all .3s ease;
+
+  &--2 {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  &:hover {
+    border: 2px solid $theme-color-primary;
+    cursor: pointer;
+  }
+}
+
+.bounty-list-item-inner {
+  align-items: center;
+  display: flex;
+
+  p {
+    font-size: .8rem;
+    margin: 0;
+  }
+
+  p.bounty-detail {
+    width: 100px;
+  }
+
+  .withdraw-amount {
+    &--red {
+      color: red;
+      font-size: 1rem;
+    }
+    &--green {
+      color: green;
+      font-size: 1rem;
+    }
+  }
+
+  button {
+    width: auto;
+    color: $title-color;
+    background-color: $theme-color-primary;
+    border: none;
+    text-transform: uppercase;
+    font-size: .6rem;
+    font-family: $secondary-font;
+    padding: 8px 20px;
+  }
+}
+
+.etherscan-container {
+  margin-left: 10px;
+}
+
+.open-bid-details-flex {
+  align-items: center;
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.open-bid-details-flex span {
+  display: inline-block;
+  width: 120px;
+}
+
+#lock-time {
+  display: inline-block;
+  border: 1px solid #666666;
+  border-radius: 4px;
+  color: #666666;
+  font-size: .8rem;
+  margin: 15px auto 0;
+  padding: 5px 10px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.open-bounty-buttons-container {
+  align-items: center;
+  display: flex;
+
+  button:first-child {
+    margin-right: 12px;
+  }
+}
