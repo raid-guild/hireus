@@ -120,17 +120,23 @@ export const HiringBoard = ({
           </motion.p>
           <div id='hiringboard-button-container'>
             <div>
-              <button
-                className='consultation-button'
-                initial={{ x: '100vw' }}
-                animate={{ x: 0 }}
-                transition={{ delay: 1.3 }}
-                onClick={() => {
-                  console.log('Link to raid');
-                }}
+              <a
+                href="https://medium.com/raid-guild/why-token-why-now-4c0b8e8ea45"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                About $RAID
-              </button>
+                <button
+                  className='consultation-button'
+                  initial={{ x: '100vw' }}
+                  animate={{ x: 0 }}
+                  transition={{ delay: 1.3 }}
+                  onClick={() => {
+                    console.log('Link to raid');
+                  }}
+                >
+                  About $RAID
+                </button>
+              </a>
             </div>
             <div>
               <button
