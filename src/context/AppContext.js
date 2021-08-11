@@ -1,8 +1,9 @@
+/* eslint-disable no-undef */
 import React, { Component, createContext } from 'react';
-
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import { DAO_ADDRESS, QUEUE_CONTRACT_ADDRESS, RAID_CONTRACT_ADDRESS } from '../constants/index';
 
 export const AppContext = createContext();
 
@@ -29,6 +30,11 @@ const web3Modal = new Web3Modal({
 const DAI_CONTRACT_ADDRESS = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 const DAI_ABI = require('../abi/DAI_ABI.json');
 
+// RINKEBY
+const RAID_ABI = require('../abi/ERC20_ABI.json');
+const QUEUE_ABI = require('../abi/QUEUE_ABI.json');
+const MOLOCH_ABI = require('../abi/MOLOCH_ABI.json');
+
 // KOVAN TESTNET
 // const DAI_CONTRACT_ADDRESS = '0xff795577d9ac8bd7d90ee22b6c1703490b6512fd';
 // const DAI_ABI = require('../abi/DAI_ABI.json');
@@ -46,6 +52,7 @@ class AppContextProvider extends Component {
     hash: '',
     notEnoughBalance: false,
     faqModalStatus: false,
+    feePaid: false,
     // Personal Info state
     name: '',
     email: '',
@@ -70,7 +77,22 @@ class AppContextProvider extends Component {
     //Feedback Info state
     feedbackOne: '',
     feedbackTwo: '',
-    rating: ''
+    rating: '',
+
+    // Consultation Queue
+    raidBalance: '0',
+    shares: 0,
+    raidAllowance: '0',
+    depositAmount: '',
+    withdrawalAmount: '',
+    isApproved: false,
+    isDepositPending: false,
+    fundsSufficient: false,
+    isWithdrawPending: false,
+    isCancelPending: false,
+    isAcceptPending: false,
+    txFailed: false,
+    cancelModalStatus: false,
   };
 
   inputChangeHandler = (e) => {
@@ -127,7 +149,227 @@ class AppContextProvider extends Component {
     provider.on('chainChanged', (chainId) => {
       this.setState({ chainID: chainId });
     });
+    await this.getRaidBalance();
+    await this.getShares();
   };
+
+  disconnectWallet = () => {
+    web3Modal.clearCachedProvider();
+    this.setState({
+      account: '',
+      chainID: '',
+      web3: '',
+    });
+  }
+
+  // Auction Queue Functions
+  getRaidBalance = async () => {
+    const RAID = new this.state.web3.eth.Contract(RAID_ABI, RAID_CONTRACT_ADDRESS);
+    const balance = await RAID.methods.balanceOf(this.state.account).call();
+    const balanceConverted = this.state.web3.utils.fromWei(balance);
+    const allowance = await RAID.methods.allowance(this.state.account, QUEUE_CONTRACT_ADDRESS).call();
+    const allowanceConverted = this.state.web3.utils.fromWei(allowance);
+    this.setState({ raidBalance: balanceConverted, raidAllowance: allowanceConverted });
+  }
+
+  getShares = async () => {
+    const DAO = new this.state.web3.eth.Contract(MOLOCH_ABI, DAO_ADDRESS);
+    const members = await DAO.methods.members(this.state.account).call();
+    this.setState({ shares: Number(members['1'] || 0) });
+  }
+
+  onChangeDepositAmount = (amount) => {
+    this.setState({ depositAmount: amount });
+    if (amount === '') {
+      this.setState({ isApproved: false });
+    } else if (BigInt(this.state.web3.utils.toWei(amount)) > BigInt(this.state.web3.utils.toWei(this.state.raidAllowance))) {
+      this.setState({ isApproved: false });
+    } else {
+      this.setState({ isApproved: true });
+    }
+  }
+
+  onChangeWithdrawalAmount = (amount) => {
+    this.setState({ withdrawalAmount: amount });
+  }
+
+  onApprove = async () => {
+    this.setState({ isDepositPending: true, hash: '' });
+    try {
+      const RAID = new this.state.web3.eth.Contract(RAID_ABI, RAID_CONTRACT_ADDRESS);
+      await RAID.methods
+        .approve(
+          QUEUE_CONTRACT_ADDRESS,
+          this.state.web3.utils.toWei(this.state.depositAmount)
+        )
+        .send({
+          from: this.state.account
+        })
+        .once('transactionHash', async (hash) => {
+          this.setState({ hash: hash });
+        })
+        .on('confirmation', async () => {
+            await this.getRaidBalance();
+            this.onChangeDepositAmount(this.state.depositAmount);
+        })
+        .on('error', async (error) => {
+          this.setState({ txFailed: true });
+          console.error('Could not approve token', error);
+        });;
+    } catch (err) {
+      console.error('Could not approve token', err);
+    }
+    this.setState({ isDepositPending: false});
+  }
+
+  onDeposit = async (consultationId) => {
+    const hex = this.state.web3.utils.asciiToHex(consultationId);
+    this.setState({ isDepositPending: true, hash: '' });
+    try {
+      const QUEUE_CONTRACT = new this.state.web3.eth.Contract(QUEUE_ABI, QUEUE_CONTRACT_ADDRESS);
+      await QUEUE_CONTRACT.methods
+        .submitBid(
+          this.state.web3.utils.toWei(this.state.depositAmount),
+          hex
+        )
+        .send({
+          from: this.state.account
+        })
+        .once('transactionHash', async (hash) => {
+          this.setState({ hash: hash });
+        })
+        .on('confirmation', async () => {
+          await this.getRaidBalance();
+          this.onChangeDepositAmount('');
+        })
+        .on('error', async (error) => {
+          this.setState({ txFailed: true });
+          console.error('Could not submit bid', error);
+        });;
+    } catch (err) {
+      console.error('Could not submit bid', err);
+    }
+    this.setState({ isDepositPending: false});
+  }
+
+  onIncreaseBid = async (bidId) => {
+    this.setState({ isDepositPending: true, hash: '' });
+    try {
+      const QUEUE_CONTRACT = new this.state.web3.eth.Contract(QUEUE_ABI, QUEUE_CONTRACT_ADDRESS);
+      await QUEUE_CONTRACT.methods
+        .increaseBid(
+          this.state.web3.utils.toWei(this.state.depositAmount),
+          bidId
+        )
+        .send({
+          from: this.state.account
+        })
+        .once('transactionHash', async (hash) => {
+          this.setState({ hash: hash });
+        })
+        .on('confirmation', async () => {
+          await this.getRaidBalance();
+          this.onChangeDepositAmount('');
+        })
+        .on('error', async (error) => {
+          this.setState({ txFailed: true });
+          console.error('Could not submit bid', error);
+        });;
+    } catch (err) {
+      console.error('Could not submit bid', err);
+    }
+    this.setState({ isDepositPending: false});
+  }
+
+  onWithdraw = async (consultationId) => {
+    this.setState({ isWithdrawPending: true, hash: ''});
+    try {
+      const QUEUE_CONTRACT = new this.state.web3.eth.Contract(QUEUE_ABI, QUEUE_CONTRACT_ADDRESS);
+      await QUEUE_CONTRACT.methods
+        .withdrawBid(
+          this.state.web3.utils.toWei(this.state.withdrawalAmount),
+          consultationId
+        )
+        .send({
+          from: this.state.account
+        })
+        .once('transactionHash', async (hash) => {
+          this.setState({ hash: hash });
+        })
+        .on('confirmation', async () => {
+          await this.getRaidBalance();
+          this.onChangeWithdrawalAmount('');
+        })
+        .on('error', async (error) => {
+          this.setState({ txFailed: true });
+          console.error('Could not withdraw tokens', error);
+        });;
+    } catch (err) {
+      console.error('Could not withdraw tokens', err);
+    }
+    this.setState({ isWithdrawPending: false});
+  }
+
+  onCancel = async (id) => {
+    this.setState({ isCancelPending: true, hash: ''});
+    try {
+      const QUEUE_CONTRACT = new this.state.web3.eth.Contract(QUEUE_ABI, QUEUE_CONTRACT_ADDRESS);
+      await QUEUE_CONTRACT.methods
+        .cancelBid(
+          id
+        )
+        .send({
+          from: this.state.account
+        })
+        .once('transactionHash', async (hash) => {
+          this.setState({ hash: hash });
+        })
+        .on('confirmation', async () => {
+          await this.getRaidBalance();
+          this.onChangeWithdrawalAmount('');
+        })
+        .on('error', async (error) => {
+          this.setState({ txFailed: true });
+          console.error('Could not withdraw tokens', error);
+        });;
+    } catch (err) {
+      console.error('Could not withdraw tokens', err);
+    }
+    this.setState({ isCancelPending: false});
+  }
+
+  onAccept = async (id) => {
+    this.setState({ isAcceptPending: true, hash: ''});
+    try {
+      const QUEUE_CONTRACT = new this.state.web3.eth.Contract(QUEUE_ABI, QUEUE_CONTRACT_ADDRESS);
+      await QUEUE_CONTRACT.methods
+        .acceptBid(
+          id
+        )
+        .send({
+          from: this.state.account
+        })
+        .once('transactionHash', async (hash) => {
+          this.setState({ hash: hash });
+        })
+        .on('confirmation', async () => {
+          await this.getRaidBalance();
+          this.onChangeWithdrawalAmount('');
+        })
+        .on('error', async (error) => {
+          this.setState({ txFailed: true });
+          console.error('Could not withdraw tokens', error);
+        });;
+    } catch (err) {
+      console.error('Could not withdraw tokens', err);
+    }
+    this.setState({ isAcceptPending: false});
+  }
+
+  updateCancelModalStatus = (status) => {
+    this.setState({ cancelModalStatus: status });
+  };
+  // End of Auction Queue Functionality
 
   sendData = async (hash = 'not paid') => {
     await axios
@@ -199,6 +441,7 @@ class AppContextProvider extends Component {
         await this.connectWallet();
         if (this.state.chainID === 1 || this.state.chainID === '0x1') {
           await this.processPayment();
+          this.setState({ feePaid: true });
         }
       } else {
         this.setState({ submitting: true });
@@ -235,6 +478,17 @@ class AppContextProvider extends Component {
       <AppContext.Provider
         value={{
           ...this.state,
+          connectWallet: this.connectWallet,
+          disconnectWallet: this.disconnectWallet,
+          onChangeDepositAmount: this.onChangeDepositAmount,
+          onChangeWithdrawalAmount: this.onChangeWithdrawalAmount,
+          onApprove: this.onApprove,
+          onDeposit: this.onDeposit,
+          onIncreaseBid: this.onIncreaseBid,
+          onWithdraw: this.onWithdraw,
+          onCancel: this.onCancel,
+          onAccept: this.onAccept,
+          updateCancelModalStatus: this.updateCancelModalStatus,
           updateStage: this.updateStage,
           setPersonalData: this.setPersonalData,
           setProjectData: this.setProjectData,
