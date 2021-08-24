@@ -149,8 +149,11 @@ class AppContextProvider extends Component {
     provider.on('chainChanged', (chainId) => {
       this.setState({ chainID: chainId });
     });
-    await this.getRaidBalance();
-    await this.getShares();
+
+    if (chainID === 100) {
+      await this.getRaidBalance();
+      await this.getShares();
+    }
   };
 
   disconnectWallet = () => {
@@ -438,7 +441,9 @@ class AppContextProvider extends Component {
   submitAll = async (specificInfo, priority, paymentStatus) => {
     this.setState({ specificInfo, priority }, async () => {
       if (paymentStatus) {
+        console.log('processing');
         await this.connectWallet();
+        console.log('connected');
         if (this.state.chainID === 1 || this.state.chainID === '0x1') {
           await this.processPayment();
           this.setState({ feePaid: true });
