@@ -17,7 +17,6 @@ export const OpenBounty = ({
   consultations,
   selectedConsultation,
   setSelectedConsultations,
-  setConsultations,
 }) => {
   const {
     account,
@@ -136,7 +135,6 @@ export const OpenBounty = ({
               setShowSnackbar={setShowSnackbar}
               setTxConfirmed={setTxConfirmed}
               consultationDetails={consultationDetails}
-              setConsultations={setConsultations}
               lockTime={lockTime}
               lockupEnded={lockupEnded}
             />}
@@ -201,7 +199,6 @@ export const OpenBounty = ({
         consultationDetails={consultationDetails}
         setTxConfirmed={setTxConfirmed}
         setShowSnackbar={setShowSnackbar}
-        setConsultations={setConsultations}
       />
     </div>
   )
