@@ -13,6 +13,7 @@ import { AppContext } from '../context/AppContext';
 
 const ConfirmCancel = ({
   consultationDetails,
+  refresh,
   setTxConfirmed,
   setShowSnackbar,
 }) => {
@@ -24,6 +25,7 @@ const ConfirmCancel = ({
     setShowSnackbar(true);
     await context.onCancel(id);
     setTxConfirmed(true);
+    refresh();
   }
 
   return (
