@@ -1,41 +1,43 @@
-import { useContext, useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useContext, useState, useEffect } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { motion } from "framer-motion";
 
-import { AppContext } from './context/AppContext';
+import { AppContext } from "./context/AppContext";
+import { shortenAddress } from "./utils";
 
-import AuctionQueue from './stages/AuctionQueue';
-import HeadsUp from './stages/HeadsUp';
-import PersonalInfo from './stages/PersonalInfo';
-import ProjectInfo from './stages/ProjectInfo';
-import RequiredServices from './stages/RequiredServices';
-import AdditionalInfo from './stages/AdditionalInfo';
-import Confirmation from './stages/Confirmation';
-import Feedback from './stages/Feedback';
+import AuctionQueue from "./stages/AuctionQueue";
+import HeadsUp from "./stages/HeadsUp";
+import PersonalInfo from "./stages/PersonalInfo";
+import ProjectInfo from "./stages/ProjectInfo";
+import RequiredServices from "./stages/RequiredServices";
+import AdditionalInfo from "./stages/AdditionalInfo";
+import Confirmation from "./stages/Confirmation";
+import Feedback from "./stages/Feedback";
 
-import FAQ from './components/Faq';
+import FAQ from "./components/Faq";
 
-import './App.scss';
+import "./App.scss";
 
-import raidguild__logo from './assets/raidguild__logo.png';
+import raidguild__logo from "./assets/raidguild__logo.png";
 
 // uses ga4
 
 const App = () => {
-  const context = useContext(AppContext);
+  const { account, stage, connectWallet, updateFaqModalStatus, updateStage } =
+    useContext(AppContext);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    window.addEventListener('resize', (e) => {
+    window.addEventListener("resize", (e) => {
       setWindowWidth(window.innerWidth);
     });
   }, []);
 
   return (
-    <div className='app'>
-      <div className='main'>
+    <div className="app">
+      <div className="main">
         {windowWidth < 1000 && (
-          <div className='window'>
+          <div className="window">
             <motion.h1
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -55,46 +57,66 @@ const App = () => {
         )}
         {windowWidth > 1000 && (
           <>
-            <a
-              href='https://raidguild.org/'
-              target='_blank'
-              rel='noopener noreferrer'
-              id='raidguild-logo'
-            >
-              <motion.img
-                src={raidguild__logo}
-                alt='raidguild logo'
-                initial={{ y: -250 }}
-                animate={{ y: -10 }}
-                transition={{ delay: 0.3 }}
-              />
-            </a>
+            <div id="raidguild-navbar">
+              <a
+                href="https://raidguild.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                id="raidguild-logo"
+              >
+                <motion.img
+                  src={raidguild__logo}
+                  alt="raidguild logo"
+                  initial={{ y: -250 }}
+                  animate={{ y: -10 }}
+                  transition={{ delay: 0.3 }}
+                />
+              </a>
+              <button
+                className="consultation-button"
+                initial={{ x: "100vw" }}
+                animate={{ x: 0 }}
+                transition={{ delay: 1.3 }}
+                onClick={() => {
+                  connectWallet();
+                }}
+                // style={{
+                //   marginTop: "20px",
+                //   position: "absolute",
+                //   right: "60px",
+                //   top: "24px",
+                //   width: "200px",
+                // }}
+              >
+                {account ? shortenAddress(account) : "Connect"}
+              </button>
+            </div>
             <Router>
               <Switch>
-                <Route path='/' exact>
+                <Route path="/" exact>
                   <>
-                    {context.stage === 1 && <AuctionQueue />}
-                    {context.stage === 2 && <HeadsUp />}
-                    {context.stage === 3 && <PersonalInfo />}
-                    {context.stage === 4 && <ProjectInfo />}
-                    {context.stage === 5 && <RequiredServices />}
-                    {context.stage === 6 && <AdditionalInfo />}
-                    {context.stage === 7 && <Confirmation />}
-                    {context.stage === 8 && <Feedback />}
+                    {stage === 1 && <AuctionQueue />}
+                    {stage === 2 && <HeadsUp />}
+                    {stage === 3 && <PersonalInfo />}
+                    {stage === 4 && <ProjectInfo />}
+                    {stage === 5 && <RequiredServices />}
+                    {stage === 6 && <AdditionalInfo />}
+                    {stage === 7 && <Confirmation />}
+                    {stage === 8 && <Feedback />}
 
-                    {context.stage !== 1 && context.stage !== 6 && (
+                    {stage !== 1 && stage !== 6 && (
                       <button
-                        id='prev-stage-button'
-                        onClick={() => context.updateStage('previous')}
+                        id="prev-stage-button"
+                        onClick={() => updateStage("previous")}
                       >
-                        <i className='fas fa-arrow-left'></i>
+                        <i className="fas fa-arrow-left"></i>
                       </button>
                     )}
 
-                    {context.stage !== 1 && (
+                    {stage !== 1 && (
                       <button
-                        onClick={() => context.updateFaqModalStatus(true)}
-                        id='faq-button'
+                        onClick={() => updateFaqModalStatus(true)}
+                        id="faq-button"
                       >
                         Read FAQ
                       </button>
