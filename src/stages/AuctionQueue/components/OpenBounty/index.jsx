@@ -15,6 +15,7 @@ import Snackbar from '../../../../components/Snackbar';
 
 export const OpenBounty = ({
   consultations,
+  refresh,
   selectedConsultation,
   setSelectedConsultations,
 }) => {
@@ -81,6 +82,7 @@ export const OpenBounty = ({
     setShowSnackbar(true);
     await onAccept(id);
     setTxConfirmed(true);
+    refresh();
   }
 
   return (
@@ -137,6 +139,7 @@ export const OpenBounty = ({
               consultationDetails={consultationDetails}
               lockTime={lockTime}
               lockupEnded={lockupEnded}
+              refresh={refresh}
             />}
           </div>
           <div className="hiringboard-card">
@@ -197,6 +200,7 @@ export const OpenBounty = ({
       />}
       <ConfirmCancel
         consultationDetails={consultationDetails}
+        refresh={refresh}
         setTxConfirmed={setTxConfirmed}
         setShowSnackbar={setShowSnackbar}
       />

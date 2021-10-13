@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import './AuctionQueue.scss'
 
 import { useBids } from '../../hooks/useBids';
+import { useRefresh } from '../../hooks/useRefresh';
 import { HiringBoard, OpenBounty } from './components';
 
 const AuctionQueue = () => {
-  const { consultations } = useBids();
+  const [refreshCount, refresh] = useRefresh();
+  const { consultations } = useBids(refreshCount);
   const [selectedConsultation, setSelectedConsultations] = useState(null);
 
   return (
@@ -16,6 +18,7 @@ const AuctionQueue = () => {
       /> : (
       <OpenBounty
         consultations={consultations}
+        refresh={refresh}
         selectedConsultation={selectedConsultation}
         setSelectedConsultations={setSelectedConsultations}
       />

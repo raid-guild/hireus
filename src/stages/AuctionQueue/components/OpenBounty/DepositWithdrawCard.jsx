@@ -11,6 +11,7 @@ const DepositWithdrawCared = ({
   consultationDetails,
   lockTime,
   lockupEnded,
+  refresh,
 }) => {
   const {
     account,
@@ -37,6 +38,7 @@ const DepositWithdrawCared = ({
       await onDeposit(id);
     }
     setTxConfirmed(true);
+    refresh();
   }
 
   const onApproveAndUpdate = async () => {
@@ -44,6 +46,7 @@ const DepositWithdrawCared = ({
     setShowSnackbar(true);
     await onApprove();
     setTxConfirmed(true);
+    refresh();
   }
 
   const onWithdrawAndupdate = async (id) => {
@@ -51,6 +54,7 @@ const DepositWithdrawCared = ({
     setShowSnackbar(true);
     await onWithdraw(id);
     setTxConfirmed(true);
+    refresh();
   }
 
   return (
