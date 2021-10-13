@@ -72,24 +72,19 @@ const App = () => {
                   transition={{ delay: 0.3 }}
                 />
               </a>
-              <button
-                className="consultation-button"
-                initial={{ x: "100vw" }}
-                animate={{ x: 0 }}
-                transition={{ delay: 1.3 }}
-                onClick={() => {
-                  connectWallet();
-                }}
-                // style={{
-                //   marginTop: "20px",
-                //   position: "absolute",
-                //   right: "60px",
-                //   top: "24px",
-                //   width: "200px",
-                // }}
-              >
-                {account ? shortenAddress(account) : "Connect"}
-              </button>
+              {stage !== 2 && (
+                <button
+                  className="consultation-button"
+                  initial={{ x: "100vw" }}
+                  animate={{ x: 0 }}
+                  transition={{ delay: 1.3 }}
+                  onClick={() => {
+                    connectWallet();
+                  }}
+                >
+                  {account ? shortenAddress(account) : "Connect"}
+                </button>
+              )}
             </div>
             <Router>
               <Switch>
