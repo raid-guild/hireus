@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
 
-import { RAID_CONTRACT_ADDRESS } from '../../../../constants';
+import { MIN_NUMBER_OF_SHARES, RAID_CONTRACT_ADDRESS } from '../../../../constants';
 import { round, shortenAddress } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 import Slider from '../../../../components/Slider';
@@ -15,6 +15,7 @@ export const HiringBoard = ({
     account,
     connectWallet,
     updateStage,
+    shares,
   } = useContext(AppContext);
   const [showMySubmissions, setShowMySubmissions] = React.useState(false);
   const [filteredConsultations, setFilteredConsultations] = React.useState(consultations || []);
@@ -179,6 +180,7 @@ export const HiringBoard = ({
                   consultation={consultation}
                   index={index}
                   setSelectedConsultations={setSelectedConsultations}
+                  shares={shares}
                 />
               ))}
             </div>
@@ -189,7 +191,7 @@ export const HiringBoard = ({
   )
 }
 
-const BidListItem = ({ account, consultation, index, setSelectedConsultations }) => {
+const BidListItem = ({ account, consultation, index, setSelectedConsultations, shares }) => {
   return (
     <div key={index}>
       {consultation.from && (
@@ -207,7 +209,7 @@ const BidListItem = ({ account, consultation, index, setSelectedConsultations })
             </p>
             <p className="bounty-detail">{new Date(consultation.created).toLocaleDateString()}</p>
             <p>
-              {consultation.from === account
+              {consultation.from === account || shares >= MIN_NUMBER_OF_SHARES
               ? consultation.project_name
               : shortenAddress(consultation.from)}
             </p>
