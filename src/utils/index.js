@@ -2,6 +2,8 @@ import { utils } from 'web3';
 import { ethers } from 'ethers';
 import { QUEUE_CONTRACT_ADDRESS } from '../constants';
 
+const provider = ethers.getDefaultProvider(process.env.REACT_APP_MAINNET_NODE_ENDPOINT)
+
 /**
  * Shorten an Ethereum address. `charsLength` allows to change the number of
  * characters on both sides of the ellipsis.
@@ -61,7 +63,6 @@ const addFromAddress = async (consultation, bids) => {
 }
 
 const getData = async (combinedBid, consultation, bids) => {
-  const provider = ethers.getDefaultProvider(process.env.REACT_APP_MAINNET_NODE_ENDPOINT)
   const tx = await provider.getTransaction(consultation.consultation_hash);
   combinedBid['from'] = tx.from;
 
