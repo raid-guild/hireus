@@ -1,21 +1,21 @@
-import React, { useContext, useEffect } from "react";
-import { motion } from "framer-motion";
-import { utils } from "web3";
+import React, { useContext, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { utils } from 'web3';
 
 import {
   MIN_NUMBER_OF_SHARES,
   RAID_CONTRACT_ADDRESS,
-} from "../../../../constants";
-import { round, shortenAddress } from "../../../../utils";
-import { AppContext } from "../../../../context/AppContext";
-import Slider from "../../../../components/Slider";
+} from '../../../../constants';
+import { round, shortenAddress } from '../../../../utils';
+import { AppContext } from '../../../../context/AppContext';
+import Slider from '../../../../components/Slider';
 
 export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
   const { account, connectWallet, updateStage, shares } =
     useContext(AppContext);
   const [showMySubmissions, setShowMySubmissions] = React.useState(false);
   const [filteredConsultations, setFilteredConsultations] = React.useState(
-    consultations || []
+    consultations || [],
   );
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
       if (!account) {
         connectWallet();
       }
-      const filteredConsultations = consultations.filter((consultation) => {
+      const filteredConsultations = consultations.filter(consultation => {
         return consultation.from === account;
       });
       setFilteredConsultations(filteredConsultations);
@@ -36,7 +36,7 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
   return (
     <div className="hiringboard-container hiringboard-respond">
       <div className="hiringboard-card-container">
-        <div style={{ width: "35%" }}>
+        <div style={{ width: '35%' }}>
           <motion.h1
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -61,7 +61,7 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
           >
             Since demand for our services is high, Raid Guild selects the next
             consultation to take from a queue (see right). To add your request
-            to queue, you can submit a payment of 500{" "}
+            to queue, you can submit a payment of 500{' '}
             <a
               href="https://etherscan.io/token/0x6b175474e89094c44da98b954eedeac495271d0f"
               target="_blank"
@@ -69,7 +69,7 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
               className="hiringboard-link"
             >
               DAI
-            </a>{" "}
+            </a>{' '}
             (on mainnet). Your request will be placed at the bottom of the
             queue.
           </motion.p>
@@ -79,7 +79,7 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
             transition={{ delay: 1, duration: 0.5 }}
           >
             If you’d like to get prioritized access to our services, you can
-            move your submission up in the queue by bidding{" "}
+            move your submission up in the queue by bidding{' '}
             <a
               href={`https://blockscout.com/xdai/mainnet/address/${RAID_CONTRACT_ADDRESS}`}
               target="_blank"
@@ -87,7 +87,7 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
               className="hiringboard-link"
             >
               $RAID
-            </a>{" "}
+            </a>{' '}
             tokens (on xDAI). Raid Guild will accept the consultation request
             with the highest bid in $RAID.
           </motion.p>
@@ -109,11 +109,11 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
               >
                 <button
                   className="consultation-button"
-                  initial={{ x: "100vw" }}
+                  initial={{ x: '100vw' }}
                   animate={{ x: 0 }}
                   transition={{ delay: 1.3 }}
                   onClick={() => {
-                    console.log("Link to raid");
+                    console.log('Link to raid');
                   }}
                 >
                   About $RAID
@@ -123,11 +123,11 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
             <div>
               <button
                 className="consultation-button"
-                initial={{ x: "100vw" }}
+                initial={{ x: '100vw' }}
                 animate={{ x: 0 }}
                 transition={{ delay: 1.3 }}
                 onClick={() => {
-                  updateStage("next");
+                  updateStage('next');
                 }}
               >
                 New Consultation
@@ -138,9 +138,9 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
         <div className="hiringboard-card">
           <div
             style={{
-              alignItems: "center",
-              display: "flex",
-              justifyContent: "space-between",
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'space-between',
             }}
           >
             <motion.h1
@@ -195,13 +195,13 @@ const BidListItem = ({
         <div
           onClick={() => setSelectedConsultations(consultation.project_name)}
           className={`bounty-list-item bounty-list-item${
-            index % 2 !== 0 && "--2"
+            index % 2 !== 0 && '--2'
           }`}
         >
           <div className="bounty-list-item-inner">
             <p
               style={{
-                marginRight: "20px",
+                marginRight: '20px',
               }}
             >
               #{index < 9 ? `0${index + 1}` : index + 1}

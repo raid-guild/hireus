@@ -13,7 +13,7 @@ import {
   AlertDialogOverlay,
   Tooltip,
   useToast,
-  Button
+  Button,
 } from '@chakra-ui/react';
 
 import { InfoIcon } from '@chakra-ui/icons';
@@ -55,8 +55,8 @@ const AdditionalInfo = () => {
   };
 
   return (
-    <div className='additional-info-container'>
-      <h2 className='step-title'>Step 4 of 4: Additional Information</h2>
+    <div className="additional-info-container">
+      <h2 className="step-title">Step 4 of 4: Additional Information</h2>
       <FormControl
         mb={10}
         isRequired
@@ -64,20 +64,20 @@ const AdditionalInfo = () => {
       >
         <FormLabel>Do you need something very specific?</FormLabel>
         <Textarea
-          placeholder='In plain words, tell us how you think we can best help you.'
-          onChange={(e) => setSpecificInfo(e.target.value)}
+          placeholder="In plain words, tell us how you think we can best help you."
+          onChange={e => setSpecificInfo(e.target.value)}
         />
       </FormControl>
 
-      <Stack mb={10} direction='row'>
+      <Stack mb={10} direction="row">
         <FormControl isRequired>
-          <FormLabel as='legend'>
+          <FormLabel as="legend">
             What are your priorities?{' '}
             <Tooltip
               hasArrow
-              placement='top'
-              label='It can be fast, polished, or inexpensive.'
-              aria-label='disclaimer tooltip'
+              placement="top"
+              label="It can be fast, polished, or inexpensive."
+              aria-label="disclaimer tooltip"
             >
               <InfoIcon />
             </Tooltip>
@@ -86,11 +86,11 @@ const AdditionalInfo = () => {
             options={[
               'Fast & Polished',
               'Fast & Inexpensive',
-              'Polished & Inexpensive'
+              'Polished & Inexpensive',
             ]}
             updateRadio={setPriority}
-            name='priority'
-            defaultValue='Fast & Polished'
+            name="priority"
+            defaultValue="Fast & Polished"
           />
         </FormControl>
       </Stack>
@@ -98,7 +98,7 @@ const AdditionalInfo = () => {
       <FormControl>
         <Checkbox
           isChecked={checkBoxStatus}
-          colorScheme='red'
+          colorScheme="red"
           onChange={checkBoxChangeHandler}
         >
           Continue without paying
@@ -113,7 +113,7 @@ const AdditionalInfo = () => {
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
               Disclaimer
             </AlertDialogHeader>
 
@@ -129,15 +129,15 @@ const AdditionalInfo = () => {
 
             <AlertDialogFooter>
               <button
-                className='dialog-button-cancel'
+                className="dialog-button-cancel"
                 ref={cancelRef}
                 onClick={onClose}
               >
                 Cancel
               </button>
               <button
-                className='dialog-button-select'
-                colorScheme='red'
+                className="dialog-button-select"
+                colorScheme="red"
                 onClick={modalConfirmHandler}
                 ml={3}
               >
@@ -150,7 +150,7 @@ const AdditionalInfo = () => {
 
       {paymentStatus && (
         <button
-          id='payment-info-link'
+          id="payment-info-link"
           onClick={() => context.updateFaqModalStatus(true)}
         >
           What am I paying for?
@@ -162,8 +162,8 @@ const AdditionalInfo = () => {
       context.chainID === '0x1' ? (
         <Button
           isLoading={context.submitting}
-          loadingText='Submitting'
-          id='chakra-button'
+          loadingText="Submitting"
+          id="chakra-button"
           onClick={() => {
             if (specificInfo !== '') {
               setButtonClickStatus(false);
@@ -173,7 +173,7 @@ const AdditionalInfo = () => {
                   title: 'Your wallet has insufficient DAI balance.',
                   status: 'warning',
                   duration: 3000,
-                  position: 'top'
+                  position: 'top',
                 });
               }
             } else {
@@ -182,7 +182,7 @@ const AdditionalInfo = () => {
                 title: 'Please fill in all the required fields.',
                 status: 'warning',
                 duration: 3000,
-                position: 'top'
+                position: 'top',
               });
             }
           }}
@@ -190,7 +190,7 @@ const AdditionalInfo = () => {
           {paymentStatus ? 'Pay 500 DAI & Submit' : 'Submit'}
         </Button>
       ) : (
-        <p id='wrong-network-text'>Switch to Mainnet</p>
+        <p id="wrong-network-text">Switch to Mainnet</p>
       )}
     </div>
   );

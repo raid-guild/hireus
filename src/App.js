@@ -1,24 +1,24 @@
-import { useContext, useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { motion } from "framer-motion";
+import { useContext, useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-import { AppContext } from "./context/AppContext";
-import { shortenAddress } from "./utils";
+import { AppContext } from './context/AppContext';
+import { shortenAddress } from './utils';
 
-import AuctionQueue from "./stages/AuctionQueue";
-import HeadsUp from "./stages/HeadsUp";
-import PersonalInfo from "./stages/PersonalInfo";
-import ProjectInfo from "./stages/ProjectInfo";
-import RequiredServices from "./stages/RequiredServices";
-import AdditionalInfo from "./stages/AdditionalInfo";
-import Confirmation from "./stages/Confirmation";
-import Feedback from "./stages/Feedback";
+import AuctionQueue from './stages/AuctionQueue';
+import HeadsUp from './stages/HeadsUp';
+import PersonalInfo from './stages/PersonalInfo';
+import ProjectInfo from './stages/ProjectInfo';
+import RequiredServices from './stages/RequiredServices';
+import AdditionalInfo from './stages/AdditionalInfo';
+import Confirmation from './stages/Confirmation';
+import Feedback from './stages/Feedback';
 
-import FAQ from "./components/Faq";
+import FAQ from './components/Faq';
 
-import "./App.scss";
+import './App.scss';
 
-import raidguild__logo from "./assets/raidguild__logo.png";
+import raidguild__logo from './assets/raidguild__logo.png';
 
 // uses ga4
 
@@ -28,7 +28,7 @@ const App = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    window.addEventListener("resize", (e) => {
+    window.addEventListener('resize', e => {
       setWindowWidth(window.innerWidth);
     });
   }, []);
@@ -75,14 +75,14 @@ const App = () => {
               {stage !== 2 && (
                 <button
                   className="consultation-button"
-                  initial={{ x: "100vw" }}
+                  initial={{ x: '100vw' }}
                   animate={{ x: 0 }}
                   transition={{ delay: 1.3 }}
                   onClick={() => {
                     connectWallet();
                   }}
                 >
-                  {account ? shortenAddress(account) : "Connect"}
+                  {account ? shortenAddress(account) : 'Connect'}
                 </button>
               )}
             </div>
@@ -102,7 +102,7 @@ const App = () => {
                     {stage !== 1 && stage !== 6 && (
                       <button
                         id="prev-stage-button"
-                        onClick={() => updateStage("previous")}
+                        onClick={() => updateStage('previous')}
                       >
                         <i className="fas fa-arrow-left"></i>
                       </button>

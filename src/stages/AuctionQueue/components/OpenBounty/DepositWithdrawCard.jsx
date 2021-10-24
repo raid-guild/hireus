@@ -29,7 +29,7 @@ const DepositWithdrawCared = ({
     isWithdrawPending,
   } = useContext(AppContext);
 
-  const onDepositAndUpdate = async (id) => {
+  const onDepositAndUpdate = async id => {
     setTxConfirmed(false);
     setShowSnackbar(true);
     if (consultationDetails.bid_id) {
@@ -39,7 +39,7 @@ const DepositWithdrawCared = ({
     }
     setTxConfirmed(true);
     refresh();
-  }
+  };
 
   const onApproveAndUpdate = async () => {
     setTxConfirmed(false);
@@ -47,15 +47,15 @@ const DepositWithdrawCared = ({
     await onApprove();
     setTxConfirmed(true);
     refresh();
-  }
+  };
 
-  const onWithdrawAndupdate = async (id) => {
+  const onWithdrawAndupdate = async id => {
     setTxConfirmed(false);
     setShowSnackbar(true);
     await onWithdraw(id);
     setTxConfirmed(true);
     refresh();
-  }
+  };
 
   return (
     <div id="deposit-withdraw-card">
@@ -71,36 +71,46 @@ const DepositWithdrawCared = ({
               min={'0'}
               step={'0.01'}
               value={depositAmount}
-              onChange={(e) => onChangeDepositAmount(e.target.value)}
+              onChange={e => onChangeDepositAmount(e.target.value)}
             />
             <button
-              className='consultation-button'
+              className="consultation-button"
               style={{ margin: '0', width: '100%' }}
               initial={{ x: '100vw' }}
               animate={{ x: 0 }}
               transition={{ delay: 1.3 }}
-              disabled={depositAmount === '0' || depositAmount === '' || isDepositPending}
+              disabled={
+                depositAmount === '0' ||
+                depositAmount === '' ||
+                isDepositPending
+              }
               onClick={() => {
                 isApproved
-                  ? onDepositAndUpdate(consultationDetails.bid_id
-                  ? consultationDetails.bid_id
-                  : consultationDetails.airtable_id)
+                  ? onDepositAndUpdate(
+                      consultationDetails.bid_id
+                        ? consultationDetails.bid_id
+                        : consultationDetails.airtable_id,
+                    )
                   : onApproveAndUpdate();
               }}
             >
-              {isDepositPending
-              ? <div className="spinner">Loading...</div>
-              : isApproved
-              ? 'Submit Bid'
-              : 'Approve $RAID'}
+              {isDepositPending ? (
+                <div className="spinner">Loading...</div>
+              ) : isApproved ? (
+                'Submit Bid'
+              ) : (
+                'Approve $RAID'
+              )}
             </button>
           </div>
         </div>
         <div style={{ width: '48%' }}>
           <p>You deposited:</p>
           <h2>
-            {consultationDetails.submitter === account 
-            ? round(utils.fromWei(consultationDetails.amount), 4) : '0'} $RAID
+            {consultationDetails.submitter === account
+              ? round(utils.fromWei(consultationDetails.amount), 4)
+              : '0'}{' '}
+            $RAID
           </h2>
           <div>
             <input
@@ -110,43 +120,49 @@ const DepositWithdrawCared = ({
               min={'0'}
               step={'0.01'}
               value={withdrawalAmount}
-              onChange={(e) => onChangeWithdrawalAmount(e.target.value)}
+              onChange={e => onChangeWithdrawalAmount(e.target.value)}
             />
             <button
-              className='consultation-button'
+              className="consultation-button"
               style={{ margin: '0', width: '100%' }}
               initial={{ x: '100vw' }}
               animate={{ x: 0 }}
               transition={{ delay: 1.3 }}
               disabled={
-                withdrawalAmount === '0' 
-                || withdrawalAmount === '' 
-                || BigInt(utils.toWei(withdrawalAmount)) > BigInt(consultationDetails.amount)
-                || isWithdrawPending
-                || !lockupEnded}
+                withdrawalAmount === '0' ||
+                withdrawalAmount === '' ||
+                BigInt(utils.toWei(withdrawalAmount)) >
+                  BigInt(consultationDetails.amount) ||
+                isWithdrawPending ||
+                !lockupEnded
+              }
               onClick={() => {
-                onWithdrawAndupdate(consultationDetails.bid_id)
+                onWithdrawAndupdate(consultationDetails.bid_id);
               }}
             >
-              {isWithdrawPending
-              ? <div className="spinner">Loading...</div>
-              : 'Withdraw Bid'}
+              {isWithdrawPending ? (
+                <div className="spinner">Loading...</div>
+              ) : (
+                'Withdraw Bid'
+              )}
             </button>
           </div>
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        {(!!consultationDetails.bid_id && !lockupEnded) && <motion.p
-          id="lock-time"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-        >
-          {lockTime}
-        </motion.p>}
+        {!!consultationDetails.bid_id && !lockupEnded && (
+          <motion.p
+            id="lock-time"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+          >
+            {lockTime}
+          </motion.p>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default DepositWithdrawCared;
