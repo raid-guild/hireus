@@ -60,9 +60,11 @@ const DepositWithdrawCared = ({
   return (
     <div id="deposit-withdraw-card">
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div style={{ width: '48%' }}>
-          <p>Wallet Balance:</p>
-          <h2>{round(raidBalance, 4)} $RAID</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '48%' }}>
+          <div>
+            <p>Wallet Balance:</p>
+            <h2>{round(raidBalance, 4)} $RAID</h2>
+          </div>
           <div>
             <input
               id={'deposit-amount'}
@@ -104,14 +106,16 @@ const DepositWithdrawCared = ({
             </button>
           </div>
         </div>
-        <div style={{ width: '48%' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '48%' }}>
+          <div>
           <p>You deposited:</p>
-          <h2>
-            {consultationDetails.submitter === account
-              ? round(utils.fromWei(consultationDetails.amount), 4)
-              : '0'}{' '}
-            $RAID
-          </h2>
+            <h2>
+              {consultationDetails.submitter === account
+                ? round(utils.fromWei(consultationDetails.amount), 4)
+                : '0'}{' '}
+              $RAID
+            </h2>
+          </div>
           <div>
             <input
               id={'deposit-amount'}
