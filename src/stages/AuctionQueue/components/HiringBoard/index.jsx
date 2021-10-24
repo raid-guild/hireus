@@ -122,7 +122,7 @@ export const HiringBoard = ({
           <div id='hiringboard-button-container'>
             <div>
               <a
-                href="https://medium.com/raid-guild/why-token-why-now-4c0b8e8ea45"
+                href="https://app.honeyswap.org/#/swap?inputCurrency=0x18e9262e68cc6c6004db93105cc7c001bb103e49&chainId=100"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -131,11 +131,9 @@ export const HiringBoard = ({
                   initial={{ x: '100vw' }}
                   animate={{ x: 0 }}
                   transition={{ delay: 1.3 }}
-                  onClick={() => {
-                    console.log('Link to raid');
-                  }}
+                  onClick={() => null}
                 >
-                  About $RAID
+                  Get $RAID
                 </button>
               </a>
             </div>
