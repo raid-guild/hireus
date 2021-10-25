@@ -21,7 +21,6 @@ export const OpenBounty = ({
 }) => {
   const {
     account,
-    connectWallet,
     hash,
     onAccept,
     isAcceptPending,
@@ -39,7 +38,8 @@ export const OpenBounty = ({
   React.useEffect(() => {
     if (!consultationDetails) return;
     const dateNow = Date.now();
-    const lockupEnds = (Number(consultationDetails.bidCreated) * 1000) + LOCKUP_PERIOD;
+    const lockupEnds =
+      Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD;
     if (dateNow > lockupEnds) {
       setLockupEnded(true);
     } else {
@@ -50,11 +50,14 @@ export const OpenBounty = ({
   React.useEffect(() => {
     if (!consultationDetails) return;
     const dateNow = Date.now();
-    const lockupEnds = (Number(consultationDetails.bidCreated) * 1000) + LOCKUP_PERIOD;
+    const lockupEnds =
+      Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD;
     const timeRemaining = lockupEnds - dateNow;
     if (timeRemaining > 0) {
       const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-      const remainingSeconds = Math.floor(timeRemaining % (1000 * 60 * 60 * 24));
+      const remainingSeconds = Math.floor(
+        timeRemaining % (1000 * 60 * 60 * 24),
+      );
       const hours = Math.floor(remainingSeconds / (1000 * 60 * 60));
       if (days === 0 && hours === 0) {
         setLockTime(`$RAID locked for < 1 hour`);
@@ -70,27 +73,27 @@ export const OpenBounty = ({
     if (selectedConsultation && consultations.length > 0) {
       const consultationDetails = consultations.filter(consultation => {
         return consultation.project_name === selectedConsultation;
-      })
+      });
       setConsultationDetails(consultationDetails[0]);
     } else {
       setSelectedConsultations(null);
     }
   }, [consultations, selectedConsultation, setSelectedConsultations]);
 
-  const onAcceptAndUpdate = async (id) => {
+  const onAcceptAndUpdate = async id => {
     setTxConfirmed(false);
     setShowSnackbar(true);
     await onAccept(id);
     setTxConfirmed(true);
     refresh();
-  }
+  };
 
   return (
     <div className="hiringboard-container">
-       <button
-        className='consultation-button'
+      <button
+        className="consultation-button"
         style={{
-          marginTop: '20px',
+          marginTop: '12px',
           position: 'absolute',
           right: '275px',
           top: '24px',
@@ -101,28 +104,12 @@ export const OpenBounty = ({
       >
         Back
       </button>
-      <button
-        className='consultation-button'
-        initial={{ x: '100vw' }}
-        animate={{ x: 0 }}
-        transition={{ delay: 1.3 }}
-        onClick={() => {
-          connectWallet()
-        }}
-        style={{
-          marginTop: '20px',
-          position: 'absolute',
-          right: '60px',
-          top: '24px',
-          width: '200px',
-        }}
-      >
-        {account ? shortenAddress(account) : 'Connect'}
-      </button>
       {consultationDetails && (
         <div className="hiringboard-card-container">
-          <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-            <ConsultationRequestCard 
+          <div
+            style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+          >
+            <ConsultationRequestCard
               account={account}
               consultationDetails={consultationDetails}
               lockTime={lockTime}
@@ -133,14 +120,16 @@ export const OpenBounty = ({
               updateCancelModalStatus={updateCancelModalStatus}
               isCancelPending={isCancelPending}
             />
-            {account && <DepositWithdrawCard
-              setShowSnackbar={setShowSnackbar}
-              setTxConfirmed={setTxConfirmed}
-              consultationDetails={consultationDetails}
-              lockTime={lockTime}
-              lockupEnded={lockupEnded}
-              refresh={refresh}
-            />}
+            {account && (
+              <DepositWithdrawCard
+                setShowSnackbar={setShowSnackbar}
+                setTxConfirmed={setTxConfirmed}
+                consultationDetails={consultationDetails}
+                lockTime={lockTime}
+                lockupEnded={lockupEnded}
+                refresh={refresh}
+              />
+            )}
           </div>
           <div className="hiringboard-card">
             {consultationDetails.bid_id ? (
@@ -153,7 +142,12 @@ export const OpenBounty = ({
                   Bid History:
                 </motion.h2>
               </div>
-            ) : <p>No bid has been submitted for this consultation. {!account && 'Connect wallet to submit a bid.'}</p>}
+            ) : (
+              <p>
+                No bid has been submitted for this consultation.{' '}
+                {!account && 'Connect wallet to submit a bid.'}
+              </p>
+            )}
             {consultationDetails.changes.length > 0 && (
               <div className="bounty-list" style={{ marginTop: '20px' }}>
                 {consultationDetails.changes.map((change, index) => (
@@ -162,7 +156,9 @@ export const OpenBounty = ({
                     target={'_blank'}
                     rel={'noopener noreferrer'}
                     key={index}
-                    className={`bounty-list-item bounty-list-item${index % 2 !== 0 && '--2'}`}
+                    className={`bounty-list-item bounty-list-item${
+                      index % 2 !== 0 && '--2'
+                    }`}
                   >
                     <div className="bounty-list-item-inner">
                       <div
@@ -174,16 +170,28 @@ export const OpenBounty = ({
                       >
                         <XDaiSvg />
                       </div>
-                      <p>{new Date(Number(change.changedAt ) * 1000).toLocaleDateString()}</p>
-                    </div>
-                    <div className="bounty-list-item-inner">
                       <p>
-                        {shortenAddress(change.increasedBy || consultationDetails.submitter, 8)}
+                        {new Date(
+                          Number(change.changedAt) * 1000,
+                        ).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="bounty-list-item-inner">
-                      <p className={`withdraw-amount withdraw-amount--${change.withdrawnAt ? 'red' : 'green'}`}>
-                        {change.withdrawnAt ? '-' : '+'}{utils.fromWei(change.amount)} $RAID
+                      <p>
+                        {shortenAddress(
+                          change.increasedBy || consultationDetails.submitter,
+                          8,
+                        )}
+                      </p>
+                    </div>
+                    <div className="bounty-list-item-inner">
+                      <p
+                        className={`withdraw-amount withdraw-amount--${
+                          change.withdrawnAt ? 'red' : 'green'
+                        }`}
+                      >
+                        {change.withdrawnAt ? '-' : '+'}
+                        {utils.fromWei(change.amount)} $RAID
                       </p>
                     </div>
                   </a>
@@ -193,11 +201,19 @@ export const OpenBounty = ({
           </div>
         </div>
       )}
-      {(showSnackbar && hash !== '') && <Snackbar
-        setShowSnackbar={setShowSnackbar}
-        message={txConfirmed ? txFailed ? 'Transaction Failed' : 'Transaction Confirmed!' : 'Transaction Pending...'}
-        hash={hash}
-      />}
+      {showSnackbar && hash !== '' && (
+        <Snackbar
+          setShowSnackbar={setShowSnackbar}
+          message={
+            txConfirmed
+              ? txFailed
+                ? 'Transaction Failed'
+                : 'Transaction Confirmed!'
+              : 'Transaction Pending...'
+          }
+          hash={hash}
+        />
+      )}
       <ConfirmCancel
         consultationDetails={consultationDetails}
         refresh={refresh}
@@ -205,5 +221,5 @@ export const OpenBounty = ({
         setShowSnackbar={setShowSnackbar}
       />
     </div>
-  )
-}
+  );
+};

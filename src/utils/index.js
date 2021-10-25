@@ -2,7 +2,9 @@ import { utils } from 'web3';
 import { ethers } from 'ethers';
 import { QUEUE_CONTRACT_ADDRESS } from '../constants';
 
-const provider = ethers.getDefaultProvider(process.env.REACT_APP_MAINNET_NODE_ENDPOINT)
+const provider = ethers.getDefaultProvider(
+  process.env.REACT_APP_MAINNET_NODE_ENDPOINT,
+);
 
 /**
  * Shorten an Ethereum address. `charsLength` allows to change the number of
@@ -17,7 +19,7 @@ const provider = ethers.getDefaultProvider(process.env.REACT_APP_MAINNET_NODE_EN
  * @param {number} [charsLength=4] The number of characters to change on both sides of the ellipsis
  * @returns {string} The shortened address
  */
- export function shortenAddress(address, charsLength = 4) {
+export function shortenAddress(address, charsLength = 4) {
   const prefixLength = 2; // "0x"
   if (!address) {
     return '';
@@ -25,24 +27,30 @@ const provider = ethers.getDefaultProvider(process.env.REACT_APP_MAINNET_NODE_EN
   if (address.length < charsLength * 2 + prefixLength) {
     return address;
   }
-  return address.slice(0, charsLength + prefixLength) + '…' + address.slice(-charsLength);
+  return (
+    address.slice(0, charsLength + prefixLength) +
+    '…' +
+    address.slice(-charsLength)
+  );
 }
 
 export const combineBids = async (consultations, bids) => {
   if (!consultations) return;
-  const combinedBids = await Promise.all(consultations.map(async (consultation) => {
-    try {
-      const combinedBid = await addFromAddress(consultation, bids);
-      return combinedBid;
-    } catch (e) {
-      return false;
-    }
-  }));
+  const combinedBids = await Promise.all(
+    consultations.map(async consultation => {
+      try {
+        const combinedBid = await addFromAddress(consultation, bids);
+        return combinedBid;
+      } catch (e) {
+        return false;
+      }
+    }),
+  );
   return combinedBids.filter(bid => bid);
-}
+};
 
 export function round(value, decimals) {
-  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+  return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
 }
 
 const addFromAddress = async (consultation, bids) => {
@@ -56,20 +64,22 @@ const addFromAddress = async (consultation, bids) => {
     bidCreated: '0',
     createTxHash: '',
     changes: [],
-    from: 'a'
-  }
+    from: 'a',
+  };
   const combinedBid = await getData(newBid, consultation, bids);
   return combinedBid;
-}
+};
 
 const getData = async (combinedBid, consultation, bids) => {
   const tx = await provider.getTransaction(consultation.consultation_hash);
   combinedBid['from'] = tx.from;
 
-  const openBids = bids.filter(bid => bid.status !== 'canceled' && bid.status !== 'accepted');
-  openBids.forEach((bid) => {
+  const openBids = bids.filter(
+    bid => bid.status !== 'canceled' && bid.status !== 'accepted',
+  );
+  openBids.forEach(bid => {
     let airtableId = utils.hexToAscii(bid.details);
-    airtableId =  airtableId.replace(/\0.*$/g,'');
+    airtableId = airtableId.replace(/\0.*$/g, '');
     const changes = [...bid.withdraws, ...bid.increases];
     const updatedChanges = changes.map(change => {
       if (change.withdrawnAt) {
@@ -85,11 +95,13 @@ const getData = async (combinedBid, consultation, bids) => {
       }
     });
 
-    updatedChanges.sort(function(a,b){
+    updatedChanges.sort(function (a, b) {
       return new Date(Number(b.changedAt)) - new Date(Number(a.changedAt));
     });
     if (consultation.id === airtableId) {
-      combinedBid.bid_id = utils.hexToNumber(bid.id.replace(`${QUEUE_CONTRACT_ADDRESS.toLowerCase()}-`, ''));
+      combinedBid.bid_id = utils.hexToNumber(
+        bid.id.replace(`${QUEUE_CONTRACT_ADDRESS.toLowerCase()}-`, ''),
+      );
       combinedBid.amount = bid.amount;
       combinedBid.submitter = utils.toChecksumAddress(bid.submitter.id);
       combinedBid.bidCreated = bid.createdAt;
@@ -97,6 +109,6 @@ const getData = async (combinedBid, consultation, bids) => {
       combinedBid.changes = [...combinedBid.changes, ...updatedChanges];
       combinedBid.status = bid.status;
     }
-  })
+  });
   return combinedBid;
-}
+};
