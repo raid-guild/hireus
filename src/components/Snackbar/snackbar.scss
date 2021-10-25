@@ -7,7 +7,7 @@
   width: 290px;
   bottom: 50px;
   right: 100px;
-  animation-duration: .5s;;
+  animation-duration: 0.5s;
   animation-name: slidein;
 }
 
@@ -38,13 +38,13 @@
 }
 
 #snackbar-status {
-  font-size: .8rem;
+  font-size: 0.8rem;
   margin: 0 10px 2px 0;
 }
 
 #snackbar-link {
   color: $theme-color-primary;
-  font-size: .8rem;
+  font-size: 0.8rem;
   margin-right: 10px;
   text-decoration: underline;
 }
@@ -57,7 +57,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
   &:hover,
   &:focus,
   &:active {

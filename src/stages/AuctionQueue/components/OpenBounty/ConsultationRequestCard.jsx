@@ -2,7 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
 import { shortenAddress, round } from '../../../../utils';
-import { BLOCK_EXPLORER_URL, MIN_NUMBER_OF_SHARES, RAID_CONTRACT_ADDRESS } from '../../../../constants/index';
+import {
+  BLOCK_EXPLORER_URL,
+  MIN_NUMBER_OF_SHARES,
+  RAID_CONTRACT_ADDRESS,
+} from '../../../../constants/index';
 
 import { ReactComponent as XDaiSvg } from '../../../../assets/xdai.svg';
 
@@ -72,7 +76,9 @@ const ConsultationRequestCard = ({
               transition={{ delay: 0.6, duration: 0.5 }}
               style={{ marginBottom: 0 }}
             >
-              {new Date(Number(consultationDetails.bidCreated) * 1000).toLocaleString()}
+              {new Date(
+                Number(consultationDetails.bidCreated) * 1000,
+              ).toLocaleString()}
             </motion.p>
             <motion.a
               href={`${BLOCK_EXPLORER_URL}tx/${consultationDetails.createTxHash}`}
@@ -135,25 +141,29 @@ const ConsultationRequestCard = ({
           </div>
           {account && (
             <div className="open-bounty-buttons-container">
-              {(shares >= MIN_NUMBER_OF_SHARES && consultationDetails?.bid_id) && <button
-                className='consultation-button'
-                style={{ marginTop: '20px' }}
-                initial={{ x: '100vw' }}
-                animate={{ x: 0 }}
-                transition={{ delay: 1.3 }}
-                disabled={isAcceptPending}
-                onClick={() => {
-                  onAcceptAndUpdate(consultationDetails.bid_id);
-                }}
-              >
-                {isAcceptPending
-                ? <div className="spinner">Loading...</div>
-                : 'Accept Request'}
-              </button>}
-              {(consultationDetails?.submitter === account && lockupEnded) && (
+              {shares >= MIN_NUMBER_OF_SHARES && consultationDetails?.bid_id && (
+                <button
+                  className="consultation-button"
+                  style={{ marginTop: '20px' }}
+                  initial={{ x: '100vw' }}
+                  animate={{ x: 0 }}
+                  transition={{ delay: 1.3 }}
+                  disabled={isAcceptPending}
+                  onClick={() => {
+                    onAcceptAndUpdate(consultationDetails.bid_id);
+                  }}
+                >
+                  {isAcceptPending ? (
+                    <div className="spinner">Loading...</div>
+                  ) : (
+                    'Accept Request'
+                  )}
+                </button>
+              )}
+              {consultationDetails?.submitter === account && lockupEnded && (
                 <div>
                   <button
-                    className='consultation-button'
+                    className="consultation-button"
                     style={{ marginTop: '20px' }}
                     initial={{ x: '100vw' }}
                     animate={{ x: 0 }}
@@ -163,9 +173,11 @@ const ConsultationRequestCard = ({
                       updateCancelModalStatus(true);
                     }}
                   >
-                    {isCancelPending
-                    ? <div className="spinner">Loading...</div>
-                    : 'Cancel Bid'}
+                    {isCancelPending ? (
+                      <div className="spinner">Loading...</div>
+                    ) : (
+                      'Cancel Bid'
+                    )}
                   </button>
                 </div>
               )}
@@ -184,7 +196,7 @@ const ConsultationRequestCard = ({
         </div>
       )}
     </>
-  )
-}
+  );
+};
 
 export default ConsultationRequestCard;

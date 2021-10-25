@@ -1,17 +1,16 @@
 @import './utils/constants.scss';
 
 .app {
-  height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   background-color: $background-color-primary;
-  padding: 10px;
+  overflow-x: hidden;
 }
 
 .main {
-  height: 100%;
+  min-height: 100vh;
   border: 2px solid $theme-color-primary;
   display: grid;
   place-items: center;
@@ -46,14 +45,29 @@
   }
 }
 
-#raidguild-logo {
-  img {
-    width: 180px;
-  }
+#raidguild-navbar {
+  background: transparent;
+  border: 2px solid #ff3864;
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
   position: fixed;
   top: 0;
   left: 0;
-  margin: 2.5rem 0 0 2.5rem;
+
+  & #raidguild-logo {
+    img {
+      width: 180px;
+    }
+    margin: 2.5rem 0 0 2.5rem;
+  }
+
+  & button {
+    width: 200px;
+    margin: 20px 60px 0 0;
+  }
 }
 
 #rg-crest {
@@ -182,8 +196,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  margin-left: auto;
-  margin-right: 3rem;
+  margin: 85px 60px 0 0;
   width: auto;
   color: $background-color-primary;
   background-color: $theme-color-secondary;
@@ -191,7 +204,6 @@
   text-transform: uppercase;
   font-size: 1rem;
   font-family: $secondary-font;
-  margin-top: 3rem;
   padding: 5px 20px;
 }
 
@@ -415,10 +427,10 @@
   font-size: 10px;
   position: relative;
   text-indent: -9999em;
-  border-top: .4em solid rgba(255, 255, 255, 0.2);
-  border-right: .4em solid rgba(255, 255, 255, 0.2);
-  border-bottom: .4em solid rgba(255, 255, 255, 0.2);
-  border-left: .4em solid #ffffff;
+  border-top: 0.4em solid rgba(255, 255, 255, 0.2);
+  border-right: 0.4em solid rgba(255, 255, 255, 0.2);
+  border-bottom: 0.4em solid rgba(255, 255, 255, 0.2);
+  border-left: 0.4em solid #ffffff;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
@@ -465,4 +477,3 @@
     transform: rotate(360deg);
   }
 }
-

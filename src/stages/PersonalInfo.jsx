@@ -6,7 +6,7 @@ import {
   Textarea,
   Stack,
   Tooltip,
-  useToast
+  useToast,
 } from '@chakra-ui/react';
 
 import { InfoIcon } from '@chakra-ui/icons';
@@ -20,24 +20,24 @@ const PersonalInfo = () => {
   const toast = useToast();
 
   const [contactType, setContactType] = useState(
-    context.contactType || 'Discord'
+    context.contactType || 'Discord',
   );
 
   const [buttonClick, setButtonClickStatus] = useState(false);
 
   return (
-    <div className='personal-info-container'>
-      <h2 className='step-title'>Step 1 of 4: Personal Information</h2>
-      <Stack mb={10} direction='row'>
+    <div className="personal-info-container">
+      <h2 className="step-title">Step 1 of 4: Personal Information</h2>
+      <Stack mb={10} direction="row">
         <FormControl
           isRequired
           isInvalid={context.name === '' && buttonClick ? true : false}
         >
           <FormLabel>Name</FormLabel>
           <Input
-            placeholder='Your Name'
+            placeholder="Your Name"
             onChange={context.inputChangeHandler}
-            name='name'
+            name="name"
             value={context.name}
           />
         </FormControl>
@@ -50,18 +50,18 @@ const PersonalInfo = () => {
             Email address{' '}
             <Tooltip
               hasArrow
-              placement='top'
-              label='Please use an email address that you check often.'
-              aria-label='disclaimer tooltip'
+              placement="top"
+              label="Please use an email address that you check often."
+              aria-label="disclaimer tooltip"
             >
               <InfoIcon />
             </Tooltip>
           </FormLabel>
           <Input
-            type='email'
-            placeholder='Your email address'
+            type="email"
+            placeholder="Your email address"
             onChange={context.inputChangeHandler}
-            name='email'
+            name="email"
             value={context.email}
           />
         </FormControl>
@@ -73,37 +73,37 @@ const PersonalInfo = () => {
       >
         <FormLabel>Your Bio</FormLabel>
         <Textarea
-          placeholder='It’s very helpful to know your background, how familiar you are with web3, and crypto in general.'
+          placeholder="It’s very helpful to know your background, how familiar you are with web3, and crypto in general."
           onChange={context.inputChangeHandler}
-          name='bio'
+          name="bio"
           value={context.bio}
         />
       </FormControl>
-      <Stack mb={10} direction='row'>
+      <Stack mb={10} direction="row">
         <FormControl>
           <FormLabel>
             Your Discord Handle{' '}
             <Tooltip
               hasArrow
-              placement='top'
-              label='Our main communications channel for work is Discord. In order to participate in the development process you will need to join our server.'
-              aria-label='disclaimer tooltip'
+              placement="top"
+              label="Our main communications channel for work is Discord. In order to participate in the development process you will need to join our server."
+              aria-label="disclaimer tooltip"
             >
               <InfoIcon />
             </Tooltip>
           </FormLabel>
           <Input
-            placeholder='@handlename'
+            placeholder="@handlename"
             onChange={context.inputChangeHandler}
-            name='discordHandle'
+            name="discordHandle"
             value={context.discordHandle}
           />
         </FormControl>
         <FormControl>
           <FormLabel>Your Telegram Handle</FormLabel>
           <Input
-            placeholder='@handlename'
-            name='telegramHandle'
+            placeholder="@handlename"
+            name="telegramHandle"
             onChange={context.inputChangeHandler}
             value={context.telegramHandle}
           />
@@ -111,26 +111,26 @@ const PersonalInfo = () => {
         <FormControl>
           <FormLabel>Your Twitter Handle</FormLabel>
           <Input
-            placeholder='@handlename'
-            name='twitterHandle'
+            placeholder="@handlename"
+            name="twitterHandle"
             onChange={context.inputChangeHandler}
             value={context.twitterHandle}
           />
         </FormControl>
       </Stack>
       <FormControl isRequired>
-        <FormLabel as='legend'>Your Preferred Contact Channel</FormLabel>
+        <FormLabel as="legend">Your Preferred Contact Channel</FormLabel>
         <RadioBox
           options={['Email', 'Discord', 'Telegram']}
           updateRadio={setContactType}
-          name='contactType'
+          name="contactType"
           defaultValue={context.contactType || contactType}
           value={context.contactType || contactType}
         />
       </FormControl>
 
       <button
-        id='next-stage-button'
+        id="next-stage-button"
         onClick={() => {
           if (context.name && context.email && context.bio) {
             context.setPersonalData(contactType);
@@ -142,7 +142,7 @@ const PersonalInfo = () => {
               title: 'Please fill in all the required fields.',
               status: 'warning',
               duration: 3000,
-              position: 'top'
+              position: 'top',
             });
           }
         }}
