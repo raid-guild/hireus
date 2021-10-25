@@ -21,20 +21,20 @@
   right: 0;
   bottom: 0;
   background-color: #666666;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 20px;
   width: 20px;
   left: 4px;
   bottom: 4px;
-  background-color: #C4C4C4;
-  -webkit-transition: .4s;
-  transition: .4s;
+  background-color: #c4c4c4;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {

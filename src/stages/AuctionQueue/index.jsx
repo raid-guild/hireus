@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './AuctionQueue.scss'
+import './AuctionQueue.scss';
 
 import { useBids } from '../../hooks/useBids';
 import { useRefresh } from '../../hooks/useRefresh';
@@ -12,16 +12,18 @@ const AuctionQueue = () => {
 
   return (
     <div style={{ width: '100%' }}>
-      {!selectedConsultation ? <HiringBoard
-        consultations={consultations}
-        setSelectedConsultations={setSelectedConsultations}
-      /> : (
-      <OpenBounty
-        consultations={consultations}
-        refresh={refresh}
-        selectedConsultation={selectedConsultation}
-        setSelectedConsultations={setSelectedConsultations}
-      />
+      {!selectedConsultation ? (
+        <HiringBoard
+          consultations={consultations}
+          setSelectedConsultations={setSelectedConsultations}
+        />
+      ) : (
+        <OpenBounty
+          consultations={consultations}
+          refresh={refresh}
+          selectedConsultation={selectedConsultation}
+          setSelectedConsultations={setSelectedConsultations}
+        />
       )}
     </div>
   );

@@ -8,19 +8,19 @@ function RadioCard(props) {
   const checkbox = getCheckboxProps();
 
   return (
-    <Box as='label'>
+    <Box as="label">
       <input {...input} />
       <Box
         {...checkbox}
-        cursor='pointer'
-        color='#7f5af0'
-        boxShadow='md'
-        border='1px solid #7f5af0'
+        cursor="pointer"
+        color="#7f5af0"
+        boxShadow="md"
+        border="1px solid #7f5af0"
         fontFamily="'JetBrains Mono', monospace"
         _checked={{
           bg: '#7f5af0',
           color: 'white',
-          borderColor: 'teal.600'
+          borderColor: 'teal.600',
         }}
         px={2}
         py={2}
@@ -36,16 +36,16 @@ function RadioBox(props) {
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: props.name,
     defaultValue: props.defaultValue,
-    onChange: (e) => {
+    onChange: e => {
       props.updateRadio(e);
-    }
+    },
   });
 
   const group = getRootProps();
 
   return props.stack === 'vertical' ? (
     <VStack {...group} style={{ alignItems: 'inherit' }}>
-      {props.options.map((value) => {
+      {props.options.map(value => {
         const radio = getRadioProps({ value });
         return (
           <RadioCard key={value} {...radio}>
@@ -56,7 +56,7 @@ function RadioBox(props) {
     </VStack>
   ) : (
     <HStack {...group}>
-      {props.options.map((value) => {
+      {props.options.map(value => {
         const radio = getRadioProps({ value });
         return (
           <RadioCard key={value} {...radio}>

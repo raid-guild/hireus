@@ -6,7 +6,7 @@ import {
   Checkbox,
   CheckboxGroup,
   Tooltip,
-  useToast
+  useToast,
 } from '@chakra-ui/react';
 
 import { InfoIcon } from '@chakra-ui/icons';
@@ -30,7 +30,7 @@ const checkbox_options = [
   'UX (Research, Testing, User Stories)',
   'UI (Interface Design, Interaction Design)',
   'Visual Design (Branding, Illustration, Graphics)',
-  'Help me figure out what I need'
+  'Help me figure out what I need',
 ];
 
 const RequiredServices = () => {
@@ -38,19 +38,19 @@ const RequiredServices = () => {
   const toast = useToast();
 
   const [servicesRequired, setServicesRequired] = useState(
-    context.servicesRequired || []
+    context.servicesRequired || [],
   );
   const [selectedDay, setSelectedDay] = useState(context.selectedDay || '');
   const [budgetRange, setBudgetRange] = useState(
-    context.budgetRange || '$5k - $20k'
+    context.budgetRange || '$5k - $20k',
   );
 
   const [buttonClick, setButtonClickStatus] = useState(false);
 
   return (
-    <div className='required-services-container'>
-      <h2 className='step-title'>Step 3 of 4: Required Services</h2>
-      <Stack direction='row'>
+    <div className="required-services-container">
+      <h2 className="step-title">Step 3 of 4: Required Services</h2>
+      <Stack direction="row">
         <FormControl
           mb={10}
           isRequired
@@ -60,15 +60,15 @@ const RequiredServices = () => {
         >
           <FormLabel mb={5}>What services are needed?</FormLabel>
           <CheckboxGroup
-            colorScheme='green'
-            onChange={(e) => setServicesRequired(e)}
-            name='servicesRequired'
+            colorScheme="green"
+            onChange={e => setServicesRequired(e)}
+            name="servicesRequired"
             value={servicesRequired}
           >
-            <Stack direction='column'>
+            <Stack direction="column">
               {checkbox_options.map((value, index) => {
                 return (
-                  <Checkbox key={index} value={value} colorScheme='red'>
+                  <Checkbox key={index} value={value} colorScheme="red">
                     {value}
                   </Checkbox>
                 );
@@ -77,35 +77,35 @@ const RequiredServices = () => {
           </CheckboxGroup>
         </FormControl>
 
-        <Stack direction='column'>
-          <FormControl mb='2rem'>
+        <Stack direction="column">
+          <FormControl mb="2rem">
             <FormLabel>What's the expected deadline?</FormLabel>
             <DayPickerInput onDayChange={setSelectedDay} value={selectedDay} />
           </FormControl>
 
           <FormControl isRequired>
-            <FormLabel as='legend'>
+            <FormLabel as="legend">
               What's your Budget Range?{' '}
               <Tooltip
                 hasArrow
-                placement='top'
-                label='We know it’s hard to estimate in many cases. This is just so we get an idea of the amount of raiders we’ll be able to involve in the raid.'
-                aria-label='disclaimer tooltip'
+                placement="top"
+                label="We know it’s hard to estimate in many cases. This is just so we get an idea of the amount of raiders we’ll be able to involve in the raid."
+                aria-label="disclaimer tooltip"
               >
                 <InfoIcon />
               </Tooltip>
             </FormLabel>
             <RadioBox
-              stack='vertical'
+              stack="vertical"
               options={[
                 '< $5k',
                 '$5k - $20k',
                 '$20k - $50k',
                 '$50k +',
-                'Not Sure'
+                'Not Sure',
               ]}
               updateRadio={setBudgetRange}
-              name='budgetRange'
+              name="budgetRange"
               defaultValue={context.budgetRange || budgetRange}
               value={context.budgetRange || budgetRange}
             />
@@ -114,14 +114,14 @@ const RequiredServices = () => {
       </Stack>
 
       <button
-        id='next-stage-button'
+        id="next-stage-button"
         onClick={() => {
           if (servicesRequired.length !== 0) {
             setButtonClickStatus(false);
             context.setRequiredServicesData(
               servicesRequired,
               selectedDay,
-              budgetRange
+              budgetRange,
             );
             context.updateStage('next');
           } else {
@@ -130,7 +130,7 @@ const RequiredServices = () => {
               title: 'Please fill in all the required fields.',
               status: 'warning',
               duration: 3000,
-              position: 'top'
+              position: 'top',
             });
           }
         }}
