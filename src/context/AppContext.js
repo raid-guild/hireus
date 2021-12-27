@@ -402,7 +402,7 @@ class AppContextProvider extends Component {
 
   sendData = async (hash = 'not paid') => {
     await axios
-      .post('https://guild-keeper.herokuapp.com/hireus-v2/consultation', {
+      .post(`${process.env.REACT_APP_HIREUS_BASE_ENDPOINT}/consultation`, {
         key: process.env.REACT_APP_ACCESS_KEY,
         name: this.state.name,
         email: this.state.email,
@@ -486,7 +486,7 @@ class AppContextProvider extends Component {
       this.setState({ submitting: true });
 
       await axios
-        .post('https://guild-keeper.herokuapp.com/hireus-v2/feedback', {
+        .post(`${process.env.REACT_APP_HIREUS_BASE_ENDPOINT}/feedback`, {
           key: process.env.REACT_APP_ACCESS_KEY,
           raidID: raidID,
           feedbackOne: this.state.feedbackOne,
