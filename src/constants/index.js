@@ -8,5 +8,4 @@ export const MIN_NUMBER_OF_SHARES = 100;
 export const SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/slgraham/guildauctionqueues-xdai';
 export const BLOCK_EXPLORER_URL = 'https://blockscout.com/xdai/mainnet/';
-export const GUILD_KEEPER_ENDPOINT =
-  'https://guild-keeper.herokuapp.com/hireus-v2/awaiting-raids';
+export const GUILD_KEEPER_ENDPOINT = `${process.env.REACT_APP_HIREUS_BASE_ENDPOINT}/awaiting-raids`;
