@@ -15,7 +15,6 @@ import Confirmation from './stages/Confirmation';
 import Feedback from './stages/Feedback';
 
 import FAQ from './components/Faq';
-import PausedModal from './components/PausedModal';
 
 import './App.scss';
 
@@ -27,7 +26,6 @@ const App = () => {
   const { account, stage, connectWallet, updateFaqModalStatus, updateStage } =
     useContext(AppContext);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [showPauseModal, setShowPauseModal] = useState(true);
 
   useEffect(() => {
     window.addEventListener('resize', e => {
@@ -121,7 +119,6 @@ const App = () => {
               </Switch>
             </Router>
             <FAQ />
-            <PausedModal showPauseModal={showPauseModal} setShowPauseModal={setShowPauseModal} />
           </>
         )}
       </div>
