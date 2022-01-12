@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { utils } from 'web3';
 import { round } from '../../../../utils';
@@ -57,6 +57,15 @@ const DepositWithdrawCared = ({
     refresh();
   };
 
+  const insufficientBalance = useMemo(() => {
+    if (!(depositAmount && raidBalance)) return false;
+    try {
+      return BigInt(utils.toWei(depositAmount || '0')) > BigInt(utils.toWei(raidBalance));
+    } catch (e) {
+      return false;
+    }
+  }, [raidBalance, depositAmount]);
+
   return (
     <div id="deposit-withdraw-card">
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -66,6 +75,7 @@ const DepositWithdrawCared = ({
             <h2>{round(raidBalance, 4)} $RAID</h2>
           </div>
           <div>
+            {insufficientBalance && <p style={{ fontSize: '12px', marginBottom: '10px' }}>Insufficient balance</p>}
             <input
               id={'deposit-amount'}
               placeholder={`0`}
@@ -84,6 +94,7 @@ const DepositWithdrawCared = ({
               disabled={
                 depositAmount === '0' ||
                 depositAmount === '' ||
+                insufficientBalance ||
                 isDepositPending
               }
               onClick={() => {
