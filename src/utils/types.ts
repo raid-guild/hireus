@@ -21,3 +21,13 @@ export type ICombinedBid = {
   status: string;
   submitter: string;
 }
+
+export type IBid = {
+
+}
+
+export type IConsultation = {
+  project_name: string;
+  created: string;
+  id: string;
+}

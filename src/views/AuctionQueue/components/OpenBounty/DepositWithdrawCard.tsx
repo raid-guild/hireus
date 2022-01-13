@@ -132,7 +132,7 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
           <p>You deposited:</p>
             <h2>
               {consultationDetails.submitter === account
-                ? round(utils.parseEther(consultationDetails.amount), 4)
+                ? round(utils.parseEther(consultationDetails.amount).toString(), 4)
                 : '0'}{' '}
               $RAID
             </h2>

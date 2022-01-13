@@ -1,6 +1,7 @@
-import { utils } from 'web3';
-import { ethers } from 'ethers';
-import { QUEUE_CONTRACT_ADDRESS } from '../constants';
+import { ethers, utils } from 'ethers';
+import web3 from 'web3';
+import { QUEUE_CONTRACT_ADDRESS } from 'constants/index';
+import type { IBid, ICombinedBid, IConsultation } from 'utils/types';
 
 const provider = ethers.getDefaultProvider(
   process.env.REACT_APP_MAINNET_NODE_ENDPOINT,
@@ -19,7 +20,7 @@ const provider = ethers.getDefaultProvider(
  * @param {number} [charsLength=4] The number of characters to change on both sides of the ellipsis
  * @returns {string} The shortened address
  */
-export function shortenAddress(address, charsLength = 4) {
+export function shortenAddress(address: string, charsLength = 4) {
   const prefixLength = 2; // "0x"
   if (!address) {
     return '';
@@ -34,7 +35,7 @@ export function shortenAddress(address, charsLength = 4) {
   );
 }
 
-export const combineBids = async (consultations, bids) => {
+export const combineBids = async (consultations: IConsultation[], bids: IBid[]) => {
   if (!consultations) return;
   const combinedBids = await Promise.all(
     consultations.map(async consultation => {
@@ -46,31 +47,33 @@ export const combineBids = async (consultations, bids) => {
       }
     }),
   );
-  return combinedBids.filter(bid => bid);
+  return combinedBids.filter(bid => bid) as ICombinedBid[];
 };
 
-export function round(value, decimals) {
-  return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+export function round(value: string, decimals: number) {
+  const decimalsString = decimals.toString();
+  return Number(Math.round(Number(value + 'e' + decimalsString)) + 'e-' + decimalsString);
 }
 
-const addFromAddress = async (consultation, bids) => {
-  let newBid = {
+const addFromAddress = async (consultation: IConsultation, bids: IBid[]) => {
+  let newBid: ICombinedBid = {
     project_name: consultation.project_name,
     created: consultation.created,
     airtable_id: consultation.id,
-    bid_id: null,
+    bid_id: '',
     amount: '0',
     submitter: '',
     bidCreated: '0',
     createTxHash: '',
     changes: [],
     from: 'a',
+    status: '',
   };
   const combinedBid = await getData(newBid, consultation, bids);
   return combinedBid;
 };
 
-const getData = async (combinedBid, consultation, bids) => {
+const getData = async (combinedBid: ICombinedBid, consultation: any, bids: any[]) => {
   const tx = await provider.getTransaction(consultation.consultation_hash);
   combinedBid['from'] = tx.from;
 
@@ -78,7 +81,7 @@ const getData = async (combinedBid, consultation, bids) => {
     bid => bid.status !== 'canceled' && bid.status !== 'accepted',
   );
   openBids.forEach(bid => {
-    let airtableId = utils.hexToAscii(bid.details);
+    let airtableId = utils.parseBytes32String(bid.details);
     airtableId = airtableId.replace(/\0.*$/g, '');
     const changes = [...bid.withdraws, ...bid.increases];
     const updatedChanges = changes.map(change => {
@@ -96,14 +99,14 @@ const getData = async (combinedBid, consultation, bids) => {
     });
 
     updatedChanges.sort(function (a, b) {
-      return new Date(Number(b.changedAt)) - new Date(Number(a.changedAt));
+      return new Date(Number(b.changedAt)).getTime() - new Date(Number(a.changedAt)).getTime();
     });
     if (consultation.id === airtableId) {
-      combinedBid.bid_id = utils.hexToNumber(
+      combinedBid.bid_id = web3.utils.hexToNumber(
         bid.id.replace(`${QUEUE_CONTRACT_ADDRESS.toLowerCase()}-`, ''),
-      );
+      ).toString();
       combinedBid.amount = bid.amount;
-      combinedBid.submitter = utils.toChecksumAddress(bid.submitter.id);
+      combinedBid.submitter = utils.getAddress(bid.submitter.id);
       combinedBid.bidCreated = bid.createdAt;
       combinedBid.createTxHash = bid.createTxHash;
       combinedBid.changes = [...combinedBid.changes, ...updatedChanges];

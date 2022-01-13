@@ -138,7 +138,7 @@ const ConsultationRequestCard: React.FC<IConsultationRequestCard> = ({
               transition={{ delay: 0.6, duration: 0.5 }}
               style={{ marginBottom: 0 }}
             >
-              {round(utils.parseEther(consultationDetails.amount), 4)} $RAID
+              {round(utils.parseEther(consultationDetails.amount).toString(), 4)} $RAID
             </motion.p>
             <motion.a
               href={`${BLOCK_EXPLORER_URL}address/${RAID_CONTRACT_ADDRESS}`}
