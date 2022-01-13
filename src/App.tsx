@@ -5,14 +5,7 @@ import { motion } from 'framer-motion';
 import { AppContext } from 'context/AppContext';
 import { shortenAddress } from 'utils';
 
-import AuctionQueue from 'stages/AuctionQueue';
-import HeadsUp from 'stages/HeadsUp';
-import PersonalInfo from 'stages/PersonalInfo';
-import ProjectInfo from 'stages/ProjectInfo';
-import RequiredServices from 'stages/RequiredServices';
-import AdditionalInfo from 'stages/AdditionalInfo';
-import Confirmation from 'stages/Confirmation';
-import Feedback from 'stages/Feedback';
+import AuctionQueue from 'views/AuctionQueue';
 
 import FAQ from 'components/Faq';
 
@@ -89,15 +82,8 @@ const App = () => {
                 <Route path="/" exact>
                   <>
                     {stage === 1 && <AuctionQueue />}
-                    {stage === 2 && <HeadsUp />}
-                    {stage === 3 && <PersonalInfo />}
-                    {stage === 4 && <ProjectInfo />}
-                    {stage === 5 && <RequiredServices />}
-                    {stage === 6 && <AdditionalInfo />}
-                    {stage === 7 && <Confirmation />}
-                    {stage === 8 && <Feedback />}
 
-                    {stage !== 1 && stage !== 6 && (
+                    {stage !== 1 && (
                       <button
                         id="prev-stage-button"
                         onClick={() => updateStage('previous')}
@@ -106,7 +92,7 @@ const App = () => {
                       </button>
                     )}
 
-                    {stage !== 1 && (
+                    {stage === 1 && (
                       <button
                         onClick={() => updateFaqModalStatus(true)}
                         id="faq-button"
