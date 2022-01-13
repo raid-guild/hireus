@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './AuctionQueue.scss';
 
-import { useBids } from '../../hooks/useBids';
-import { useRefresh } from '../../hooks/useRefresh';
+import { useBids } from 'hooks/useBids';
+import { useRefresh } from 'hooks/useRefresh';
 import { HiringBoard, OpenBounty } from './components';
 
 const AuctionQueue = () => {

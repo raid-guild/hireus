@@ -1,15 +1,16 @@
-import React from 'react';
-import { GUILD_KEEPER_ENDPOINT } from '../constants';
-import { combineBids } from '../utils';
+import { useState, useEffect } from 'react';
+import { GUILD_KEEPER_ENDPOINT } from 'constants/index';
+import { combineBids } from 'utils';
+import { ICombinedBid } from 'utils/types';
 
-import { getBids } from '../graphql/getBids';
+import { getBids } from 'graphql/getBids';
 
 export const useBids = (refresh = 0) => {
-  const [fetching, setFetching] = React.useState(true);
-  const [consultations, setConsultations] = React.useState(null);
-  const [error, setError] = React.useState(null);
+  const [fetching, setFetching] = useState(true);
+  const [consultations, setConsultations] = useState<ICombinedBid[] | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let isSubscribed = true;
     getBids().then(bids => {
       if (isSubscribed && bids) {
@@ -25,12 +26,14 @@ export const useBids = (refresh = 0) => {
         })
           .then(res => res.json())
           .then(async data => {
-            const combinedBids = await combineBids(data, bids);
+            const combinedBids: ICombinedBid[] | undefined = await combineBids(data, bids);
             if (!combinedBids) {
               setError(new Error('No bids found'));
+              return;
             }
+            console.log(combinedBids);
             combinedBids.sort(function (a, b) {
-              return new Date(b.created) - new Date(a.created);
+              return new Date(b.created).getTime() - new Date(a.created).getTime();
             });
             combinedBids.sort((a, b) => Number(b.amount) - Number(a.amount));
             setConsultations(combinedBids);
