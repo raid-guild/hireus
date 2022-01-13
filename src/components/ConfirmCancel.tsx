@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -8,10 +8,18 @@ import {
   ModalFooter,
   Button,
 } from '@chakra-ui/react';
+import type { ICombinedBid } from 'utils/types';
 
-import { AppContext } from '../context/AppContext';
+import { AppContext } from 'context/AppContext';
 
-const ConfirmCancel = ({
+type IConfirmCancel = {
+  consultationDetails: ICombinedBid;
+  refresh: () => void;
+  setTxConfirmed: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ConfirmCancel: React.FC<IConfirmCancel> = ({
   consultationDetails,
   refresh,
   setTxConfirmed,
@@ -19,7 +27,7 @@ const ConfirmCancel = ({
 }) => {
   const context = useContext(AppContext);
 
-  const onCancelAndUpdate = async id => {
+  const onCancelAndUpdate = async (id: string) => {
     context.updateCancelModalStatus(false);
     setTxConfirmed(false);
     setShowSnackbar(true);

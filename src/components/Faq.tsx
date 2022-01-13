@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import {
   Accordion,
   AccordionItem,
@@ -15,7 +15,7 @@ import {
   Button,
 } from '@chakra-ui/react';
 
-import { AppContext } from '../context/AppContext';
+import { AppContext } from 'context/AppContext';
 
 const faq_items = [
   {

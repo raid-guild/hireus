@@ -1,16 +1,26 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import './snackbar.scss';
-import { BLOCK_EXPLORER_URL } from '../../constants';
-import { ReactComponent as EtherscanSvg } from '../../assets/etherscan.svg';
+import { BLOCK_EXPLORER_URL } from 'constants/index';
+import { ReactComponent as EtherscanSvg } from 'assets/etherscan.svg';
 
-export default function Snackbar(props) {
+type ISnackbar = {
+  hash: string;
+  message: string;
+  setShowSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Snackbar: React.FC<ISnackbar> = ({
+  hash,
+  message,
+  setShowSnackbar,
+}) => {
   return (
     <div id="snackbar-position">
       <div id="snackbar-container">
         <div style={{ display: 'flex' }}>
           <motion.a
-            href={`${BLOCK_EXPLORER_URL}tx/${props.hash}`}
+            href={`${BLOCK_EXPLORER_URL}tx/${hash}`}
             target={'_blank'}
             rel={'noopener noreferrer'}
             id="snackbar-link"
@@ -20,20 +30,20 @@ export default function Snackbar(props) {
           >
             <EtherscanSvg />
           </motion.a>
-          {props.message && (
+          {message && (
             <motion.p
               id="snackbar-status"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
             >
-              {props.message}
+              {message}
             </motion.p>
           )}
         </div>
         <div
           id="snackbar-close-container"
-          onClick={() => props.setShowSnackbar(false)}
+          onClick={() => setShowSnackbar(false)}
         >
           <div id="close-icon">&#10005;</div>
         </div>
@@ -41,3 +51,5 @@ export default function Snackbar(props) {
     </div>
   );
 }
+
+export default Snackbar;

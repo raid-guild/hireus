@@ -223,12 +223,12 @@ export const OpenBounty: React.FC<IOpenBounty> = ({
           hash={hash}
         />
       )}
-      <ConfirmCancel
+      {consultationDetails && <ConfirmCancel
         consultationDetails={consultationDetails}
         refresh={refresh}
         setTxConfirmed={setTxConfirmed}
         setShowSnackbar={setShowSnackbar}
-      />
+      />}
     </div>
   );
 };

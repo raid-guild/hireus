@@ -9,7 +9,12 @@ import {
   Button,
 } from '@chakra-ui/react';
 
-const PausedModal = ({
+type IPausedModal = {
+  showPauseModal: boolean;
+  setShowPauseModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const PausedModal: React.FC<IPausedModal> = ({
   showPauseModal,
   setShowPauseModal,
 }) => {
