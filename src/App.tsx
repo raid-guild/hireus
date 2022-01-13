@@ -2,23 +2,23 @@ import { useContext, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-import { AppContext } from './context/AppContext';
-import { shortenAddress } from './utils';
+import { AppContext } from 'context/AppContext';
+import { shortenAddress } from 'utils';
 
-import AuctionQueue from './stages/AuctionQueue';
-import HeadsUp from './stages/HeadsUp';
-import PersonalInfo from './stages/PersonalInfo';
-import ProjectInfo from './stages/ProjectInfo';
-import RequiredServices from './stages/RequiredServices';
-import AdditionalInfo from './stages/AdditionalInfo';
-import Confirmation from './stages/Confirmation';
-import Feedback from './stages/Feedback';
+import AuctionQueue from 'stages/AuctionQueue';
+import HeadsUp from 'stages/HeadsUp';
+import PersonalInfo from 'stages/PersonalInfo';
+import ProjectInfo from 'stages/ProjectInfo';
+import RequiredServices from 'stages/RequiredServices';
+import AdditionalInfo from 'stages/AdditionalInfo';
+import Confirmation from 'stages/Confirmation';
+import Feedback from 'stages/Feedback';
 
-import FAQ from './components/Faq';
+import FAQ from 'components/Faq';
 
-import './App.scss';
+import 'App.scss';
 
-import raidguild__logo from './assets/raidguild__logo.png';
+import raidguild__logo from 'assets/raidguild__logo.png';
 
 // uses ga4
 
@@ -72,7 +72,7 @@ const App = () => {
                   transition={{ delay: 0.3 }}
                 />
               </a>
-              <button
+              <motion.button
                 className="consultation-button"
                 initial={{ x: '100vw' }}
                 animate={{ x: 0 }}
@@ -82,7 +82,7 @@ const App = () => {
                 }}
               >
                 {account ? shortenAddress(account) : 'Connect'}
-              </button>
+              </motion.button>
             </div>
             <Router>
               <Switch>
