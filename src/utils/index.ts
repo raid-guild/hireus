@@ -1,4 +1,4 @@
-import { ethers, utils } from 'ethers';
+import { ethers, utils, BigNumber } from 'ethers';
 import web3 from 'web3';
 import { QUEUE_CONTRACT_ADDRESS } from 'constants/index';
 import type { IBid, ICombinedBid, IConsultation } from 'utils/types';
@@ -50,9 +50,13 @@ export const combineBids = async (consultations: IConsultation[], bids: IBid[]) 
   return combinedBids.filter(bid => bid) as ICombinedBid[];
 };
 
-export function round(value: string, decimals: number) {
-  const decimalsString = decimals.toString();
-  return Number(Math.round(Number(value + 'e' + decimalsString)) + 'e-' + decimalsString);
+export function round(value: BigNumber | string, decimals: number) {
+  if (typeof value === 'string') {
+    const valueNumber = Number(value);
+    return valueNumber.toFixed(decimals);
+  }
+  const valueNumber = value.toNumber();
+  return valueNumber.toFixed(decimals);
 }
 
 const addFromAddress = async (consultation: IConsultation, bids: IBid[]) => {

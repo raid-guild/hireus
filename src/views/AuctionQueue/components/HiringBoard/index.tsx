@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import web3 from 'web3';
+import { utils } from 'ethers';
 
 import {
   MIN_NUMBER_OF_SHARES,
@@ -229,7 +229,7 @@ const BidListItem: React.FC<IBidListItem> = ({
           </div>
           <div className="bounty-list-item-inner">
             <p className="bounty-detail">
-              {round(web3.utils.fromWei(consultation.amount), 4)} $RAID
+              {round(utils.formatEther(consultation.amount), 2)} $RAID
             </p>
             <button>open</button>
           </div>
