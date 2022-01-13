@@ -5,13 +5,14 @@ export type IBidChange = {
   increasedAt: string;
   increasedBy: string;
   txHash: string;
+  withdrawnAt: string;
 }
 
 export type ICombinedBid = {
   airtable_id: string;
   amount: string;
   bidCreated: string;
-  bid_id: number;
+  bid_id: string;
   changes: IBidChange[];
   createTxHash: string;
   created: string;

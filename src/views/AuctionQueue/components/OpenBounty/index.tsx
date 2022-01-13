@@ -1,19 +1,28 @@
 /* eslint-disable no-undef */
 import React, { useContext, useState } from 'react';
 import { motion } from 'framer-motion';
-import { utils } from 'web3';
-import { shortenAddress } from '../../../../utils';
-import { BLOCK_EXPLORER_URL, LOCKUP_PERIOD } from '../../../../constants/index';
-import { AppContext } from '../../../../context/AppContext';
+import web3 from 'web3';
+import { shortenAddress } from 'utils';
+import { BLOCK_EXPLORER_URL, LOCKUP_PERIOD } from 'constants/index';
+import { AppContext } from 'context/AppContext';
+import type { ICombinedBid } from 'utils/types';
 
-import { ReactComponent as XDaiSvg } from '../../../../assets/xdai.svg';
+import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
 
-import ConfirmCancel from '../../../../components/ConfirmCancel';
+import ConfirmCancel from 'components/ConfirmCancel';
 import DepositWithdrawCard from './DepositWithdrawCard';
 import ConsultationRequestCard from './ConsultationRequestCard';
-import Snackbar from '../../../../components/Snackbar';
+import Snackbar from 'components/Snackbar';
 
-export const OpenBounty = ({
+type IOpenBounty = {
+  consultations: ICombinedBid[] | null;
+  refresh: () => void;
+  selectedConsultation: string;
+  setSelectedConsultations: React.Dispatch<React.SetStateAction<string>>;
+}
+
+
+export const OpenBounty: React.FC<IOpenBounty> = ({
   consultations,
   refresh,
   selectedConsultation,
@@ -30,7 +39,7 @@ export const OpenBounty = ({
     txFailed,
   } = useContext(AppContext);
   const [lockupEnded, setLockupEnded] = useState(false);
-  const [consultationDetails, setConsultationDetails] = useState(null);
+  const [consultationDetails, setConsultationDetails] = useState<ICombinedBid | null>(null);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [txConfirmed, setTxConfirmed] = useState(false);
   const [lockTime, setLockTime] = useState('');
@@ -70,17 +79,17 @@ export const OpenBounty = ({
   }, [consultationDetails]);
 
   React.useEffect(() => {
-    if (selectedConsultation && consultations.length > 0) {
+    if (selectedConsultation && consultations && consultations.length > 0) {
       const consultationDetails = consultations.filter(consultation => {
         return consultation.project_name === selectedConsultation;
       });
       setConsultationDetails(consultationDetails[0]);
     } else {
-      setSelectedConsultations(null);
+      setSelectedConsultations('');
     }
   }, [consultations, selectedConsultation, setSelectedConsultations]);
 
-  const onAcceptAndUpdate = async id => {
+  const onAcceptAndUpdate = async (id: string) => {
     setTxConfirmed(false);
     setShowSnackbar(true);
     await onAccept(id);
@@ -99,7 +108,7 @@ export const OpenBounty = ({
           top: '24px',
         }}
         onClick={() => {
-          setSelectedConsultations(null);
+          setSelectedConsultations('');
         }}
       >
         Back
@@ -161,7 +170,7 @@ export const OpenBounty = ({
                     }`}
                   >
                     <div className="bounty-list-item-inner">
-                      <div
+                      <motion.div
                         className="etherscan-container"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -169,7 +178,7 @@ export const OpenBounty = ({
                         style={{ marginRight: '16px' }}
                       >
                         <XDaiSvg />
-                      </div>
+                      </motion.div>
                       <p>
                         {new Date(
                           Number(change.changedAt) * 1000,
@@ -191,7 +200,7 @@ export const OpenBounty = ({
                         }`}
                       >
                         {change.withdrawnAt ? '-' : '+'}
-                        {utils.fromWei(change.amount)} $RAID
+                        {web3.utils.fromWei(change.amount)} $RAID
                       </p>
                     </div>
                   </a>

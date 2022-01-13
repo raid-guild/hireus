@@ -31,7 +31,6 @@ export const useBids = (refresh = 0) => {
               setError(new Error('No bids found'));
               return;
             }
-            console.log(combinedBids);
             combinedBids.sort(function (a, b) {
               return new Date(b.created).getTime() - new Date(a.created).getTime();
             });

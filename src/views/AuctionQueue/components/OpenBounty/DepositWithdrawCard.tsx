@@ -1,11 +1,21 @@
 /* eslint-disable no-undef */
 import React, { useContext, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { utils } from 'web3';
-import { round } from '../../../../utils';
-import { AppContext } from '../../../../context/AppContext';
+import { utils } from 'ethers';
+import { round } from 'utils';
+import type { ICombinedBid } from 'utils/types';
+import { AppContext } from 'context/AppContext';
 
-const DepositWithdrawCared = ({
+type IDepositWithdrawCared = {
+  setShowSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
+  setTxConfirmed: React.Dispatch<React.SetStateAction<boolean>>;
+  consultationDetails: ICombinedBid;
+  lockTime: string;
+  lockupEnded: boolean;
+  refresh: () => void;
+}
+
+const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
   setShowSnackbar,
   setTxConfirmed,
   consultationDetails,
@@ -29,7 +39,7 @@ const DepositWithdrawCared = ({
     isWithdrawPending,
   } = useContext(AppContext);
 
-  const onDepositAndUpdate = async id => {
+  const onDepositAndUpdate = async (id: string) => {
     setTxConfirmed(false);
     setShowSnackbar(true);
     if (consultationDetails.bid_id) {
@@ -49,7 +59,7 @@ const DepositWithdrawCared = ({
     refresh();
   };
 
-  const onWithdrawAndupdate = async id => {
+  const onWithdrawAndupdate = async (id: string) => {
     setTxConfirmed(false);
     setShowSnackbar(true);
     await onWithdraw(id);
@@ -60,7 +70,7 @@ const DepositWithdrawCared = ({
   const insufficientBalance = useMemo(() => {
     if (!(depositAmount && raidBalance)) return false;
     try {
-      return BigInt(utils.toWei(depositAmount || '0')) > BigInt(utils.toWei(raidBalance));
+      return BigInt(utils.parseEther(depositAmount || '0').toString()) > BigInt(utils.parseEther(raidBalance).toString());
     } catch (e) {
       return false;
     }
@@ -85,7 +95,7 @@ const DepositWithdrawCared = ({
               value={depositAmount}
               onChange={e => onChangeDepositAmount(e.target.value)}
             />
-            <button
+            <motion.button
               className="consultation-button"
               style={{ margin: '0', width: '100%' }}
               initial={{ x: '100vw' }}
@@ -114,7 +124,7 @@ const DepositWithdrawCared = ({
               ) : (
                 'Approve $RAID'
               )}
-            </button>
+            </motion.button>
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '48%' }}>
@@ -122,7 +132,7 @@ const DepositWithdrawCared = ({
           <p>You deposited:</p>
             <h2>
               {consultationDetails.submitter === account
-                ? round(utils.fromWei(consultationDetails.amount), 4)
+                ? round(utils.parseEther(consultationDetails.amount), 4)
                 : '0'}{' '}
               $RAID
             </h2>
@@ -137,7 +147,7 @@ const DepositWithdrawCared = ({
               value={withdrawalAmount}
               onChange={e => onChangeWithdrawalAmount(e.target.value)}
             />
-            <button
+            <motion.button
               className="consultation-button"
               style={{ margin: '0', width: '100%' }}
               initial={{ x: '100vw' }}
@@ -146,7 +156,7 @@ const DepositWithdrawCared = ({
               disabled={
                 withdrawalAmount === '0' ||
                 withdrawalAmount === '' ||
-                BigInt(utils.toWei(withdrawalAmount)) >
+                BigInt(utils.parseEther(withdrawalAmount).toString()) >
                   BigInt(consultationDetails.amount) ||
                 isWithdrawPending ||
                 !lockupEnded
@@ -160,7 +170,7 @@ const DepositWithdrawCared = ({
               ) : (
                 'Withdraw Bid'
               )}
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>

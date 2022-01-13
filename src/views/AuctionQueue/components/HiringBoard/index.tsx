@@ -1,16 +1,22 @@
 import React, { useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { utils } from 'web3';
+import web3 from 'web3';
 
 import {
   MIN_NUMBER_OF_SHARES,
   RAID_CONTRACT_ADDRESS,
-} from '../../../../constants';
-import { round, shortenAddress } from '../../../../utils';
-import { AppContext } from '../../../../context/AppContext';
-import Slider from '../../../../components/Slider';
+} from 'constants/index';
+import { round, shortenAddress } from 'utils';
+import type { ICombinedBid } from 'utils/types';
+import { AppContext } from 'context/AppContext';
+import Slider from 'components/Slider';
 
-export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
+type IHiringBoard = {
+  consultations: ICombinedBid[] | null;
+  setSelectedConsultations: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export const HiringBoard: React.FC<IHiringBoard> = ({ consultations, setSelectedConsultations }) => {
   const { account, connectWallet, updateStage, shares } =
     useContext(AppContext);
   const [showMySubmissions, setShowMySubmissions] = React.useState(false);
@@ -107,7 +113,7 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <button
+                <motion.button
                   className="consultation-button"
                   initial={{ x: '100vw' }}
                   animate={{ x: 0 }}
@@ -115,11 +121,11 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
                   onClick={() => null}
                 >
                   Get $RAID
-                </button>
+                </motion.button>
               </a>
             </div>
             <div>
-              <button
+              <motion.button
                 className="consultation-button"
                 initial={{ x: '100vw' }}
                 animate={{ x: 0 }}
@@ -129,7 +135,7 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
                 }}
               >
                 New Consultation
-              </button>
+              </motion.button>
             </div>
           </div>
         </div>
@@ -180,7 +186,15 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
   );
 };
 
-const BidListItem = ({
+type IBidListItem = {
+  account: string;
+  consultation: ICombinedBid;
+  index: number;
+  setSelectedConsultations: React.Dispatch<React.SetStateAction<string>>;
+  shares: number;
+}
+
+const BidListItem: React.FC<IBidListItem> = ({
   account,
   consultation,
   index,
@@ -215,7 +229,7 @@ const BidListItem = ({
           </div>
           <div className="bounty-list-item-inner">
             <p className="bounty-detail">
-              {round(utils.fromWei(consultation.amount), 4)} $RAID
+              {round(web3.utils.fromWei(consultation.amount), 4)} $RAID
             </p>
             <button>open</button>
           </div>

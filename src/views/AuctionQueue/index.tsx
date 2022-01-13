@@ -8,7 +8,7 @@ import { HiringBoard, OpenBounty } from './components';
 const AuctionQueue = () => {
   const [refreshCount, refresh] = useRefresh();
   const { consultations } = useBids(refreshCount);
-  const [selectedConsultation, setSelectedConsultations] = useState(null);
+  const [selectedConsultation, setSelectedConsultations] = useState<string>('');
 
   return (
     <div style={{ width: '100%' }}>

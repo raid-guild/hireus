@@ -1,16 +1,29 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { utils } from 'web3';
-import { shortenAddress, round } from '../../../../utils';
+import { utils } from 'ethers';
+import { shortenAddress, round } from 'utils';
+import type { ICombinedBid } from 'utils/types';
 import {
   BLOCK_EXPLORER_URL,
   MIN_NUMBER_OF_SHARES,
   RAID_CONTRACT_ADDRESS,
-} from '../../../../constants/index';
+} from 'constants/index';
 
-import { ReactComponent as XDaiSvg } from '../../../../assets/xdai.svg';
+import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
 
-const ConsultationRequestCard = ({
+type IConsultationRequestCard = {
+  account: string;
+  consultationDetails: ICombinedBid;
+  lockTime: string;
+  lockupEnded: boolean;
+  shares: number;
+  isAcceptPending: boolean;
+  onAcceptAndUpdate: (id: string) => void;
+  updateCancelModalStatus: (status: boolean) => void;
+  isCancelPending: boolean;
+};
+
+const ConsultationRequestCard: React.FC<IConsultationRequestCard> = ({
   account,
   consultationDetails,
   lockTime,
@@ -125,7 +138,7 @@ const ConsultationRequestCard = ({
               transition={{ delay: 0.6, duration: 0.5 }}
               style={{ marginBottom: 0 }}
             >
-              {round(utils.fromWei(consultationDetails.amount), 4)} $RAID
+              {round(utils.parseEther(consultationDetails.amount), 4)} $RAID
             </motion.p>
             <motion.a
               href={`${BLOCK_EXPLORER_URL}address/${RAID_CONTRACT_ADDRESS}`}
@@ -142,7 +155,7 @@ const ConsultationRequestCard = ({
           {account && (
             <div className="open-bounty-buttons-container">
               {shares >= MIN_NUMBER_OF_SHARES && consultationDetails?.bid_id && (
-                <button
+                <motion.button
                   className="consultation-button"
                   style={{ marginTop: '20px' }}
                   initial={{ x: '100vw' }}
@@ -158,11 +171,11 @@ const ConsultationRequestCard = ({
                   ) : (
                     'Accept Request'
                   )}
-                </button>
+                </motion.button>
               )}
               {consultationDetails?.submitter === account && lockupEnded && (
                 <div>
-                  <button
+                  <motion.button
                     className="consultation-button"
                     style={{ marginTop: '20px' }}
                     initial={{ x: '100vw' }}
@@ -178,7 +191,7 @@ const ConsultationRequestCard = ({
                     ) : (
                       'Cancel Bid'
                     )}
-                  </button>
+                  </motion.button>
                 </div>
               )}
             </div>
