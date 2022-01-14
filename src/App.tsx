@@ -11,7 +11,7 @@ import AuctionQueue from 'views/AuctionQueue';
 
 // uses ga4
 
-const App: React.FC = () => {
+const App = () => {
   const { account, stage, connectWallet, updateFaqModalStatus, updateStage } =
     useContext(AppContext);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);

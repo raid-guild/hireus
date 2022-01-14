@@ -22,6 +22,7 @@
     "framer-motion": "^3.2.1",
     "graphql": "^15.5.1",
     "graphql-tag": "^2.12.5",
+    "husky": "^7.0.4",
     "react": "^17.0.1",
     "react-day-picker": "^7.4.8",
     "react-dom": "^17.0.1",
@@ -43,6 +44,15 @@
     "lint:nofix": "NODE_ENV=production eslint --ignore-path .gitignore \"*/**/*.{js,jsx,ts,tsx}\"",
     "lint": "yarn lint:nofix --quiet --fix",
     "format": "prettier --ignore-path .gitignore --write \"{*,**/*}.{ts,tsx,js,jsx,json,yml,yaml,md}\""
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,yml,yaml,md}": [
+      "prettier --write"
+    ]
   },
   "eslintConfig": {
     "extends": [
