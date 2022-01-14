@@ -6,7 +6,8 @@ export type IBidChange = {
   increasedBy: string;
   txHash: string;
   withdrawnAt: string;
-}
+  withdrawTxHash: string;
+};
 
 export type ICombinedBid = {
   airtable_id: string;
@@ -20,14 +21,25 @@ export type ICombinedBid = {
   project_name: string;
   status: string;
   submitter: string;
-}
+};
 
 export type IBid = {
-
-}
+  id: string;
+  amount: string;
+  submitter: {
+    id: string;
+  };
+  createdAt: string;
+  createTxHash: string;
+  details: string;
+  status: string;
+  increases: IBidChange[];
+  withdraws: IBidChange[];
+};
 
 export type IConsultation = {
   project_name: string;
+  consultation_hash: string;
   created: string;
   id: string;
-}
+};

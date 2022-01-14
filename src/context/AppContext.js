@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import React, { Component, createContext } from 'react';
+import { Component, createContext } from 'react';
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';

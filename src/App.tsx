@@ -1,21 +1,17 @@
-import { useContext, useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { motion } from 'framer-motion';
-
-import { AppContext } from 'context/AppContext';
-import { shortenAddress } from 'utils';
-
-import AuctionQueue from 'views/AuctionQueue';
-
-import FAQ from 'components/Faq';
-
 import 'App.scss';
 
 import raidguild__logo from 'assets/raidguild__logo.png';
+import FAQ from 'components/Faq';
+import { AppContext } from 'context/AppContext';
+import { motion } from 'framer-motion';
+import { useContext, useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { shortenAddress } from 'utils';
+import AuctionQueue from 'views/AuctionQueue';
 
 // uses ga4
 
-const App = () => {
+const App: React.FC = () => {
   const { account, stage, connectWallet, updateFaqModalStatus, updateStage } =
     useContext(AppContext);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);

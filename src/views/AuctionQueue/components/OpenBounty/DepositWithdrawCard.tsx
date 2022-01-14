@@ -1,10 +1,10 @@
 /* eslint-disable no-undef */
-import React, { useContext, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { AppContext } from 'context/AppContext';
 import { utils } from 'ethers';
+import { motion } from 'framer-motion';
+import React, { useContext, useMemo } from 'react';
 import { round } from 'utils';
 import type { ICombinedBid } from 'utils/types';
-import { AppContext } from 'context/AppContext';
 
 type IDepositWithdrawCared = {
   setShowSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,7 +13,7 @@ type IDepositWithdrawCared = {
   lockTime: string;
   lockupEnded: boolean;
   refresh: () => void;
-}
+};
 
 const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
   setShowSnackbar,
@@ -70,7 +70,10 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
   const insufficientBalance = useMemo(() => {
     if (!(depositAmount && raidBalance)) return false;
     try {
-      return BigInt(utils.parseEther(depositAmount || '0').toString()) > BigInt(utils.parseEther(raidBalance).toString());
+      return (
+        BigInt(utils.parseEther(depositAmount || '0').toString()) >
+        BigInt(utils.parseEther(raidBalance).toString())
+      );
     } catch (e) {
       return false;
     }
@@ -79,13 +82,24 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
   return (
     <div id="deposit-withdraw-card">
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '48%' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            width: '48%',
+          }}
+        >
           <div>
             <p>Wallet Balance:</p>
             <h2>{round(raidBalance, 4)} $RAID</h2>
           </div>
           <div>
-            {insufficientBalance && <p style={{ fontSize: '12px', marginBottom: '10px' }}>Insufficient balance</p>}
+            {insufficientBalance && (
+              <p style={{ fontSize: '12px', marginBottom: '10px' }}>
+                Insufficient balance
+              </p>
+            )}
             <input
               id={'deposit-amount'}
               placeholder={`0`}
@@ -127,9 +141,16 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
             </motion.button>
           </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '48%' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            width: '48%',
+          }}
+        >
           <div>
-          <p>You deposited:</p>
+            <p>You deposited:</p>
             <h2>
               {consultationDetails.submitter === account
                 ? round(utils.formatEther(consultationDetails.amount), 4)
