@@ -1,26 +1,24 @@
 /* eslint-disable no-undef */
-import React, { useContext, useState } from 'react';
-import { motion } from 'framer-motion';
-import web3 from 'web3';
-import { shortenAddress } from 'utils';
+import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
+import ConfirmCancel from 'components/ConfirmCancel';
+import Snackbar from 'components/Snackbar';
 import { BLOCK_EXPLORER_URL, LOCKUP_PERIOD } from 'constants/index';
 import { AppContext } from 'context/AppContext';
+import { motion } from 'framer-motion';
+import React, { useContext, useState } from 'react';
+import { shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
+import web3 from 'web3';
 
-import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
-
-import ConfirmCancel from 'components/ConfirmCancel';
-import DepositWithdrawCard from './DepositWithdrawCard';
 import ConsultationRequestCard from './ConsultationRequestCard';
-import Snackbar from 'components/Snackbar';
+import DepositWithdrawCard from './DepositWithdrawCard';
 
 type IOpenBounty = {
   consultations: ICombinedBid[] | null;
   refresh: () => void;
   selectedConsultation: string;
   setSelectedConsultations: React.Dispatch<React.SetStateAction<string>>;
-}
-
+};
 
 export const OpenBounty: React.FC<IOpenBounty> = ({
   consultations,
@@ -39,7 +37,8 @@ export const OpenBounty: React.FC<IOpenBounty> = ({
     txFailed,
   } = useContext(AppContext);
   const [lockupEnded, setLockupEnded] = useState(false);
-  const [consultationDetails, setConsultationDetails] = useState<ICombinedBid | null>(null);
+  const [consultationDetails, setConsultationDetails] =
+    useState<ICombinedBid | null>(null);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [txConfirmed, setTxConfirmed] = useState(false);
   const [lockTime, setLockTime] = useState('');
@@ -223,12 +222,14 @@ export const OpenBounty: React.FC<IOpenBounty> = ({
           hash={hash}
         />
       )}
-      {consultationDetails && <ConfirmCancel
-        consultationDetails={consultationDetails}
-        refresh={refresh}
-        setTxConfirmed={setTxConfirmed}
-        setShowSnackbar={setShowSnackbar}
-      />}
+      {consultationDetails && (
+        <ConfirmCancel
+          consultationDetails={consultationDetails}
+          refresh={refresh}
+          setTxConfirmed={setTxConfirmed}
+          setShowSnackbar={setShowSnackbar}
+        />
+      )}
     </div>
   );
 };

@@ -1,20 +1,17 @@
-import React from 'react';
-import { motion } from 'framer-motion';
 import './snackbar.scss';
-import { BLOCK_EXPLORER_URL } from 'constants/index';
+
 import { ReactComponent as EtherscanSvg } from 'assets/etherscan.svg';
+import { BLOCK_EXPLORER_URL } from 'constants/index';
+import { motion } from 'framer-motion';
+import React from 'react';
 
 type ISnackbar = {
   hash: string;
   message: string;
   setShowSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
-}
+};
 
-const Snackbar: React.FC<ISnackbar> = ({
-  hash,
-  message,
-  setShowSnackbar,
-}) => {
+const Snackbar: React.FC<ISnackbar> = ({ hash, message, setShowSnackbar }) => {
   return (
     <div id="snackbar-position">
       <div id="snackbar-container">
@@ -50,6 +47,6 @@ const Snackbar: React.FC<ISnackbar> = ({
       </div>
     </div>
   );
-}
+};
 
 export default Snackbar;

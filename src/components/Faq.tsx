@@ -1,21 +1,20 @@
-import { useContext } from 'react';
 import {
   Accordion,
-  AccordionItem,
   AccordionButton,
-  AccordionPanel,
   AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
 } from '@chakra-ui/react';
-
 import { AppContext } from 'context/AppContext';
+import { useContext } from 'react';
 
 const faq_items = [
   {
@@ -51,7 +50,7 @@ const faq_items = [
   },
 ];
 
-const FAQ = () => {
+const FAQ: React.FC = () => {
   const context = useContext(AppContext);
   return (
     <Modal
@@ -87,8 +86,8 @@ const FAQ = () => {
               </AccordionButton>
               <AccordionPanel pb={4}>
                 <p>
-                  DAI is a stablecoin pegged to the US Dollar. First, you'll
-                  need a wallet like{' '}
+                  DAI is a stablecoin pegged to the US Dollar. First,
+                  you&apos;ll need a wallet like{' '}
                   <a
                     href="https://metamask.io/"
                     target="_blank"
@@ -100,8 +99,8 @@ const FAQ = () => {
                 </p>
                 <br />
                 <p>
-                  Second, you'll need funds. To go from fiat currencies to the
-                  Ethereum ecosystem you can use a onramp like{' '}
+                  Second, you&apos;ll need funds. To go from fiat currencies to
+                  the Ethereum ecosystem you can use a onramp like{' '}
                   <a
                     href="https://www.sendwyre.com/"
                     target="_blank"

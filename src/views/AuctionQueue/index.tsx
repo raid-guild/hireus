@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
 import './AuctionQueue.scss';
 
 import { useBids } from 'hooks/useBids';
 import { useRefresh } from 'hooks/useRefresh';
+import React, { useState } from 'react';
+
 import { HiringBoard, OpenBounty } from './components';
 
-const AuctionQueue = () => {
+const AuctionQueue: React.FC = () => {
   const [refreshCount, refresh] = useRefresh();
   const { consultations } = useBids(refreshCount);
   const [selectedConsultation, setSelectedConsultations] = useState<string>('');

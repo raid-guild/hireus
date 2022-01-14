@@ -1,7 +1,7 @@
-import { ethers, utils, BigNumber } from 'ethers';
-import web3 from 'web3';
 import { QUEUE_CONTRACT_ADDRESS } from 'constants/index';
+import { BigNumber, ethers, utils } from 'ethers';
 import type { IBid, ICombinedBid, IConsultation } from 'utils/types';
+import web3 from 'web3';
 
 const provider = ethers.getDefaultProvider(
   process.env.REACT_APP_MAINNET_NODE_ENDPOINT,
@@ -20,7 +20,7 @@ const provider = ethers.getDefaultProvider(
  * @param {number} [charsLength=4] The number of characters to change on both sides of the ellipsis
  * @returns {string} The shortened address
  */
-export function shortenAddress(address: string, charsLength = 4) {
+export function shortenAddress(address: string, charsLength = 4): string {
   const prefixLength = 2; // "0x"
   if (!address) {
     return '';
@@ -35,8 +35,11 @@ export function shortenAddress(address: string, charsLength = 4) {
   );
 }
 
-export const combineBids = async (consultations: IConsultation[], bids: IBid[]) => {
-  if (!consultations) return;
+export const combineBids = async (
+  consultations: IConsultation[],
+  bids: IBid[],
+): Promise<ICombinedBid[] | null> => {
+  if (!consultations) return null;
   const combinedBids = await Promise.all(
     consultations.map(async consultation => {
       try {
@@ -50,7 +53,7 @@ export const combineBids = async (consultations: IConsultation[], bids: IBid[]) 
   return combinedBids.filter(bid => bid) as ICombinedBid[];
 };
 
-export function round(value: BigNumber | string, decimals: number) {
+export function round(value: BigNumber | string, decimals: number): string {
   if (typeof value === 'string') {
     const valueNumber = Number(value);
     return valueNumber.toFixed(decimals);
@@ -60,7 +63,7 @@ export function round(value: BigNumber | string, decimals: number) {
 }
 
 const addFromAddress = async (consultation: IConsultation, bids: IBid[]) => {
-  let newBid: ICombinedBid = {
+  const newBid: ICombinedBid = {
     project_name: consultation.project_name,
     created: consultation.created,
     airtable_id: consultation.id,
@@ -77,7 +80,11 @@ const addFromAddress = async (consultation: IConsultation, bids: IBid[]) => {
   return combinedBid;
 };
 
-const getData = async (combinedBid: ICombinedBid, consultation: any, bids: any[]) => {
+const getData = async (
+  combinedBid: ICombinedBid,
+  consultation: IConsultation,
+  bids: IBid[],
+) => {
   const tx = await provider.getTransaction(consultation.consultation_hash);
   combinedBid['from'] = tx.from;
 
@@ -103,12 +110,17 @@ const getData = async (combinedBid: ICombinedBid, consultation: any, bids: any[]
     });
 
     updatedChanges.sort(function (a, b) {
-      return new Date(Number(b.changedAt)).getTime() - new Date(Number(a.changedAt)).getTime();
+      return (
+        new Date(Number(b.changedAt)).getTime() -
+        new Date(Number(a.changedAt)).getTime()
+      );
     });
     if (consultation.id === airtableId) {
-      combinedBid.bid_id = web3.utils.hexToNumber(
-        bid.id.replace(`${QUEUE_CONTRACT_ADDRESS.toLowerCase()}-`, ''),
-      ).toString();
+      combinedBid.bid_id = web3.utils
+        .hexToNumber(
+          bid.id.replace(`${QUEUE_CONTRACT_ADDRESS.toLowerCase()}-`, ''),
+        )
+        .toString();
       combinedBid.amount = bid.amount;
       combinedBid.submitter = utils.getAddress(bid.submitter.id);
       combinedBid.bidCreated = bid.createdAt;

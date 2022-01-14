@@ -1,15 +1,14 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { utils } from 'ethers';
-import { shortenAddress, round } from 'utils';
-import type { ICombinedBid } from 'utils/types';
+import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
 import {
   BLOCK_EXPLORER_URL,
   MIN_NUMBER_OF_SHARES,
   RAID_CONTRACT_ADDRESS,
 } from 'constants/index';
-
-import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
+import { utils } from 'ethers';
+import { motion } from 'framer-motion';
+import React from 'react';
+import { round, shortenAddress } from 'utils';
+import type { ICombinedBid } from 'utils/types';
 
 type IConsultationRequestCard = {
   account: string;

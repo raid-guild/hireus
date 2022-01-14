@@ -1,22 +1,21 @@
-import React, { useContext, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import Slider from 'components/Slider';
+import { MIN_NUMBER_OF_SHARES, RAID_CONTRACT_ADDRESS } from 'constants/index';
+import { AppContext } from 'context/AppContext';
 import { utils } from 'ethers';
-
-import {
-  MIN_NUMBER_OF_SHARES,
-  RAID_CONTRACT_ADDRESS,
-} from 'constants/index';
+import { motion } from 'framer-motion';
+import React, { useContext, useEffect } from 'react';
 import { round, shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
-import { AppContext } from 'context/AppContext';
-import Slider from 'components/Slider';
 
 type IHiringBoard = {
   consultations: ICombinedBid[] | null;
   setSelectedConsultations: React.Dispatch<React.SetStateAction<string>>;
-}
+};
 
-export const HiringBoard: React.FC<IHiringBoard> = ({ consultations, setSelectedConsultations }) => {
+export const HiringBoard: React.FC<IHiringBoard> = ({
+  consultations,
+  setSelectedConsultations,
+}) => {
   const { account, connectWallet, updateStage, shares } =
     useContext(AppContext);
   const [showMySubmissions, setShowMySubmissions] = React.useState(false);
@@ -192,7 +191,7 @@ type IBidListItem = {
   index: number;
   setSelectedConsultations: React.Dispatch<React.SetStateAction<string>>;
   shares: number;
-}
+};
 
 const BidListItem: React.FC<IBidListItem> = ({
   account,

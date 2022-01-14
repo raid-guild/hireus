@@ -1,23 +1,22 @@
-import { useContext } from 'react';
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
 } from '@chakra-ui/react';
-import type { ICombinedBid } from 'utils/types';
-
 import { AppContext } from 'context/AppContext';
+import { useContext } from 'react';
+import type { ICombinedBid } from 'utils/types';
 
 type IConfirmCancel = {
   consultationDetails: ICombinedBid;
   refresh: () => void;
   setTxConfirmed: React.Dispatch<React.SetStateAction<boolean>>;
   setShowSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
-}
+};
 
 const ConfirmCancel: React.FC<IConfirmCancel> = ({
   consultationDetails,

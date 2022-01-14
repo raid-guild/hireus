@@ -1,4 +1,6 @@
 import gql from 'fake-tag';
+import type { IBid } from 'utils/types';
+
 import { CLIENT } from './client';
 
 const bidsQuery = gql`
@@ -31,7 +33,7 @@ const bidsQuery = gql`
   }
 `;
 
-export const getBids = async () => {
+export const getBids = async (): Promise<IBid[]> => {
   const { data, error } = await CLIENT.query(bidsQuery).toPromise();
   if (!data) {
     if (error) {
