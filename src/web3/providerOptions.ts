@@ -1,8 +1,7 @@
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import CoinbaseLogo from 'assets/coinbase-wallet.svg';
 import { WalletLink } from 'walletlink';
 import { IProviderOptions } from 'web3modal';
-
-import CoinbaseLogo from './images/coinbase-wallet.svg';
 
 interface ConnectorOptions {
   appName: string;
@@ -27,7 +26,7 @@ export const providerOptions: IProviderOptions = {
       description: 'Scan with Coinbase wallet to connect',
     },
     options: {
-      appName: 'Rigor',
+      appName: 'RaidGuild: Consultation Queue',
     },
     package: WalletLink,
     connector: async (

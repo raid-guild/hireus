@@ -4,7 +4,6 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -131,16 +130,16 @@ export const WalletProvider: React.FC = ({ children }) => {
     }
   }, [setWalletProvider, disconnect]);
 
-  useEffect(() => {
-    const load = async () => {
-      if ((await web3Modal.isSafeApp()) || web3Modal.cachedProvider) {
-        await connectWallet();
-      } else {
-        setConnecting(false);
-      }
-    };
-    load();
-  }, [connectWallet]);
+  // useEffect(() => {
+  //   const load = async () => {
+  //     if ((await web3Modal.isSafeApp()) || web3Modal.cachedProvider) {
+  //       await connectWallet();
+  //     } else {
+  //       setConnecting(false);
+  //     }
+  //   };
+  //   load();
+  // }, [connectWallet]);
 
   return (
     <WalletContext.Provider

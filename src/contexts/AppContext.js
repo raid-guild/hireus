@@ -30,10 +30,6 @@ const web3Modal = new Web3Modal({
   providerOptions,
 });
 
-//MAINNET
-const DAI_CONTRACT_ADDRESS = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
-const DAI_ABI = require('../abi/DAI_ABI.json');
-
 // RINKEBY
 const RAID_ABI = require('../abi/ERC20_ABI.json');
 const QUEUE_ABI = require('../abi/QUEUE_ABI.json');
