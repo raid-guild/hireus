@@ -2,7 +2,7 @@ import 'App.scss';
 
 import raidguild__logo from 'assets/raidguild__logo.png';
 import FAQ from 'components/Faq';
-import { AppContext } from 'context/AppContext';
+import { AppContext } from 'contexts/AppContext';
 import { motion } from 'framer-motion';
 import { useContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';

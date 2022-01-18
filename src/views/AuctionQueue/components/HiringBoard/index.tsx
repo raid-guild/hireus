@@ -1,6 +1,6 @@
 import Slider from 'components/Slider';
 import { MIN_NUMBER_OF_SHARES, RAID_CONTRACT_ADDRESS } from 'constants/index';
-import { AppContext } from 'context/AppContext';
+import { AppContext } from 'contexts/AppContext';
 import { utils } from 'ethers';
 import { motion } from 'framer-motion';
 import React, { useContext, useEffect } from 'react';

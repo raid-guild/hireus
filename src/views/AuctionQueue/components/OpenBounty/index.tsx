@@ -3,7 +3,7 @@ import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
 import ConfirmCancel from 'components/ConfirmCancel';
 import Snackbar from 'components/Snackbar';
 import { BLOCK_EXPLORER_URL, LOCKUP_PERIOD } from 'constants/index';
-import { AppContext } from 'context/AppContext';
+import { AppContext } from 'contexts/AppContext';
 import { motion } from 'framer-motion';
 import React, { useContext, useState } from 'react';
 import { shortenAddress } from 'utils';

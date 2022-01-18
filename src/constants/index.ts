@@ -1,4 +1,4 @@
-export const LOCKUP_PERIOD = 7 * 24 * 60 * 60 * 1000;
+export const LOCKUP_PERIOD = 7 * 24 * 60 * 60 * 1000; // 7 days
 export const RAID_CONTRACT_ADDRESS =
   '0x18e9262e68cc6c6004db93105cc7c001bb103e49';
 export const QUEUE_CONTRACT_ADDRESS =
