@@ -3,7 +3,7 @@ import { History } from 'history';
 import { bidLocationTemplate, rootLocation } from 'locations';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import ScrollToTop from 'utils/ScrollToTop';
-import AuctionQueue from 'views/AuctionQueue';
+import HiringBoard from 'views/HiringBoard';
 
 interface CustomRouteProps {
   path: string;
@@ -41,7 +41,7 @@ const routes = [
   {
     path: rootLocation,
     exact: true,
-    component: AuctionQueue,
+    component: HiringBoard,
   },
   {
     path: bidLocationTemplate,
