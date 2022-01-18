@@ -125,6 +125,7 @@ const HiringBaord: React.FC = () => {
                   initial={{ x: '100vw' }}
                   animate={{ x: 0 }}
                   transition={{ delay: 1.3 }}
+                  // eslint-disable-next-line no-console
                   onClick={() => () => console.log('Link to hireus')}
                 >
                   New Consultation
