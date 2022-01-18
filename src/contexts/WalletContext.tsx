@@ -1,5 +1,6 @@
 import { SafeAppWeb3Modal as Web3Modal } from '@gnosis.pm/safe-apps-web3modal';
 import { providers } from 'ethers';
+import { getBids } from 'graphql/getBids';
 import React, {
   createContext,
   useCallback,
@@ -8,7 +9,10 @@ import React, {
   useState,
 } from 'react';
 import { toast } from 'react-toastify';
+import { combineBids } from 'utils';
+import { ICombinedBid } from 'utils/types';
 import { DEFAULT_NETWORK, NETWORK_NAMES } from 'web3/constants';
+import { GUILD_KEEPER_ENDPOINT } from 'web3/constants';
 import { switchChainOnMetaMask } from 'web3/metamask';
 import { providerOptions } from 'web3/providerOptions';
 
@@ -28,20 +32,24 @@ export type WalletContextType = {
   isConnected: boolean;
   isMetamask: boolean;
   isGnosisSafe: boolean;
+  bids: ICombinedBid[];
+  isLoadingBids: boolean;
+  refreshBids: () => void;
 };
 
 export const WalletContext = createContext<WalletContextType>({
   provider: null,
   chainId: null,
   address: null,
-  connectWallet: async () => {
-    return;
-  },
+  connectWallet: async () => undefined,
   disconnect: () => undefined,
   isConnecting: true,
   isConnected: false,
   isGnosisSafe: false,
   isMetamask: false,
+  bids: [],
+  isLoadingBids: false,
+  refreshBids: () => undefined,
 });
 
 type WalletStateType = {
@@ -58,6 +66,8 @@ export const WalletProvider: React.FC = ({ children }) => {
   const [{ provider, chainId, address }, setWalletState] =
     useState<WalletStateType>({});
   const [isGnosisSafe, setIsGnosisSafe] = useState(false);
+  const [bids, setBids] = useState<ICombinedBid[]>([]);
+  const [isLoadingBids, setIsLoadingBids] = useState(false);
 
   const isConnected: boolean = useMemo(
     () => !!provider && !!address && !!chainId,
@@ -111,6 +121,46 @@ export const WalletProvider: React.FC = ({ children }) => {
 
       await setWalletProvider(modalProvider, gnosisSafe);
 
+      const fetchBids = async (): Promise<void> => {
+        try {
+          setIsLoadingBids(true);
+          const bids = await getBids();
+          if (bids) {
+            const res = await fetch(`${GUILD_KEEPER_ENDPOINT}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                key: process.env.REACT_APP_ACCESS_KEY,
+              }),
+            });
+            const consultationData = await res.json();
+            const combinedBids = await combineBids(consultationData, bids);
+            if (!combinedBids) {
+              toast.error('Error: no bids found');
+              return;
+            }
+            combinedBids.sort(function (a, b) {
+              return (
+                new Date(b.created).getTime() - new Date(a.created).getTime()
+              );
+            });
+            combinedBids.sort((a, b) => Number(b.amount) - Number(a.amount));
+            setBids(combinedBids);
+          } else {
+            toast.error('Error: unable to fetch bids');
+          }
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error('Could not fetch bids', e);
+          toast.error('Error: Could not fetch bids');
+        } finally {
+          setIsLoadingBids(false);
+        }
+      };
+      fetchBids();
+
       if (!gnosisSafe) {
         modalProvider.on('accountsChanged', () => {
           disconnect();
@@ -129,6 +179,43 @@ export const WalletProvider: React.FC = ({ children }) => {
       setConnecting(false);
     }
   }, [setWalletProvider, disconnect]);
+
+  const refreshBids = useCallback(async () => {
+    try {
+      setIsLoadingBids(true);
+      const bids = await getBids();
+      if (bids) {
+        const res = await fetch(`${GUILD_KEEPER_ENDPOINT}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            key: process.env.REACT_APP_ACCESS_KEY,
+          }),
+        });
+        const consultationData = await res.json();
+        const combinedBids = await combineBids(consultationData, bids);
+        if (!combinedBids) {
+          toast.error('Error: no bids found');
+          return;
+        }
+        combinedBids.sort(function (a, b) {
+          return new Date(b.created).getTime() - new Date(a.created).getTime();
+        });
+        combinedBids.sort((a, b) => Number(b.amount) - Number(a.amount));
+        setBids(combinedBids);
+      } else {
+        toast.error('Error: unable to fetch bids');
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error('Could not fetch bids', e);
+      toast.error('Error: Could not fetch bids');
+    } finally {
+      setIsLoadingBids(false);
+    }
+  }, []);
 
   // useEffect(() => {
   //   const load = async () => {
@@ -153,6 +240,9 @@ export const WalletProvider: React.FC = ({ children }) => {
         isConnecting,
         disconnect,
         isMetamask,
+        bids,
+        isLoadingBids,
+        refreshBids,
       }}
     >
       {children}

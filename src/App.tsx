@@ -10,8 +10,6 @@ import Routes from 'Routes';
 import { shortenAddress } from 'utils';
 import history from 'utils/history';
 
-// uses ga4
-
 const App: React.FC = () => {
   const { address, connectWallet } = useWallet();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -77,26 +75,6 @@ const App: React.FC = () => {
             <Router history={history}>
               <Routes />
             </Router>
-            {/* <Router>
-              <Switch>
-                <Route path="/" exact>
-                  <AuctionQueue />
-
-                  {stage !== 1 && (
-                    <button
-                      id="prev-stage-button"
-                      onClick={() => console.log('Next stage')}
-                    >
-                      <i className="fas fa-arrow-left"></i>
-                    </button>
-                  )}
-
-                  <button onClick={() => setIsFaqOpen(true)} id="faq-button">
-                    Read FAQ
-                  </button>
-                </Route>
-              </Switch>
-            </Router> */}
             <FAQ isOpen={isFaqOpen} onClose={() => setIsFaqOpen(false)} />
           </>
         )}

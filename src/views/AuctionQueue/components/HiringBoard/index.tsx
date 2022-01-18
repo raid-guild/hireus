@@ -9,16 +9,16 @@ import type { ICombinedBid } from 'utils/types';
 import { MIN_NUMBER_OF_SHARES, RAID_CONTRACT_ADDRESS } from 'web3/constants';
 
 type IHiringBoard = {
-  consultations: ICombinedBid[] | null;
+  consultations: ICombinedBid[];
+  isLoadingBids: boolean;
   isLoadingShares: boolean;
-  setSelectedConsultations: React.Dispatch<React.SetStateAction<string>>;
   shares: string;
 };
 
 export const HiringBoard: React.FC<IHiringBoard> = ({
   consultations,
+  isLoadingBids,
   isLoadingShares,
-  setSelectedConsultations,
   shares,
 }) => {
   const { address, connectWallet } = useWallet();
@@ -164,24 +164,21 @@ export const HiringBoard: React.FC<IHiringBoard> = ({
             </div>
           </div>
           {isLoadingShares && <p>Checking RaidGuild membership...</p>}
-          {!consultations ? (
+          {!(address && shares) ? (
+            <div>Connect wallet to view consultation queue</div>
+          ) : isLoadingBids ? (
             <div className="spinner">Loading...</div>
           ) : filteredConsultations.length > 0 ? (
             <div className="bounty-list">
-              {!(address && shares) ? (
-                <div>Connect wallet to view consultation queue</div>
-              ) : (
-                filteredConsultations.map((consultation, index) => (
-                  <BidListItem
-                    key={index}
-                    account={address}
-                    consultation={consultation}
-                    index={index}
-                    setSelectedConsultations={setSelectedConsultations}
-                    shares={shares}
-                  />
-                ))
-              )}
+              {filteredConsultations.map((consultation, index) => (
+                <BidListItem
+                  key={index}
+                  account={address}
+                  consultation={consultation}
+                  index={index}
+                  shares={shares}
+                />
+              ))}
             </div>
           ) : (
             <p>There are no bounties.</p>
@@ -196,7 +193,6 @@ type IBidListItem = {
   account: string;
   consultation: ICombinedBid;
   index: number;
-  setSelectedConsultations: React.Dispatch<React.SetStateAction<string>>;
   shares: string;
 };
 
@@ -204,7 +200,6 @@ const BidListItem: React.FC<IBidListItem> = ({
   account,
   consultation,
   index,
-  setSelectedConsultations,
   shares,
 }) => {
   const history = useHistory();

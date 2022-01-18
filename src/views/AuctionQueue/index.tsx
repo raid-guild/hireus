@@ -1,6 +1,6 @@
 import './AuctionQueue.scss';
 
-import { useBids } from 'hooks/useBids';
+import { useWallet } from 'contexts/WalletContext';
 import { useRefresh } from 'hooks/useRefresh';
 import { useShares } from 'hooks/useShares';
 import React, { useState } from 'react';
@@ -8,8 +8,8 @@ import React, { useState } from 'react';
 import { HiringBoard, OpenBounty } from './components';
 
 const AuctionQueue: React.FC = () => {
-  const [refreshCount, refresh] = useRefresh();
-  const { consultations } = useBids(refreshCount);
+  const { bids, isLoadingBids } = useWallet();
+  const [, refresh] = useRefresh();
   const { shares, isLoadingShares } = useShares();
   const [selectedConsultation, setSelectedConsultations] = useState<string>('');
 
@@ -17,14 +17,14 @@ const AuctionQueue: React.FC = () => {
     <div style={{ width: '100%' }}>
       {!selectedConsultation ? (
         <HiringBoard
-          consultations={consultations}
+          consultations={bids}
+          isLoadingBids={isLoadingBids}
           isLoadingShares={isLoadingShares}
-          setSelectedConsultations={setSelectedConsultations}
           shares={shares}
         />
       ) : (
         <OpenBounty
-          consultations={consultations}
+          consultations={bids}
           refresh={refresh}
           selectedConsultation={selectedConsultation}
           setSelectedConsultations={setSelectedConsultations}
