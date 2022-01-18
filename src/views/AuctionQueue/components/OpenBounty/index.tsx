@@ -2,13 +2,13 @@
 import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
 import ConfirmCancel from 'components/ConfirmCancel';
 import Snackbar from 'components/Snackbar';
-import { BLOCK_EXPLORER_URL, LOCKUP_PERIOD } from 'constants/index';
 import { AppContext } from 'contexts/AppContext';
 import { motion } from 'framer-motion';
 import React, { useContext, useState } from 'react';
 import { shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
 import web3 from 'web3';
+import { BLOCK_EXPLORER_URL, LOCKUP_PERIOD } from 'web3/constants';
 
 import ConsultationRequestCard from './ConsultationRequestCard';
 import DepositWithdrawCard from './DepositWithdrawCard';

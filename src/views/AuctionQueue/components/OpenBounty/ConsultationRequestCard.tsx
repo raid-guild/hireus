@@ -1,21 +1,21 @@
 import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
-import {
-  BLOCK_EXPLORER_URL,
-  MIN_NUMBER_OF_SHARES,
-  RAID_CONTRACT_ADDRESS,
-} from 'constants/index';
 import { utils } from 'ethers';
 import { motion } from 'framer-motion';
 import React from 'react';
 import { round, shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
+import {
+  BLOCK_EXPLORER_URL,
+  MIN_NUMBER_OF_SHARES,
+  RAID_CONTRACT_ADDRESS,
+} from 'web3/constants';
 
 type IConsultationRequestCard = {
   account: string;
   consultationDetails: ICombinedBid;
   lockTime: string;
   lockupEnded: boolean;
-  shares: number;
+  shares: string;
   isAcceptPending: boolean;
   onAcceptAndUpdate: (id: string) => void;
   updateCancelModalStatus: (status: boolean) => void;
@@ -153,25 +153,26 @@ const ConsultationRequestCard: React.FC<IConsultationRequestCard> = ({
           </div>
           {account && (
             <div className="open-bounty-buttons-container">
-              {shares >= MIN_NUMBER_OF_SHARES && consultationDetails?.bid_id && (
-                <motion.button
-                  className="consultation-button"
-                  style={{ marginTop: '20px' }}
-                  initial={{ x: '100vw' }}
-                  animate={{ x: 0 }}
-                  transition={{ delay: 1.3 }}
-                  disabled={isAcceptPending}
-                  onClick={() => {
-                    onAcceptAndUpdate(consultationDetails.bid_id);
-                  }}
-                >
-                  {isAcceptPending ? (
-                    <div className="spinner">Loading...</div>
-                  ) : (
-                    'Accept Request'
-                  )}
-                </motion.button>
-              )}
+              {BigInt(shares) >= BigInt(MIN_NUMBER_OF_SHARES) &&
+                consultationDetails?.bid_id && (
+                  <motion.button
+                    className="consultation-button"
+                    style={{ marginTop: '20px' }}
+                    initial={{ x: '100vw' }}
+                    animate={{ x: 0 }}
+                    transition={{ delay: 1.3 }}
+                    disabled={isAcceptPending}
+                    onClick={() => {
+                      onAcceptAndUpdate(consultationDetails.bid_id);
+                    }}
+                  >
+                    {isAcceptPending ? (
+                      <div className="spinner">Loading...</div>
+                    ) : (
+                      'Accept Request'
+                    )}
+                  </motion.button>
+                )}
               {consultationDetails?.submitter === account && lockupEnded && (
                 <div>
                   <motion.button

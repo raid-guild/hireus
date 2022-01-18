@@ -76,7 +76,7 @@ const App: React.FC = () => {
             <Router>
               <Switch>
                 <Route path="/" exact>
-                  {/* <AuctionQueue /> */}
+                  <AuctionQueue />
 
                   {/* {stage !== 1 && (
                     <button

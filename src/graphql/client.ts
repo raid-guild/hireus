@@ -1,6 +1,5 @@
 import { createClient, dedupExchange, fetchExchange } from 'urql';
-
-import { SUBGRAPH_URL } from '../constants';
+import { SUBGRAPH_URL } from 'web3/constants';
 
 export const CLIENT = createClient({
   url: SUBGRAPH_URL ?? '',

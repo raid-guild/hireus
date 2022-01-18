@@ -1,11 +1,12 @@
 import Slider from 'components/Slider';
-import { MIN_NUMBER_OF_SHARES, RAID_CONTRACT_ADDRESS } from 'constants/index';
-import { AppContext } from 'contexts/AppContext';
+import { useWallet } from 'contexts/WalletContext';
 import { utils } from 'ethers';
 import { motion } from 'framer-motion';
-import React, { useContext, useEffect } from 'react';
+import { useShares } from 'hooks/useShares';
+import React, { useEffect } from 'react';
 import { round, shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
+import { MIN_NUMBER_OF_SHARES, RAID_CONTRACT_ADDRESS } from 'web3/constants';
 
 type IHiringBoard = {
   consultations: ICombinedBid[] | null;
@@ -16,8 +17,8 @@ export const HiringBoard: React.FC<IHiringBoard> = ({
   consultations,
   setSelectedConsultations,
 }) => {
-  const { account, connectWallet, updateStage, shares } =
-    useContext(AppContext);
+  const { address, connectWallet } = useWallet();
+  const { shares, isLoadingShares } = useShares();
   const [showMySubmissions, setShowMySubmissions] = React.useState(false);
   const [filteredConsultations, setFilteredConsultations] = React.useState(
     consultations || [],
@@ -26,17 +27,17 @@ export const HiringBoard: React.FC<IHiringBoard> = ({
   useEffect(() => {
     if (!consultations) return;
     if (showMySubmissions) {
-      if (!account) {
+      if (!address) {
         connectWallet();
       }
       const filteredConsultations = consultations.filter(consultation => {
-        return consultation.from === account;
+        return consultation.from === address;
       });
       setFilteredConsultations(filteredConsultations);
     } else {
       setFilteredConsultations(consultations);
     }
-  }, [account, connectWallet, consultations, showMySubmissions]);
+  }, [address, connectWallet, consultations, showMySubmissions]);
 
   return (
     <div className="hiringboard-container hiringboard-respond">
@@ -129,9 +130,7 @@ export const HiringBoard: React.FC<IHiringBoard> = ({
                 initial={{ x: '100vw' }}
                 animate={{ x: 0 }}
                 transition={{ delay: 1.3 }}
-                onClick={() => {
-                  updateStage('next');
-                }}
+                onClick={() => () => console.log('Link to hireus')}
               >
                 New Consultation
               </motion.button>
@@ -161,20 +160,25 @@ export const HiringBoard: React.FC<IHiringBoard> = ({
               />
             </div>
           </div>
+          {isLoadingShares && <p>Checking RaidGuild membership...</p>}
           {!consultations ? (
             <div className="spinner">Loading...</div>
           ) : filteredConsultations.length > 0 ? (
             <div className="bounty-list">
-              {filteredConsultations.map((consultation, index) => (
-                <BidListItem
-                  key={index}
-                  account={account}
-                  consultation={consultation}
-                  index={index}
-                  setSelectedConsultations={setSelectedConsultations}
-                  shares={shares}
-                />
-              ))}
+              {!(address && shares) ? (
+                <div>Connect wallet to view consultation queue</div>
+              ) : (
+                filteredConsultations.map((consultation, index) => (
+                  <BidListItem
+                    key={index}
+                    account={address}
+                    consultation={consultation}
+                    index={index}
+                    setSelectedConsultations={setSelectedConsultations}
+                    shares={shares}
+                  />
+                ))
+              )}
             </div>
           ) : (
             <p>There are no bounties.</p>
@@ -190,7 +194,7 @@ type IBidListItem = {
   consultation: ICombinedBid;
   index: number;
   setSelectedConsultations: React.Dispatch<React.SetStateAction<string>>;
-  shares: number;
+  shares: string;
 };
 
 const BidListItem: React.FC<IBidListItem> = ({
@@ -221,7 +225,8 @@ const BidListItem: React.FC<IBidListItem> = ({
               {new Date(consultation.created).toLocaleDateString()}
             </p>
             <p>
-              {consultation.from === account || shares >= MIN_NUMBER_OF_SHARES
+              {consultation.from === account ||
+              BigInt(shares) >= BigInt(MIN_NUMBER_OF_SHARES)
                 ? consultation.project_name
                 : shortenAddress(consultation.from)}
             </p>

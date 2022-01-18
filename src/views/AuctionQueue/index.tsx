@@ -13,7 +13,7 @@ const AuctionQueue: React.FC = () => {
 
   return (
     <div style={{ width: '100%' }}>
-      {!selectedConsultation ? (
+      {/* {!selectedConsultation ? (
         <HiringBoard
           consultations={consultations}
           setSelectedConsultations={setSelectedConsultations}
@@ -25,7 +25,11 @@ const AuctionQueue: React.FC = () => {
           selectedConsultation={selectedConsultation}
           setSelectedConsultations={setSelectedConsultations}
         />
-      )}
+      )} */}
+      <HiringBoard
+        consultations={consultations}
+        setSelectedConsultations={setSelectedConsultations}
+      />
     </div>
   );
 };
