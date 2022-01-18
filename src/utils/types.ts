@@ -11,6 +11,7 @@ export type IBidChange = {
 
 export type ICombinedBid = {
   airtable_id: string;
+  consultation_hash: string;
   amount: string;
   bidCreated: string;
   bid_id: string;

@@ -67,6 +67,7 @@ const addFromAddress = async (consultation: IConsultation, bids: IBid[]) => {
     project_name: consultation.project_name,
     created: consultation.created,
     airtable_id: consultation.id,
+    consultation_hash: consultation.consultation_hash,
     bid_id: '',
     amount: '0',
     submitter: '',
