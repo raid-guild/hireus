@@ -3,11 +3,7 @@ import { Component, createContext } from 'react';
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import {
-  DAO_ADDRESS,
-  QUEUE_CONTRACT_ADDRESS,
-  RAID_CONTRACT_ADDRESS,
-} from 'web3/constants';
+import { QUEUE_CONTRACT_ADDRESS, RAID_CONTRACT_ADDRESS } from 'web3/constants';
 
 export const AppContext = createContext();
 
@@ -31,7 +27,6 @@ const web3Modal = new Web3Modal({
 // RINKEBY
 const RAID_ABI = require('../abi/ERC20_ABI.json');
 const QUEUE_ABI = require('../abi/QUEUE_ABI.json');
-const MOLOCH_ABI = require('../abi/MOLOCH_ABI.json');
 
 // KOVAN TESTNET
 // const DAI_CONTRACT_ADDRESS = '0xff795577d9ac8bd7d90ee22b6c1703490b6512fd';
@@ -50,7 +45,6 @@ class AppContextProvider extends Component {
 
     // Consultation Queue
     raidBalance: '0',
-    shares: 0,
     raidAllowance: '0',
     depositAmount: '',
     withdrawalAmount: '',
@@ -84,7 +78,6 @@ class AppContextProvider extends Component {
 
     if (chainID === 100) {
       await this.getRaidBalance();
-      await this.getShares();
     }
   };
 
@@ -113,12 +106,6 @@ class AppContextProvider extends Component {
       raidBalance: balanceConverted,
       raidAllowance: allowanceConverted,
     });
-  };
-
-  getShares = async () => {
-    const DAO = new this.state.web3.eth.Contract(MOLOCH_ABI, DAO_ADDRESS);
-    const members = await DAO.methods.members(this.state.account).call();
-    this.setState({ shares: Number(members['1'] || 0) });
   };
 
   onChangeDepositAmount = amount => {

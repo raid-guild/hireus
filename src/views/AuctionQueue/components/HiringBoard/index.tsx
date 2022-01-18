@@ -2,23 +2,26 @@ import Slider from 'components/Slider';
 import { useWallet } from 'contexts/WalletContext';
 import { utils } from 'ethers';
 import { motion } from 'framer-motion';
-import { useShares } from 'hooks/useShares';
 import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { round, shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
 import { MIN_NUMBER_OF_SHARES, RAID_CONTRACT_ADDRESS } from 'web3/constants';
 
 type IHiringBoard = {
   consultations: ICombinedBid[] | null;
+  isLoadingShares: boolean;
   setSelectedConsultations: React.Dispatch<React.SetStateAction<string>>;
+  shares: string;
 };
 
 export const HiringBoard: React.FC<IHiringBoard> = ({
   consultations,
+  isLoadingShares,
   setSelectedConsultations,
+  shares,
 }) => {
   const { address, connectWallet } = useWallet();
-  const { shares, isLoadingShares } = useShares();
   const [showMySubmissions, setShowMySubmissions] = React.useState(false);
   const [filteredConsultations, setFilteredConsultations] = React.useState(
     consultations || [],
@@ -204,11 +207,13 @@ const BidListItem: React.FC<IBidListItem> = ({
   setSelectedConsultations,
   shares,
 }) => {
+  const history = useHistory();
+
   return (
     <div key={index}>
       {consultation.from && (
         <div
-          onClick={() => setSelectedConsultations(consultation.project_name)}
+          onClick={() => history.push('/bids/test')}
           className={`bounty-list-item bounty-list-item${
             index % 2 !== 0 && '--2'
           }`}

@@ -5,9 +5,10 @@ import FAQ from 'components/Faq';
 import { useWallet } from 'contexts/WalletContext';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Router } from 'react-router-dom';
+import Routes from 'Routes';
 import { shortenAddress } from 'utils';
-import AuctionQueue from 'views/AuctionQueue';
+import history from 'utils/history';
 
 // uses ga4
 
@@ -73,26 +74,29 @@ const App: React.FC = () => {
                 {address ? shortenAddress(address) : 'Connect'}
               </motion.button>
             </div>
-            <Router>
+            <Router history={history}>
+              <Routes />
+            </Router>
+            {/* <Router>
               <Switch>
                 <Route path="/" exact>
                   <AuctionQueue />
 
-                  {/* {stage !== 1 && (
+                  {stage !== 1 && (
                     <button
                       id="prev-stage-button"
                       onClick={() => console.log('Next stage')}
                     >
                       <i className="fas fa-arrow-left"></i>
                     </button>
-                  )} */}
+                  )}
 
                   <button onClick={() => setIsFaqOpen(true)} id="faq-button">
                     Read FAQ
                   </button>
                 </Route>
               </Switch>
-            </Router>
+            </Router> */}
             <FAQ isOpen={isFaqOpen} onClose={() => setIsFaqOpen(false)} />
           </>
         )}
