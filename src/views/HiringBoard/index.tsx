@@ -204,7 +204,7 @@ const BidListItem: React.FC<IBidListItem> = ({
     <div key={index}>
       {bid.from && (
         <div
-          onClick={() => history.push(`/bids/${bid.createTxHash}`)}
+          onClick={() => history.push(`/bids/${bid.consultation_hash}`)}
           className={`bounty-list-item bounty-list-item${
             index % 2 !== 0 && '--2'
           }`}

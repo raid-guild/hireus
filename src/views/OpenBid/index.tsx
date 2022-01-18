@@ -70,7 +70,7 @@ const OpenBid: React.FC = () => {
   React.useEffect(() => {
     if (address && bids.length > 0) {
       const consultationDetails = bids.filter(consultation => {
-        return consultation.createTxHash === id;
+        return consultation.consultation_hash === id;
       });
       setConsultationDetails(consultationDetails[0]);
     }
