@@ -1,8 +1,8 @@
-import { GUILD_KEEPER_ENDPOINT } from 'constants/index';
 import { getBids } from 'graphql/getBids';
 import { useEffect, useState } from 'react';
 import { combineBids } from 'utils';
 import { ICombinedBid } from 'utils/types';
+import { GUILD_KEEPER_ENDPOINT } from 'web3/constants';
 
 export const useBids = (
   refresh = 0,

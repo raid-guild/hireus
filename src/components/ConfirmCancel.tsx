@@ -7,7 +7,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { AppContext } from 'context/AppContext';
+import { AppContext } from 'contexts/AppContext';
 import { useContext } from 'react';
 import type { ICombinedBid } from 'utils/types';
 

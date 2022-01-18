@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { AppContext } from 'context/AppContext';
+import { AppContext } from 'contexts/AppContext';
 import { utils } from 'ethers';
 import { motion } from 'framer-motion';
 import React, { useContext, useMemo } from 'react';

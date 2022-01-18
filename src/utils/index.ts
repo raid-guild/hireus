@@ -1,7 +1,7 @@
-import { QUEUE_CONTRACT_ADDRESS } from 'constants/index';
 import { BigNumber, ethers, utils } from 'ethers';
 import type { IBid, ICombinedBid, IConsultation } from 'utils/types';
 import web3 from 'web3';
+import { QUEUE_CONTRACT_ADDRESS } from 'web3/constants';
 
 const provider = ethers.getDefaultProvider(
   process.env.REACT_APP_MAINNET_NODE_ENDPOINT,

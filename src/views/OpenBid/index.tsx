@@ -1,100 +1,89 @@
 /* eslint-disable no-undef */
 import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
-import ConfirmCancel from 'components/ConfirmCancel';
-import Snackbar from 'components/Snackbar';
-import { BLOCK_EXPLORER_URL, LOCKUP_PERIOD } from 'constants/index';
-import { AppContext } from 'context/AppContext';
+// import ConfirmCancel from 'components/ConfirmCancel';
+// import Snackbar from 'components/Snackbar';
+import { useWallet } from 'contexts/WalletContext';
 import { motion } from 'framer-motion';
-import React, { useContext, useState } from 'react';
+import { rootLocation } from 'locations';
+import React, { useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
 import web3 from 'web3';
+import { BLOCK_EXPLORER_URL } from 'web3/constants';
 
-import ConsultationRequestCard from './ConsultationRequestCard';
-import DepositWithdrawCard from './DepositWithdrawCard';
+// import ConsultationRequestCard from './ConsultationRequestCard';
+// import DepositWithdrawCard from './DepositWithdrawCard';
 
-type IOpenBounty = {
-  consultations: ICombinedBid[] | null;
-  refresh: () => void;
-  selectedConsultation: string;
-  setSelectedConsultations: React.Dispatch<React.SetStateAction<string>>;
+type ICauseParams = {
+  id: string;
 };
 
-export const OpenBounty: React.FC<IOpenBounty> = ({
-  consultations,
-  refresh,
-  selectedConsultation,
-  setSelectedConsultations,
-}) => {
-  const {
-    account,
-    hash,
-    onAccept,
-    isAcceptPending,
-    isCancelPending,
-    updateCancelModalStatus,
-    shares,
-    txFailed,
-  } = useContext(AppContext);
-  const [lockupEnded, setLockupEnded] = useState(false);
+const OpenBid: React.FC = () => {
+  const { id } = useParams<ICauseParams>();
+  const { address, bids } = useWallet();
+  const history = useHistory();
+
+  // const [lockupEnded, setLockupEnded] = useState(false);
   const [consultationDetails, setConsultationDetails] =
     useState<ICombinedBid | null>(null);
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [txConfirmed, setTxConfirmed] = useState(false);
-  const [lockTime, setLockTime] = useState('');
+  // const [showSnackbar, setShowSnackbar] = useState(false);
+  // const [txConfirmed, setTxConfirmed] = useState(false);
+  // const [lockTime, setLockTime] = useState('');
+  // const [hash, setHash] = useState('');
+  // const [txFailed, setTxFailed] = useState(false);
+
+  // React.useEffect(() => {
+  //   if (bids.length === 0) return;
+  //   const dateNow = Date.now();
+  //   const lockupEnds =
+  //     Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD;
+  //   if (dateNow > lockupEnds) {
+  //     setLockupEnded(true);
+  //   } else {
+  //     setLockupEnded(false);
+  //   }
+  // }, [consultationDetails]);
+
+  // React.useEffect(() => {
+  //   if (!consultationDetails) return;
+  //   const dateNow = Date.now();
+  //   const lockupEnds =
+  //     Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD;
+  //   const timeRemaining = lockupEnds - dateNow;
+  //   if (timeRemaining > 0) {
+  //     const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+  //     const remainingSeconds = Math.floor(
+  //       timeRemaining % (1000 * 60 * 60 * 24),
+  //     );
+  //     const hours = Math.floor(remainingSeconds / (1000 * 60 * 60));
+  //     if (days === 0 && hours === 0) {
+  //       setLockTime(`$RAID locked for < 1 hour`);
+  //     } else {
+  //       setLockTime(`$RAID locked for ${days} days, ${hours} hours`);
+  //     }
+  //   } else {
+  //     setLockTime('Bid can be withdrawn or canceled');
+  //   }
+  // }, [consultationDetails]);
 
   React.useEffect(() => {
-    if (!consultationDetails) return;
-    const dateNow = Date.now();
-    const lockupEnds =
-      Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD;
-    if (dateNow > lockupEnds) {
-      setLockupEnded(true);
-    } else {
-      setLockupEnded(false);
-    }
-  }, [consultationDetails]);
-
-  React.useEffect(() => {
-    if (!consultationDetails) return;
-    const dateNow = Date.now();
-    const lockupEnds =
-      Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD;
-    const timeRemaining = lockupEnds - dateNow;
-    if (timeRemaining > 0) {
-      const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-      const remainingSeconds = Math.floor(
-        timeRemaining % (1000 * 60 * 60 * 24),
-      );
-      const hours = Math.floor(remainingSeconds / (1000 * 60 * 60));
-      if (days === 0 && hours === 0) {
-        setLockTime(`$RAID locked for < 1 hour`);
-      } else {
-        setLockTime(`$RAID locked for ${days} days, ${hours} hours`);
-      }
-    } else {
-      setLockTime('Bid can be withdrawn or canceled');
-    }
-  }, [consultationDetails]);
-
-  React.useEffect(() => {
-    if (selectedConsultation && consultations && consultations.length > 0) {
-      const consultationDetails = consultations.filter(consultation => {
-        return consultation.project_name === selectedConsultation;
+    if (address && bids.length > 0) {
+      const consultationDetails = bids.filter(consultation => {
+        return consultation.createTxHash === id;
       });
       setConsultationDetails(consultationDetails[0]);
-    } else {
-      setSelectedConsultations('');
     }
-  }, [consultations, selectedConsultation, setSelectedConsultations]);
+  }, [address, bids, id]);
 
-  const onAcceptAndUpdate = async (id: string) => {
-    setTxConfirmed(false);
-    setShowSnackbar(true);
-    await onAccept(id);
-    setTxConfirmed(true);
-    refresh();
-  };
+  // const onAcceptAndUpdate = async (id: string) => {
+  // setTxConfirmed(false);
+  // setShowSnackbar(true);
+  // await onAccept(id);
+  // setTxConfirmed(true);
+  // refresh();
+  // console.log('Accept');
+  // };
 
   return (
     <div className="hiringboard-container">
@@ -107,7 +96,7 @@ export const OpenBounty: React.FC<IOpenBounty> = ({
           top: '24px',
         }}
         onClick={() => {
-          setSelectedConsultations('');
+          history.push(rootLocation);
         }}
       >
         Back
@@ -117,8 +106,9 @@ export const OpenBounty: React.FC<IOpenBounty> = ({
           <div
             style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
           >
-            <ConsultationRequestCard
-              account={account}
+            <div>{consultationDetails.project_name}</div>
+            {/* <ConsultationRequestCard
+              account={address || ''}
               consultationDetails={consultationDetails}
               lockTime={lockTime}
               lockupEnded={lockupEnded}
@@ -127,8 +117,8 @@ export const OpenBounty: React.FC<IOpenBounty> = ({
               onAcceptAndUpdate={onAcceptAndUpdate}
               updateCancelModalStatus={updateCancelModalStatus}
               isCancelPending={isCancelPending}
-            />
-            {account && (
+            /> */}
+            {/* {address && (
               <DepositWithdrawCard
                 setShowSnackbar={setShowSnackbar}
                 setTxConfirmed={setTxConfirmed}
@@ -137,7 +127,7 @@ export const OpenBounty: React.FC<IOpenBounty> = ({
                 lockupEnded={lockupEnded}
                 refresh={refresh}
               />
-            )}
+            )} */}
           </div>
           <div className="hiringboard-card">
             {consultationDetails.bid_id ? (
@@ -153,7 +143,7 @@ export const OpenBounty: React.FC<IOpenBounty> = ({
             ) : (
               <p>
                 No bid has been submitted for this consultation.{' '}
-                {!account && 'Connect wallet to submit a bid.'}
+                {!address && 'Connect wallet to submit a bid.'}
               </p>
             )}
             {consultationDetails.changes.length > 0 && (
@@ -209,7 +199,7 @@ export const OpenBounty: React.FC<IOpenBounty> = ({
           </div>
         </div>
       )}
-      {showSnackbar && hash !== '' && (
+      {/* {showSnackbar && hash !== '' && (
         <Snackbar
           setShowSnackbar={setShowSnackbar}
           message={
@@ -221,15 +211,17 @@ export const OpenBounty: React.FC<IOpenBounty> = ({
           }
           hash={hash}
         />
-      )}
-      {consultationDetails && (
+      )} */}
+      {/* {consultationDetails && (
         <ConfirmCancel
           consultationDetails={consultationDetails}
           refresh={refresh}
           setTxConfirmed={setTxConfirmed}
           setShowSnackbar={setShowSnackbar}
         />
-      )}
+      )} */}
     </div>
   );
 };
+
+export default OpenBid;

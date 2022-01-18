@@ -13,8 +13,6 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { AppContext } from 'context/AppContext';
-import { useContext } from 'react';
 
 const faq_items = [
   {
@@ -50,15 +48,14 @@ const faq_items = [
   },
 ];
 
-const FAQ: React.FC = () => {
-  const context = useContext(AppContext);
+type IFAQ = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+const FAQ: React.FC<IFAQ> = ({ isOpen, onClose }) => {
   return (
-    <Modal
-      onClose={() => context.updateFaqModalStatus(false)}
-      isOpen={context.faqModalStatus}
-      isCentered
-      scrollBehavior="inside"
-    >
+    <Modal onClose={onClose} isOpen={isOpen} isCentered scrollBehavior="inside">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>FAQs</ModalHeader>
@@ -159,13 +156,7 @@ const FAQ: React.FC = () => {
           </Accordion>
         </ModalBody>
         <ModalFooter>
-          <Button
-            onClick={() => {
-              context.updateFaqModalStatus(false);
-            }}
-          >
-            Close
-          </Button>
+          <Button onClick={onClose}>Close</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

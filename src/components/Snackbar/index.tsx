@@ -1,9 +1,9 @@
 import './snackbar.scss';
 
 import { ReactComponent as EtherscanSvg } from 'assets/etherscan.svg';
-import { BLOCK_EXPLORER_URL } from 'constants/index';
 import { motion } from 'framer-motion';
 import React from 'react';
+import { BLOCK_EXPLORER_URL } from 'web3/constants';
 
 type ISnackbar = {
   hash: string;
