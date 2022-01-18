@@ -1,46 +1,40 @@
 /* eslint-disable no-undef */
 import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
-import ConfirmCancel from 'components/ConfirmCancel';
-import Snackbar from 'components/Snackbar';
+// import ConfirmCancel from 'components/ConfirmCancel';
+// import Snackbar from 'components/Snackbar';
 import { useWallet } from 'contexts/WalletContext';
 import { motion } from 'framer-motion';
+import { rootLocation } from 'locations';
 import React, { useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
 import web3 from 'web3';
-import { BLOCK_EXPLORER_URL, LOCKUP_PERIOD } from 'web3/constants';
+import { BLOCK_EXPLORER_URL } from 'web3/constants';
 
 // import ConsultationRequestCard from './ConsultationRequestCard';
 // import DepositWithdrawCard from './DepositWithdrawCard';
 
-type IOpenBounty = {
-  consultations: ICombinedBid[] | null;
-  refresh: () => void;
-  selectedConsultation: string;
-  setSelectedConsultations: React.Dispatch<React.SetStateAction<string>>;
-  shares: string;
+type ICauseParams = {
+  id: string;
 };
 
-export const OpenBounty: React.FC<IOpenBounty> = ({
-  consultations,
-  refresh,
-  selectedConsultation,
-  setSelectedConsultations,
-  shares,
-}) => {
-  const { address } = useWallet();
+const OpenBid: React.FC = () => {
+  const { id } = useParams<ICauseParams>();
+  const { address, bids } = useWallet();
+  const history = useHistory();
 
   // const [lockupEnded, setLockupEnded] = useState(false);
   const [consultationDetails, setConsultationDetails] =
     useState<ICombinedBid | null>(null);
-  const [showSnackbar, setShowSnackbar] = useState(false);
+  // const [showSnackbar, setShowSnackbar] = useState(false);
   // const [txConfirmed, setTxConfirmed] = useState(false);
-  const [lockTime, setLockTime] = useState('');
-  const [hash, setHash] = useState('');
-  const [txFailed, setTxFailed] = useState(false);
+  // const [lockTime, setLockTime] = useState('');
+  // const [hash, setHash] = useState('');
+  // const [txFailed, setTxFailed] = useState(false);
 
   // React.useEffect(() => {
-  //   if (!consultationDetails) return;
+  //   if (bids.length === 0) return;
   //   const dateNow = Date.now();
   //   const lockupEnds =
   //     Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD;
@@ -74,24 +68,22 @@ export const OpenBounty: React.FC<IOpenBounty> = ({
   // }, [consultationDetails]);
 
   React.useEffect(() => {
-    if (selectedConsultation && consultations && consultations.length > 0) {
-      const consultationDetails = consultations.filter(consultation => {
-        return consultation.project_name === selectedConsultation;
+    if (address && bids.length > 0) {
+      const consultationDetails = bids.filter(consultation => {
+        return consultation.createTxHash === id;
       });
       setConsultationDetails(consultationDetails[0]);
-    } else {
-      setSelectedConsultations('');
     }
-  }, [consultations, selectedConsultation, setSelectedConsultations]);
+  }, [address, bids, id]);
 
-  const onAcceptAndUpdate = async (id: string) => {
-    // setTxConfirmed(false);
-    // setShowSnackbar(true);
-    // await onAccept(id);
-    // setTxConfirmed(true);
-    // refresh();
-    console.log('Accept');
-  };
+  // const onAcceptAndUpdate = async (id: string) => {
+  // setTxConfirmed(false);
+  // setShowSnackbar(true);
+  // await onAccept(id);
+  // setTxConfirmed(true);
+  // refresh();
+  // console.log('Accept');
+  // };
 
   return (
     <div className="hiringboard-container">
@@ -104,7 +96,7 @@ export const OpenBounty: React.FC<IOpenBounty> = ({
           top: '24px',
         }}
         onClick={() => {
-          setSelectedConsultations('');
+          history.push(rootLocation);
         }}
       >
         Back
@@ -231,3 +223,5 @@ export const OpenBounty: React.FC<IOpenBounty> = ({
     </div>
   );
 };
+
+export default OpenBid;

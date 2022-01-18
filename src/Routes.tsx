@@ -4,6 +4,7 @@ import { bidLocationTemplate, rootLocation } from 'locations';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import ScrollToTop from 'utils/ScrollToTop';
 import HiringBoard from 'views/HiringBoard';
+import OpenBid from 'views/OpenBid';
 
 interface CustomRouteProps {
   path: string;
@@ -33,10 +34,6 @@ const CustomRoute = (props: CustomRouteProps) => {
   return <Route path={path} component={component} />;
 };
 
-const PlaceHolder: React.FC = () => {
-  return <div style={{ color: '#fff' }}>Test</div>;
-};
-
 const routes = [
   {
     path: rootLocation,
@@ -46,7 +43,7 @@ const routes = [
   {
     path: bidLocationTemplate,
     exact: true,
-    component: PlaceHolder,
+    component: OpenBid,
     withAuth: true,
   },
 ];
