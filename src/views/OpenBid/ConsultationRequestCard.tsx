@@ -1,6 +1,7 @@
 import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
 import { utils } from 'ethers';
 import { motion } from 'framer-motion';
+import { useShares } from 'hooks/useShares';
 import React from 'react';
 import { round, shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
@@ -13,26 +14,26 @@ import {
 type IConsultationRequestCard = {
   account: string;
   consultationDetails: ICombinedBid;
+  isAccepting: boolean;
+  isCancelling: boolean;
   lockTime: string;
   lockupEnded: boolean;
-  shares: string;
-  isAcceptPending: boolean;
-  onAcceptAndUpdate: (id: string) => void;
-  updateCancelModalStatus: (status: boolean) => void;
-  isCancelPending: boolean;
+  onAccept: (id: string) => Promise<void>;
+  openCancelModal: () => void;
 };
 
 const ConsultationRequestCard: React.FC<IConsultationRequestCard> = ({
   account,
   consultationDetails,
+  isAccepting,
+  isCancelling,
   lockTime,
   lockupEnded,
-  shares,
-  isAcceptPending,
-  onAcceptAndUpdate,
-  updateCancelModalStatus,
-  isCancelPending,
+  onAccept,
+  openCancelModal,
 }) => {
+  const { shares, isLoadingShares } = useShares();
+
   return (
     <>
       {consultationDetails.bid_id ? (
@@ -151,7 +152,7 @@ const ConsultationRequestCard: React.FC<IConsultationRequestCard> = ({
               <XDaiSvg />
             </motion.a>
           </div>
-          {account && (
+          {account && !isLoadingShares && (
             <div className="open-bounty-buttons-container">
               {BigInt(shares) >= BigInt(MIN_NUMBER_OF_SHARES) &&
                 consultationDetails?.bid_id && (
@@ -161,12 +162,12 @@ const ConsultationRequestCard: React.FC<IConsultationRequestCard> = ({
                     initial={{ x: '100vw' }}
                     animate={{ x: 0 }}
                     transition={{ delay: 1.3 }}
-                    disabled={isAcceptPending}
+                    disabled={isAccepting}
                     onClick={() => {
-                      onAcceptAndUpdate(consultationDetails.bid_id);
+                      onAccept(consultationDetails.bid_id);
                     }}
                   >
-                    {isAcceptPending ? (
+                    {isAccepting ? (
                       <div className="spinner">Loading...</div>
                     ) : (
                       'Accept Request'
@@ -181,12 +182,10 @@ const ConsultationRequestCard: React.FC<IConsultationRequestCard> = ({
                     initial={{ x: '100vw' }}
                     animate={{ x: 0 }}
                     transition={{ delay: 1.3 }}
-                    disabled={isCancelPending}
-                    onClick={() => {
-                      updateCancelModalStatus(true);
-                    }}
+                    disabled={isCancelling}
+                    onClick={openCancelModal}
                   >
-                    {isCancelPending ? (
+                    {isCancelling ? (
                       <div className="spinner">Loading...</div>
                     ) : (
                       'Cancel Bid'
