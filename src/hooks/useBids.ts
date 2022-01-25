@@ -1,3 +1,4 @@
+import { useWallet } from 'contexts/WalletContext';
 import { getBids } from 'graphql/getBids';
 import { useEffect, useState } from 'react';
 import { combineBids } from 'utils';
@@ -11,6 +12,7 @@ export const useBids = (
   consultations: ICombinedBid[] | null;
   error: Error | null;
 } => {
+  const { chainId } = useWallet();
   const [fetching, setFetching] = useState(true);
   const [consultations, setConsultations] = useState<ICombinedBid[] | null>(
     null,
@@ -18,9 +20,9 @@ export const useBids = (
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    let isSubscribed = true;
-    getBids().then(bids => {
-      if (isSubscribed && bids) {
+    if (!chainId) return;
+    getBids(chainId).then(bids => {
+      if (bids) {
         setFetching(true);
         fetch(`${GUILD_KEEPER_ENDPOINT}`, {
           method: 'POST',
@@ -33,7 +35,7 @@ export const useBids = (
         })
           .then(res => res.json())
           .then(async data => {
-            const combinedBids = await combineBids(data, bids);
+            const combinedBids = await combineBids(chainId, data, bids);
             if (!combinedBids) {
               setError(new Error('No bids found'));
               return;
@@ -50,11 +52,7 @@ export const useBids = (
         setError(new Error('Unable to fetch bids'));
       }
     });
-
-    return () => {
-      isSubscribed = false;
-    };
-  }, [refresh]);
+  }, [chainId, refresh]);
 
   return { fetching, consultations, error };
 };

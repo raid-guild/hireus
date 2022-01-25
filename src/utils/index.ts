@@ -36,6 +36,7 @@ export function shortenAddress(address: string, charsLength = 4): string {
 }
 
 export const combineBids = async (
+  chainId: number,
   consultations: IConsultation[],
   bids: IBid[],
 ): Promise<ICombinedBid[] | null> => {
@@ -43,7 +44,7 @@ export const combineBids = async (
   const combinedBids = await Promise.all(
     consultations.map(async consultation => {
       try {
-        const combinedBid = await addFromAddress(consultation, bids);
+        const combinedBid = await addFromAddress(chainId, consultation, bids);
         return combinedBid;
       } catch (e) {
         return false;
@@ -62,7 +63,11 @@ export function round(value: BigNumber | string, decimals: number): string {
   return valueNumber.toFixed(decimals);
 }
 
-const addFromAddress = async (consultation: IConsultation, bids: IBid[]) => {
+const addFromAddress = async (
+  chainId: number,
+  consultation: IConsultation,
+  bids: IBid[],
+) => {
   const newBid: ICombinedBid = {
     project_name: consultation.project_name,
     created: consultation.created,
@@ -77,11 +82,12 @@ const addFromAddress = async (consultation: IConsultation, bids: IBid[]) => {
     from: 'a',
     status: '',
   };
-  const combinedBid = await getData(newBid, consultation, bids);
+  const combinedBid = await getData(chainId, newBid, consultation, bids);
   return combinedBid;
 };
 
 const getData = async (
+  chainId: number,
   combinedBid: ICombinedBid,
   consultation: IConsultation,
   bids: IBid[],
@@ -119,7 +125,10 @@ const getData = async (
     if (consultation.id === airtableId) {
       combinedBid.bid_id = web3.utils
         .hexToNumber(
-          bid.id.replace(`${QUEUE_CONTRACT_ADDRESS.toLowerCase()}-`, ''),
+          bid.id.replace(
+            `${QUEUE_CONTRACT_ADDRESS[chainId].toLowerCase()}-`,
+            '',
+          ),
         )
         .toString();
       combinedBid.amount = bid.amount;

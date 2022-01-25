@@ -20,7 +20,7 @@ export const useShares = (refresh = 0): IBalances => {
         return;
       }
       setLoadingShares(true);
-      const shares = await getShares(provider, DAO_ADDRESS, address);
+      const shares = await getShares(provider, DAO_ADDRESS[chainId], address);
       setShares(shares);
       setLoadingShares(false);
     };

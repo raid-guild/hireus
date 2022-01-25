@@ -1,19 +1,18 @@
-/* eslint-disable no-undef */
 import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
 // import ConfirmCancel from 'components/ConfirmCancel';
 // import Snackbar from 'components/Snackbar';
 import { useWallet } from 'contexts/WalletContext';
 import { motion } from 'framer-motion';
 import { rootLocation } from 'locations';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
 import web3 from 'web3';
-import { BLOCK_EXPLORER_URL } from 'web3/constants';
+import { BLOCK_EXPLORER_URL, LOCKUP_PERIOD } from 'web3/constants';
 
-// import ConsultationRequestCard from './ConsultationRequestCard';
-// import DepositWithdrawCard from './DepositWithdrawCard';
+import ConsultationRequestCard from './ConsultationRequestCard';
+import DepositWithdrawCard from './DepositWithdrawCard';
 
 type ICauseParams = {
   id: string;
@@ -21,51 +20,56 @@ type ICauseParams = {
 
 const OpenBid: React.FC = () => {
   const { id } = useParams<ICauseParams>();
-  const { address, bids } = useWallet();
+  const { address, bids, chainId, refreshBids } = useWallet();
   const history = useHistory();
 
-  // const [lockupEnded, setLockupEnded] = useState(false);
   const [consultationDetails, setConsultationDetails] =
     useState<ICombinedBid | null>(null);
-  // const [showSnackbar, setShowSnackbar] = useState(false);
-  // const [txConfirmed, setTxConfirmed] = useState(false);
-  // const [lockTime, setLockTime] = useState('');
+
+  const [isAccepting] = useState(false);
+  const [isCancelling] = useState(false);
+
+  const [lockupEnded, setLockupEnded] = useState(false);
+  const [lockTime, setLockTime] = useState('');
+  const [, setShowCancelModal] = useState(false);
+  const [, setShowSnackbar] = useState(false);
+  const [, setTxConfirmed] = useState(false);
   // const [hash, setHash] = useState('');
   // const [txFailed, setTxFailed] = useState(false);
 
-  // React.useEffect(() => {
-  //   if (bids.length === 0) return;
-  //   const dateNow = Date.now();
-  //   const lockupEnds =
-  //     Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD;
-  //   if (dateNow > lockupEnds) {
-  //     setLockupEnded(true);
-  //   } else {
-  //     setLockupEnded(false);
-  //   }
-  // }, [consultationDetails]);
+  React.useEffect(() => {
+    if (!(bids.length !== 0 && consultationDetails && chainId)) return;
+    const dateNow = Date.now();
+    const lockupEnds =
+      Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD[chainId];
+    if (dateNow > lockupEnds) {
+      setLockupEnded(true);
+    } else {
+      setLockupEnded(false);
+    }
+  }, [bids.length, chainId, consultationDetails]);
 
-  // React.useEffect(() => {
-  //   if (!consultationDetails) return;
-  //   const dateNow = Date.now();
-  //   const lockupEnds =
-  //     Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD;
-  //   const timeRemaining = lockupEnds - dateNow;
-  //   if (timeRemaining > 0) {
-  //     const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-  //     const remainingSeconds = Math.floor(
-  //       timeRemaining % (1000 * 60 * 60 * 24),
-  //     );
-  //     const hours = Math.floor(remainingSeconds / (1000 * 60 * 60));
-  //     if (days === 0 && hours === 0) {
-  //       setLockTime(`$RAID locked for < 1 hour`);
-  //     } else {
-  //       setLockTime(`$RAID locked for ${days} days, ${hours} hours`);
-  //     }
-  //   } else {
-  //     setLockTime('Bid can be withdrawn or canceled');
-  //   }
-  // }, [consultationDetails]);
+  React.useEffect(() => {
+    if (!(consultationDetails && chainId)) return;
+    const dateNow = Date.now();
+    const lockupEnds =
+      Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD[chainId];
+    const timeRemaining = lockupEnds - dateNow;
+    if (timeRemaining > 0) {
+      const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+      const remainingSeconds = Math.floor(
+        timeRemaining % (1000 * 60 * 60 * 24),
+      );
+      const hours = Math.floor(remainingSeconds / (1000 * 60 * 60));
+      if (days === 0 && hours === 0) {
+        setLockTime(`$RAID locked for < 1 hour`);
+      } else {
+        setLockTime(`$RAID locked for ${days} days, ${hours} hours`);
+      }
+    } else {
+      setLockTime('Bid can be withdrawn or canceled');
+    }
+  }, [chainId, consultationDetails]);
 
   React.useEffect(() => {
     if (address && bids.length > 0) {
@@ -76,14 +80,15 @@ const OpenBid: React.FC = () => {
     }
   }, [address, bids, id]);
 
-  // const onAcceptAndUpdate = async (id: string) => {
-  // setTxConfirmed(false);
-  // setShowSnackbar(true);
-  // await onAccept(id);
-  // setTxConfirmed(true);
-  // refresh();
-  // console.log('Accept');
-  // };
+  const onAccept = useCallback(async (id: string) => {
+    // setTxConfirmed(false);
+    // setShowSnackbar(true);
+    // await onAccept(id);
+    // setTxConfirmed(true);
+    // refresh();
+    // eslint-disable-next-line no-console
+    console.log('Accept: ', id);
+  }, []);
 
   return (
     <div className="hiringboard-container">
@@ -101,33 +106,33 @@ const OpenBid: React.FC = () => {
       >
         Back
       </button>
-      {consultationDetails && (
+      {consultationDetails && chainId && (
         <div className="hiringboard-card-container">
           <div
             style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
           >
-            <div>{consultationDetails.project_name}</div>
-            {/* <ConsultationRequestCard
-              account={address || ''}
+            <ConsultationRequestCard
+              address={address || ''}
+              chainId={chainId}
               consultationDetails={consultationDetails}
+              isAccepting={isAccepting}
+              isCancelling={isCancelling}
               lockTime={lockTime}
               lockupEnded={lockupEnded}
-              shares={shares}
-              isAcceptPending={isAcceptPending}
-              onAcceptAndUpdate={onAcceptAndUpdate}
-              updateCancelModalStatus={updateCancelModalStatus}
-              isCancelPending={isCancelPending}
-            /> */}
-            {/* {address && (
+              onAccept={onAccept}
+              openCancelModal={() => setShowCancelModal(true)}
+            />
+            {address && (
               <DepositWithdrawCard
+                address={address}
                 setShowSnackbar={setShowSnackbar}
                 setTxConfirmed={setTxConfirmed}
                 consultationDetails={consultationDetails}
                 lockTime={lockTime}
                 lockupEnded={lockupEnded}
-                refresh={refresh}
+                refresh={refreshBids}
               />
-            )} */}
+            )}
           </div>
           <div className="hiringboard-card">
             {consultationDetails.bid_id ? (

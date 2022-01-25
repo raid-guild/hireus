@@ -108,6 +108,7 @@ export const WalletProvider: React.FC = ({ children }) => {
       chainId: network,
       address: signerAddress.toLowerCase(),
     });
+    return network;
   }, []);
 
   const connectWallet = useCallback(async () => {
@@ -119,12 +120,13 @@ export const WalletProvider: React.FC = ({ children }) => {
       const gnosisSafe = await web3Modal.isSafeApp();
       setIsGnosisSafe(gnosisSafe);
 
-      await setWalletProvider(modalProvider, gnosisSafe);
+      const network = await setWalletProvider(modalProvider, gnosisSafe);
 
       const fetchBids = async (): Promise<void> => {
+        if (!network) return;
         try {
           setIsLoadingBids(true);
-          const bids = await getBids();
+          const bids = await getBids(network);
           if (bids) {
             const res = await fetch(`${GUILD_KEEPER_ENDPOINT}`, {
               method: 'POST',
@@ -136,7 +138,11 @@ export const WalletProvider: React.FC = ({ children }) => {
               }),
             });
             const consultationData = await res.json();
-            const combinedBids = await combineBids(consultationData, bids);
+            const combinedBids = await combineBids(
+              network,
+              consultationData,
+              bids,
+            );
             if (!combinedBids) {
               toast.error('Error: no bids found');
               return;
@@ -181,9 +187,10 @@ export const WalletProvider: React.FC = ({ children }) => {
   }, [setWalletProvider, disconnect]);
 
   const refreshBids = useCallback(async () => {
+    if (!chainId) return;
     try {
       setIsLoadingBids(true);
-      const bids = await getBids();
+      const bids = await getBids(chainId);
       if (bids) {
         const res = await fetch(`${GUILD_KEEPER_ENDPOINT}`, {
           method: 'POST',
@@ -195,7 +202,7 @@ export const WalletProvider: React.FC = ({ children }) => {
           }),
         });
         const consultationData = await res.json();
-        const combinedBids = await combineBids(consultationData, bids);
+        const combinedBids = await combineBids(chainId, consultationData, bids);
         if (!combinedBids) {
           toast.error('Error: no bids found');
           return;
@@ -215,7 +222,7 @@ export const WalletProvider: React.FC = ({ children }) => {
     } finally {
       setIsLoadingBids(false);
     }
-  }, []);
+  }, [chainId]);
 
   // useEffect(() => {
   //   const load = async () => {

@@ -1,12 +1,11 @@
-/* eslint-disable no-undef */
-import { AppContext } from 'contexts/AppContext';
 import { utils } from 'ethers';
 import { motion } from 'framer-motion';
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { round } from 'utils';
 import type { ICombinedBid } from 'utils/types';
 
-type IDepositWithdrawCared = {
+type DepositWithdrawCardProps = {
+  address: string;
   setShowSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
   setTxConfirmed: React.Dispatch<React.SetStateAction<boolean>>;
   consultationDetails: ICombinedBid;
@@ -15,7 +14,8 @@ type IDepositWithdrawCared = {
   refresh: () => void;
 };
 
-const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
+const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
+  address,
   setShowSnackbar,
   setTxConfirmed,
   consultationDetails,
@@ -23,29 +23,20 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
   lockupEnded,
   refresh,
 }) => {
-  const {
-    account,
-    raidBalance,
-    isApproved,
-    depositAmount,
-    withdrawalAmount,
-    onChangeDepositAmount,
-    onChangeWithdrawalAmount,
-    onApprove,
-    isDepositPending,
-    onDeposit,
-    onIncreaseBid,
-    onWithdraw,
-    isWithdrawPending,
-  } = useContext(AppContext);
+  const [depositAmount, setDepositAmount] = useState('');
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+
+  const [isApproved] = useState(false);
+  const [isDepositing] = useState(false);
+  const [isWithdrawing] = useState(false);
 
   const onDepositAndUpdate = async (id: string) => {
     setTxConfirmed(false);
     setShowSnackbar(true);
     if (consultationDetails.bid_id) {
-      await onIncreaseBid(id);
+      // await onIncreaseBid(id);
     } else {
-      await onDeposit(id);
+      // await onDeposit(id);
     }
     setTxConfirmed(true);
     refresh();
@@ -54,7 +45,7 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
   const onApproveAndUpdate = async () => {
     setTxConfirmed(false);
     setShowSnackbar(true);
-    await onApprove();
+    // await onApprove();
     setTxConfirmed(true);
     refresh();
   };
@@ -62,22 +53,24 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
   const onWithdrawAndupdate = async (id: string) => {
     setTxConfirmed(false);
     setShowSnackbar(true);
-    await onWithdraw(id);
+    // await onWithdraw(id);
     setTxConfirmed(true);
     refresh();
   };
 
-  const insufficientBalance = useMemo(() => {
-    if (!(depositAmount && raidBalance)) return false;
-    try {
-      return (
-        BigInt(utils.parseEther(depositAmount || '0').toString()) >
-        BigInt(utils.parseEther(raidBalance).toString())
-      );
-    } catch (e) {
-      return false;
-    }
-  }, [raidBalance, depositAmount]);
+  const insufficientBalance = useMemo(() => false, []);
+
+  // const insufficientBalance = useMemo(() => {
+  //   if (!(depositAmount && raidBalance)) return false;
+  //   try {
+  //     return (
+  //       BigInt(utils.parseEther(depositAmount || '0').toString()) >
+  //       BigInt(utils.parseEther(raidBalance).toString())
+  //     );
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }, [raidBalance, depositAmount]);
 
   return (
     <div id="deposit-withdraw-card">
@@ -92,7 +85,8 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
         >
           <div>
             <p>Wallet Balance:</p>
-            <h2>{round(raidBalance, 4)} $RAID</h2>
+            {/* <h2>{round(raidBalance, 4)} $RAID</h2> */}
+            <h2>{round('500', 4)} $RAID</h2>
           </div>
           <div>
             {insufficientBalance && (
@@ -107,7 +101,7 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
               min={'0'}
               step={'0.01'}
               value={depositAmount}
-              onChange={e => onChangeDepositAmount(e.target.value)}
+              onChange={e => setDepositAmount(e.target.value)}
             />
             <motion.button
               className="consultation-button"
@@ -119,7 +113,7 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
                 depositAmount === '0' ||
                 depositAmount === '' ||
                 insufficientBalance ||
-                isDepositPending
+                isDepositing
               }
               onClick={() => {
                 isApproved
@@ -131,7 +125,7 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
                   : onApproveAndUpdate();
               }}
             >
-              {isDepositPending ? (
+              {isDepositing ? (
                 <div className="spinner">Loading...</div>
               ) : isApproved ? (
                 'Submit Bid'
@@ -152,7 +146,7 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
           <div>
             <p>You deposited:</p>
             <h2>
-              {consultationDetails.submitter === account
+              {consultationDetails.submitter === address
                 ? round(utils.formatEther(consultationDetails.amount), 4)
                 : '0'}{' '}
               $RAID
@@ -165,8 +159,8 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
               type={'number'}
               min={'0'}
               step={'0.01'}
-              value={withdrawalAmount}
-              onChange={e => onChangeWithdrawalAmount(e.target.value)}
+              value={withdrawAmount}
+              onChange={e => setWithdrawAmount(e.target.value)}
             />
             <motion.button
               className="consultation-button"
@@ -175,18 +169,18 @@ const DepositWithdrawCared: React.FC<IDepositWithdrawCared> = ({
               animate={{ x: 0 }}
               transition={{ delay: 1.3 }}
               disabled={
-                withdrawalAmount === '0' ||
-                withdrawalAmount === '' ||
-                BigInt(utils.parseEther(withdrawalAmount).toString()) >
+                withdrawAmount === '0' ||
+                withdrawAmount === '' ||
+                BigInt(utils.parseEther(withdrawAmount).toString()) >
                   BigInt(consultationDetails.amount) ||
-                isWithdrawPending ||
+                isWithdrawing ||
                 !lockupEnded
               }
               onClick={() => {
                 onWithdrawAndupdate(consultationDetails.bid_id);
               }}
             >
-              {isWithdrawPending ? (
+              {isWithdrawing ? (
                 <div className="spinner">Loading...</div>
               ) : (
                 'Withdraw Bid'

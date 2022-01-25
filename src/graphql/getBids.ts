@@ -1,9 +1,39 @@
 import gql from 'fake-tag';
 import type { IBid } from 'utils/types';
 
-import { CLIENT } from './client';
+import { CLIENTS } from './client';
 
-const bidsQuery = gql`
+const rinkebyBidsQuery = gql`
+  query {
+    bids(
+      first: 100
+      where: { queue: "0x3a9f3147742e51efba1f04ff26e8dc95978dccb4" }
+    ) {
+      id
+      amount
+      createdAt
+      details
+      createTxHash
+      status
+      submitter {
+        id
+      }
+      increases {
+        increasedAt
+        amount
+        increasedBy
+        increaseTxHash
+      }
+      withdraws {
+        withdrawnAt
+        amount
+        withdrawTxHash
+      }
+    }
+  }
+`;
+
+const gnosisBidsQuery = gql`
   query {
     bids(
       first: 100
@@ -33,8 +63,10 @@ const bidsQuery = gql`
   }
 `;
 
-export const getBids = async (): Promise<IBid[]> => {
-  const { data, error } = await CLIENT.query(bidsQuery).toPromise();
+export const getBids = async (chainId: number): Promise<IBid[]> => {
+  const { data, error } = await CLIENTS[chainId]
+    .query(chainId === 100 ? gnosisBidsQuery : rinkebyBidsQuery)
+    .toPromise();
   if (!data) {
     if (error) {
       throw error;
