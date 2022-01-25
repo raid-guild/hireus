@@ -185,14 +185,14 @@ const HiringBaord: React.FC = () => {
 
 export default HiringBaord;
 
-type IBidListItem = {
+type BidListItemProps = {
   account: string;
   bid: ICombinedBid;
   index: number;
   shares: string;
 };
 
-const BidListItem: React.FC<IBidListItem> = ({
+const BidListItem: React.FC<BidListItemProps> = ({
   account,
   bid,
   index,

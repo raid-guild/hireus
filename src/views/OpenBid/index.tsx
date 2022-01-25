@@ -12,7 +12,7 @@ import web3 from 'web3';
 import { BLOCK_EXPLORER_URL, LOCKUP_PERIOD } from 'web3/constants';
 
 import ConsultationRequestCard from './ConsultationRequestCard';
-// import DepositWithdrawCard from './DepositWithdrawCard';
+import DepositWithdrawCard from './DepositWithdrawCard';
 
 type ICauseParams = {
   id: string;
@@ -20,20 +20,20 @@ type ICauseParams = {
 
 const OpenBid: React.FC = () => {
   const { id } = useParams<ICauseParams>();
-  const { address, bids } = useWallet();
+  const { address, bids, refreshBids } = useWallet();
   const history = useHistory();
 
   const [consultationDetails, setConsultationDetails] =
     useState<ICombinedBid | null>(null);
 
-  const [isAccepting, setIsAccepting] = useState(false);
-  const [isCancelling, setIsCancelling] = useState(false);
+  const [isAccepting] = useState(false);
+  const [isCancelling] = useState(false);
 
   const [lockupEnded, setLockupEnded] = useState(false);
   const [lockTime, setLockTime] = useState('');
-  const [showCancelModal, setShowCancelModal] = useState(false);
-  // const [showSnackbar, setShowSnackbar] = useState(false);
-  // const [txConfirmed, setTxConfirmed] = useState(false);
+  const [, setShowCancelModal] = useState(false);
+  const [, setShowSnackbar] = useState(false);
+  const [, setTxConfirmed] = useState(false);
   // const [hash, setHash] = useState('');
   // const [txFailed, setTxFailed] = useState(false);
 
@@ -86,6 +86,7 @@ const OpenBid: React.FC = () => {
     // await onAccept(id);
     // setTxConfirmed(true);
     // refresh();
+    // eslint-disable-next-line no-console
     console.log('Accept: ', id);
   }, []);
 
@@ -111,7 +112,7 @@ const OpenBid: React.FC = () => {
             style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
           >
             <ConsultationRequestCard
-              account={address || ''}
+              address={address || ''}
               consultationDetails={consultationDetails}
               isAccepting={isAccepting}
               isCancelling={isCancelling}
@@ -120,16 +121,17 @@ const OpenBid: React.FC = () => {
               onAccept={onAccept}
               openCancelModal={() => setShowCancelModal(true)}
             />
-            {/* {address && (
+            {address && (
               <DepositWithdrawCard
+                address={address}
                 setShowSnackbar={setShowSnackbar}
                 setTxConfirmed={setTxConfirmed}
                 consultationDetails={consultationDetails}
                 lockTime={lockTime}
                 lockupEnded={lockupEnded}
-                refresh={refresh}
+                refresh={refreshBids}
               />
-            )} */}
+            )}
           </div>
           <div className="hiringboard-card">
             {consultationDetails.bid_id ? (

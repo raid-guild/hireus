@@ -11,8 +11,8 @@ import {
   RAID_CONTRACT_ADDRESS,
 } from 'web3/constants';
 
-type IConsultationRequestCard = {
-  account: string;
+type ConsultationRequestCardProps = {
+  address: string;
   consultationDetails: ICombinedBid;
   isAccepting: boolean;
   isCancelling: boolean;
@@ -22,8 +22,8 @@ type IConsultationRequestCard = {
   openCancelModal: () => void;
 };
 
-const ConsultationRequestCard: React.FC<IConsultationRequestCard> = ({
-  account,
+const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
+  address,
   consultationDetails,
   isAccepting,
   isCancelling,
@@ -152,7 +152,7 @@ const ConsultationRequestCard: React.FC<IConsultationRequestCard> = ({
               <XDaiSvg />
             </motion.a>
           </div>
-          {account && !isLoadingShares && (
+          {address && !isLoadingShares && (
             <div className="open-bounty-buttons-container">
               {BigInt(shares) >= BigInt(MIN_NUMBER_OF_SHARES) &&
                 consultationDetails?.bid_id && (
@@ -174,7 +174,7 @@ const ConsultationRequestCard: React.FC<IConsultationRequestCard> = ({
                     )}
                   </motion.button>
                 )}
-              {consultationDetails?.submitter === account && lockupEnded && (
+              {consultationDetails?.submitter === address && lockupEnded && (
                 <div>
                   <motion.button
                     className="consultation-button"
