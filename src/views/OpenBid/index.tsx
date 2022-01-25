@@ -20,7 +20,7 @@ type ICauseParams = {
 
 const OpenBid: React.FC = () => {
   const { id } = useParams<ICauseParams>();
-  const { address, bids, refreshBids } = useWallet();
+  const { address, bids, chainId, refreshBids } = useWallet();
   const history = useHistory();
 
   const [consultationDetails, setConsultationDetails] =
@@ -38,22 +38,22 @@ const OpenBid: React.FC = () => {
   // const [txFailed, setTxFailed] = useState(false);
 
   React.useEffect(() => {
-    if (bids.length === 0 || !consultationDetails) return;
+    if (!(bids.length !== 0 && consultationDetails && chainId)) return;
     const dateNow = Date.now();
     const lockupEnds =
-      Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD;
+      Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD[chainId];
     if (dateNow > lockupEnds) {
       setLockupEnded(true);
     } else {
       setLockupEnded(false);
     }
-  }, [bids.length, consultationDetails]);
+  }, [bids.length, chainId, consultationDetails]);
 
   React.useEffect(() => {
-    if (!consultationDetails) return;
+    if (!(consultationDetails && chainId)) return;
     const dateNow = Date.now();
     const lockupEnds =
-      Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD;
+      Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD[chainId];
     const timeRemaining = lockupEnds - dateNow;
     if (timeRemaining > 0) {
       const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
@@ -69,7 +69,7 @@ const OpenBid: React.FC = () => {
     } else {
       setLockTime('Bid can be withdrawn or canceled');
     }
-  }, [consultationDetails]);
+  }, [chainId, consultationDetails]);
 
   React.useEffect(() => {
     if (address && bids.length > 0) {
@@ -106,13 +106,14 @@ const OpenBid: React.FC = () => {
       >
         Back
       </button>
-      {consultationDetails && (
+      {consultationDetails && chainId && (
         <div className="hiringboard-card-container">
           <div
             style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
           >
             <ConsultationRequestCard
               address={address || ''}
+              chainId={chainId}
               consultationDetails={consultationDetails}
               isAccepting={isAccepting}
               isCancelling={isCancelling}

@@ -12,7 +12,7 @@ import { ICombinedBid } from 'utils/types';
 import { MIN_NUMBER_OF_SHARES, RAID_CONTRACT_ADDRESS } from 'web3/constants';
 
 const HiringBaord: React.FC = () => {
-  const { bids, isLoadingBids } = useWallet();
+  const { bids, chainId, isLoadingBids } = useWallet();
   const { shares, isLoadingShares } = useShares();
   const { address, connectWallet } = useWallet();
   const [showMySubmissions, setShowMySubmissions] = useState(false);
@@ -157,7 +157,7 @@ const HiringBaord: React.FC = () => {
               </div>
             </div>
             {isLoadingShares && <p>Checking RaidGuild membership...</p>}
-            {!(address && shares) ? (
+            {!(address && chainId && shares) ? (
               <div>Connect wallet to view consultation queue</div>
             ) : isLoadingBids ? (
               <div className="spinner">Loading...</div>
@@ -168,6 +168,7 @@ const HiringBaord: React.FC = () => {
                     key={index}
                     account={address}
                     bid={bid}
+                    chainId={chainId}
                     index={index}
                     shares={shares}
                   />
@@ -188,6 +189,7 @@ export default HiringBaord;
 type BidListItemProps = {
   account: string;
   bid: ICombinedBid;
+  chainId: number;
   index: number;
   shares: string;
 };
@@ -195,6 +197,7 @@ type BidListItemProps = {
 const BidListItem: React.FC<BidListItemProps> = ({
   account,
   bid,
+  chainId,
   index,
   shares,
 }) => {
@@ -222,7 +225,7 @@ const BidListItem: React.FC<BidListItemProps> = ({
             </p>
             <p>
               {bid.from === account ||
-              BigInt(shares) >= BigInt(MIN_NUMBER_OF_SHARES)
+              BigInt(shares) >= BigInt(MIN_NUMBER_OF_SHARES[chainId])
                 ? bid.project_name
                 : shortenAddress(bid.from)}
             </p>

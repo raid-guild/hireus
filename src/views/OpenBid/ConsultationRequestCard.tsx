@@ -13,6 +13,7 @@ import {
 
 type ConsultationRequestCardProps = {
   address: string;
+  chainId: number;
   consultationDetails: ICombinedBid;
   isAccepting: boolean;
   isCancelling: boolean;
@@ -24,6 +25,7 @@ type ConsultationRequestCardProps = {
 
 const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
   address,
+  chainId,
   consultationDetails,
   isAccepting,
   isCancelling,
@@ -154,7 +156,7 @@ const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
           </div>
           {address && !isLoadingShares && (
             <div className="open-bounty-buttons-container">
-              {BigInt(shares) >= BigInt(MIN_NUMBER_OF_SHARES) &&
+              {BigInt(shares) >= BigInt(MIN_NUMBER_OF_SHARES[chainId]) &&
                 consultationDetails?.bid_id && (
                   <motion.button
                     className="consultation-button"
