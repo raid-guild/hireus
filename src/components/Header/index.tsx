@@ -1,6 +1,8 @@
 import { Button, Flex, Image, Link as ChakraLink } from '@chakra-ui/react';
 import styled from '@emotion/styled';
+import { rootLocation } from 'locations';
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { theme } from 'themes/theme';
 
 const StyledButton = styled(ChakraLink)`
@@ -38,6 +40,7 @@ type HeaderProps = {
 };
 
 export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
+  const history = useHistory();
   const [isOpen, onOpen] = useState(false);
 
   return (
@@ -55,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
         fallbackSrc="/assets/raidguild__logo.png"
         alt="RaidGuild"
         width={{ base: '150px', lg: '168px' }}
-        onClick={() => (window.location.href = '/')}
+        onClick={() => history.push(rootLocation)}
         cursor="pointer"
       />
 

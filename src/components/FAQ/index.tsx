@@ -5,7 +5,6 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
-  Button,
   Modal,
   ModalBody,
   ModalContent,
@@ -13,6 +12,8 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
+import React from 'react';
+import { StyledPrimaryButton } from 'themes/styled';
 
 const faq_items = [
   {
@@ -48,12 +49,12 @@ const faq_items = [
   },
 ];
 
-type IFAQ = {
+type FAQProps = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-const FAQ: React.FC<IFAQ> = ({ isOpen, onClose }) => {
+export const FAQ: React.FC<FAQProps> = ({ isOpen, onClose }) => {
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered scrollBehavior="inside">
       <ModalOverlay />
@@ -63,8 +64,8 @@ const FAQ: React.FC<IFAQ> = ({ isOpen, onClose }) => {
           <Accordion defaultIndex={[0]}>
             {faq_items.map((item, index) => {
               return (
-                <AccordionItem key={index}>
-                  <AccordionButton>
+                <AccordionItem key={index} fontFamily="spaceMono">
+                  <AccordionButton color="purple" textTransform="uppercase">
                     <Box flex="1" textAlign="left">
                       {item.q}
                     </Box>
@@ -74,93 +75,12 @@ const FAQ: React.FC<IFAQ> = ({ isOpen, onClose }) => {
                 </AccordionItem>
               );
             })}
-            <AccordionItem>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  How do I get DAI?
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel pb={4}>
-                <p>
-                  DAI is a stablecoin pegged to the US Dollar. First,
-                  you&apos;ll need a wallet like{' '}
-                  <a
-                    href="https://metamask.io/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Metamask
-                  </a>{' '}
-                  to manage your funds.
-                </p>
-                <br />
-                <p>
-                  Second, you&apos;ll need funds. To go from fiat currencies to
-                  the Ethereum ecosystem you can use a onramp like{' '}
-                  <a
-                    href="https://www.sendwyre.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Wyre
-                  </a>{' '}
-                  or{' '}
-                  <a
-                    href="https://ramp.network/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Ramp
-                  </a>
-                  .
-                </p>
-                <br />
-                <p>
-                  {' '}
-                  Lastly, you can use a decentralized exchange like{' '}
-                  <a
-                    href="https://app.uniswap.org/#/swap"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Uniswap
-                  </a>{' '}
-                  to swap your ETH for DAI.
-                </p>
-              </AccordionPanel>
-            </AccordionItem>
-
-            <AccordionItem>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  How can I get in touch with RaidGuild?
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel pb={4}>
-                <p>
-                  If you have questions about RaidGuild, the submission form or
-                  our consultation process, hop into our{' '}
-                  <a
-                    href="https://discord.gg/Sv5avwyNPX"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    #client-arena
-                  </a>{' '}
-                  channel in Discord.
-                </p>
-              </AccordionPanel>
-            </AccordionItem>
           </Accordion>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={onClose}>Close</Button>
+          <StyledPrimaryButton onClick={onClose}>Close</StyledPrimaryButton>
         </ModalFooter>
       </ModalContent>
     </Modal>
   );
 };
-
-export default FAQ;

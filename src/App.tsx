@@ -1,5 +1,4 @@
 import { Box, Flex } from '@chakra-ui/react';
-import FAQ from 'components/Faq';
 import { Footer } from 'components/Footer';
 import { Header } from 'components/Header';
 import { useEffect, useState } from 'react';
@@ -8,8 +7,6 @@ import Routes from 'Routes';
 import history from 'utils/history';
 
 const App: React.FC = () => {
-  const [isFaqOpen, setIsFaqOpen] = useState(false);
-
   const [windowWidth, setWindowWidth] = useState(0);
 
   useEffect(() => {
@@ -28,14 +25,13 @@ const App: React.FC = () => {
       justifyContent="space-between"
       alignItems="center"
     >
-      <Box px={{ base: '2rem', lg: '5rem' }} w="100%">
-        <Header windowWidth={windowWidth} />
-      </Box>
       <Router history={history}>
+        <Box px={{ base: '2rem', lg: '5rem' }} w="100%">
+          <Header windowWidth={windowWidth} />
+        </Box>
         <Routes />
+        <Footer />
       </Router>
-      <Footer />
-      <FAQ isOpen={isFaqOpen} onClose={() => setIsFaqOpen(false)} />
     </Flex>
   );
 };
