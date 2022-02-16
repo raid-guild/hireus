@@ -1,8 +1,13 @@
 import { useWallet } from 'contexts/WalletContext';
 import { History } from 'history';
-import { bidLocationTemplate, rootLocation } from 'locations';
+import {
+  bidLocationTemplate,
+  hiringBoardLocation,
+  rootLocation,
+} from 'locations';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import ScrollToTop from 'utils/ScrollToTop';
+import Explainer from 'views/Explainer';
 import HiringBoard from 'views/HiringBoard';
 import OpenBid from 'views/OpenBid';
 
@@ -37,6 +42,11 @@ const CustomRoute = (props: CustomRouteProps) => {
 const routes = [
   {
     path: rootLocation,
+    exact: true,
+    component: Explainer,
+  },
+  {
+    path: hiringBoardLocation,
     exact: true,
     component: HiringBoard,
   },
