@@ -5,6 +5,7 @@ import { rootLocation } from 'locations';
 import { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { StyledPrimaryButton } from 'themes/styled';
+import { StyledSecondaryButton } from 'themes/styled';
 import { theme } from 'themes/theme';
 import { shortenAddress } from 'utils';
 
@@ -187,13 +188,25 @@ export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
         </>
       )}
       {!isRoot && (
-        <StyledPrimaryButton
-          fontSize={{ base: '16px', lg: '18px' }}
-          mt={'8px'}
-          onClick={connectWallet}
-        >
-          {address ? shortenAddress(address) : 'Connect Wallet'}
-        </StyledPrimaryButton>
+        <Flex mt={'8px'}>
+          <StyledSecondaryButton
+            onClick={() =>
+              history.action !== 'POP'
+                ? history.goBack()
+                : history.push(rootLocation)
+            }
+            mr={'20px'}
+            w={'100px'}
+          >
+            Back
+          </StyledSecondaryButton>
+          <StyledPrimaryButton
+            fontSize={{ base: '16px', lg: '18px' }}
+            onClick={connectWallet}
+          >
+            {address ? shortenAddress(address) : 'Connect Wallet'}
+          </StyledPrimaryButton>
+        </Flex>
       )}
     </Flex>
   );
