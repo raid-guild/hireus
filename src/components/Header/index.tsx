@@ -1,9 +1,12 @@
 import { Button, Flex, Image, Link as ChakraLink } from '@chakra-ui/react';
 import styled from '@emotion/styled';
+import { useWallet } from 'contexts/WalletContext';
 import { rootLocation } from 'locations';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import { StyledPrimaryButton } from 'themes/styled';
 import { theme } from 'themes/theme';
+import { shortenAddress } from 'utils';
 
 const StyledButton = styled(ChakraLink)`
   &::after {
@@ -40,8 +43,13 @@ type HeaderProps = {
 };
 
 export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
+  const { address, connectWallet } = useWallet();
   const history = useHistory();
+  const { pathname } = useLocation();
+
   const [isOpen, onOpen] = useState(false);
+
+  const isRoot = pathname === rootLocation;
 
   return (
     <Flex
@@ -62,7 +70,7 @@ export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
         cursor="pointer"
       />
 
-      {windowWidth > 1200 && (
+      {windowWidth > 1200 && isRoot && (
         <Flex
           minWidth="50%"
           direction="row"
@@ -108,7 +116,7 @@ export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
         </Flex>
       )}
 
-      {windowWidth < 1200 && (
+      {windowWidth < 1200 && isRoot && (
         <>
           <Flex align="center" height="8rem">
             <Button
@@ -177,6 +185,15 @@ export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
             ></ChakraLink>
           </Flex>
         </>
+      )}
+      {!isRoot && (
+        <StyledPrimaryButton
+          fontSize={{ base: '16px', lg: '18px' }}
+          mt={'8px'}
+          onClick={connectWallet}
+        >
+          {address ? shortenAddress(address) : 'Connect Wallet'}
+        </StyledPrimaryButton>
       )}
     </Flex>
   );
