@@ -35,7 +35,7 @@ const Explainer: React.FC = () => {
 
         <StyledBodyText fontSize={{ base: '1rem', lg: '18px' }}>
           The first step to hiring RaidGuild is submitting a request for a
-          consultation (cost is 500{' '}
+          consultation (submission cost is 500{' '}
           <Link
             href={`https://blockscout.com/xdai/mainnet/address/${
               RAID_CONTRACT_ADDRESS[chainId || 4]
@@ -98,20 +98,21 @@ const Explainer: React.FC = () => {
         <br />
         <br />
 
-        <StyledPrimaryButton
-          fontSize={{ base: '16px', lg: '18px' }}
-          mb={'1rem'}
-          onClick={() => history.push('/hiring-board')}
+        <Flex
+          direction={{ base: 'column-reverse', md: 'row' }}
+          justifyContent={'space-between'}
         >
-          Bid on Consultation
-        </StyledPrimaryButton>
-        <StyledSecondaryButton
-          w="100%"
-          mt={{ base: '.5rem' }}
-          onClick={() => setIsFaqOpen(true)}
-        >
-          Read FAQ
-        </StyledSecondaryButton>
+          <StyledSecondaryButton w={'100px'} onClick={() => setIsFaqOpen(true)}>
+            Read FAQ
+          </StyledSecondaryButton>
+          <StyledPrimaryButton
+            fontSize={{ base: '16px', lg: '18px' }}
+            mb={'1rem'}
+            onClick={() => history.push('/hiring-board')}
+          >
+            Bid on Consultation
+          </StyledPrimaryButton>
+        </Flex>
         <br />
       </Flex>
       <FAQ isOpen={isFaqOpen} onClose={() => setIsFaqOpen(false)} />
