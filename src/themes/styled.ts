@@ -142,3 +142,12 @@ export const StyledTextArea = styled(Textarea)`
   border: none;
   border-radius: 0;
 `;
+
+// --------- Cards ------------
+
+export const StyledCard = styled.div`
+  border: 2px solid ${theme.colors.red};
+  border-radius: 4px;
+  overflow-y: scroll;
+  padding: 32px;
+`;

@@ -4,11 +4,14 @@ import { Box, Flex } from '@chakra-ui/react';
 import Slider from 'components/Slider';
 import { useWallet } from 'contexts/WalletContext';
 import { utils } from 'ethers';
-import { motion } from 'framer-motion';
 import { useShares } from 'hooks/useShares';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { StyledBodyText, StyledPrimaryHeading } from 'themes/styled';
+import {
+  StyledBodyText,
+  StyledCard,
+  StyledPrimaryHeading,
+} from 'themes/styled';
 import { round, shortenAddress } from 'utils';
 import { ICombinedBid } from 'utils/types';
 import { MIN_NUMBER_OF_SHARES } from 'web3/constants';
@@ -56,21 +59,9 @@ const HiringBaord: React.FC = () => {
           Select a consultation request from the queue to add or increase your
           bid.
         </StyledBodyText>
-        <div className="hiringboard-card">
-          <div
-            style={{
-              alignItems: 'center',
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
-          >
-            <motion.h1
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7, duration: 0.5 }}
-            >
-              Open bids:
-            </motion.h1>
+        <StyledCard>
+          <Flex align={'center'} justify={'space-between'} mb={'12px'}>
+            <StyledBodyText fontSize={'24px'}>Open bids:</StyledBodyText>
             <div id="switch-container">
               <p>My submissions:</p>
               <Slider
@@ -78,7 +69,7 @@ const HiringBaord: React.FC = () => {
                 toggleState={showMySubmissions}
               />
             </div>
-          </div>
+          </Flex>
           {isLoadingShares && <p>Checking RaidGuild membership...</p>}
           {isLoadingBids ? (
             <div className="spinner">Loading...</div>
@@ -98,7 +89,7 @@ const HiringBaord: React.FC = () => {
           ) : (
             <p>There are no bounties.</p>
           )}
-        </div>
+        </StyledCard>
       </Flex>
     </Box>
   );
