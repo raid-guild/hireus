@@ -156,6 +156,10 @@ export const WalletProvider: React.FC = ({ children }) => {
             key: process.env.REACT_APP_ACCESS_KEY,
           }),
         });
+        if (res.status !== 200) {
+          toast.error('Failed to fetch bids');
+          return;
+        }
         const consultationData = await res.json();
         const combinedBids = await combineBids(
           DEFAULT_NETWORK,
