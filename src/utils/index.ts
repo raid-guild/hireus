@@ -3,9 +3,7 @@ import type { IBid, ICombinedBid, IConsultation } from 'utils/types';
 import web3 from 'web3';
 import { QUEUE_CONTRACT_ADDRESS } from 'web3/constants';
 
-const provider = ethers.getDefaultProvider(
-  process.env.REACT_APP_MAINNET_NODE_ENDPOINT,
-);
+const provider = ethers.getDefaultProvider(process.env.REACT_APP_MAINNET_RPC);
 
 /**
  * Shorten an Ethereum address. `charsLength` allows to change the number of

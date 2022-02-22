@@ -1,130 +1,5 @@
 @import '../../utils/constants.scss';
 
-#switch-container {
-  align-items: center;
-  background: #111111;
-  display: flex;
-  padding: 8px 12px;
-}
-
-#switch-container p {
-  color: #cccccc;
-  font-size: 12px;
-  margin-right: 12px;
-  text-transform: uppercase;
-}
-
-.hiringboard-container {
-  color: $subtitle-color;
-  min-width: 90%;
-  max-width: 90%;
-  margin: 0 auto;
-  padding-top: 40px;
-
-  @media screen and (min-width: 1200px) {
-    min-width: 80%;
-    max-width: 80%;
-  }
-
-  h1 {
-    font-family: $primary-font;
-    font-size: 1.6rem;
-    text-transform: uppercase;
-    text-align: left;
-    margin-bottom: 20px;
-    color: $theme-color-primary;
-  }
-  h2 {
-    font-family: $primary-font;
-    font-size: 1.4rem;
-    text-align: left;
-    margin-bottom: 2rem;
-  }
-  p {
-    margin-bottom: 2rem;
-    font-size: 1rem;
-    font-family: $primary-font;
-    letter-spacing: 1.3px;
-    line-height: 1.2;
-  }
-
-  @media screen and (max-height: 800px) {
-    padding-top: 10%;
-  }
-
-  @media screen and (min-width: 1000px) and (max-width: 1200px) {
-    padding-top: 100px;
-
-    & h1 {
-      font-size: 1.4rem;
-    }
-
-    & p {
-      font-size: 0.8rem;
-    }
-  }
-}
-
-.hiringboard-respond {
-  @media screen and (min-width: 1200px) {
-    min-width: 90%;
-    max-width: 90%;
-  }
-}
-
-.hiringboard-link {
-  color: $theme-color-primary;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.hiringboard-card-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-#hiringboard-button-container {
-  display: flex;
-  flex-direction: column;
-
-  @media screen and (min-width: 1200px) {
-    flex-direction: row;
-
-    button:first-child {
-      margin-right: 10px;
-    }
-  }
-}
-
-#hiringboard-button-container * button:first-child {
-  margin-bottom: 16px;
-  @media screen and (min-width: 1200px) {
-    margin-bottom: 0;
-    margin-right: 16px;
-  }
-}
-
-.hiringboard-card {
-  border: 2px solid $theme-color-primary;
-  border-radius: 4px;
-  min-height: 70vh;
-  max-height: 70vh;
-  overflow-y: scroll;
-  padding: 32px;
-  max-width: 58%;
-  min-width: 58%;
-
-  p {
-    margin-bottom: 5px;
-
-    span {
-      display: inline-block;
-      width: 150px;
-    }
-  }
-}
-
 #deposit-withdraw-card {
   border: 2px solid $theme-color-primary;
   border-radius: 4px;
@@ -199,11 +74,6 @@ button.consultation-button:disabled {
   cursor: not-allowed;
 }
 
-.bounty-list {
-  display: flex;
-  flex-direction: column;
-}
-
 .bounty-list-item {
   align-items: center;
   border: 2px solid transparent;
@@ -214,7 +84,7 @@ button.consultation-button:disabled {
   transition: all 0.3s ease;
 
   &--2 {
-    background: rgba(0, 0, 0, 0.2);
+    background: '#111111';
   }
 
   &:hover {
@@ -230,10 +100,6 @@ button.consultation-button:disabled {
   p {
     font-size: 0.8rem;
     margin: 0;
-  }
-
-  p.bounty-detail {
-    width: 100px;
   }
 
   .withdraw-amount {

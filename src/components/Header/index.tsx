@@ -1,9 +1,13 @@
 import { Button, Flex, Image, Link as ChakraLink } from '@chakra-ui/react';
 import styled from '@emotion/styled';
+import { useWallet } from 'contexts/WalletContext';
 import { rootLocation } from 'locations';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import { StyledPrimaryButton } from 'themes/styled';
+import { StyledSecondaryButton } from 'themes/styled';
 import { theme } from 'themes/theme';
+import { shortenAddress } from 'utils';
 
 const StyledButton = styled(ChakraLink)`
   &::after {
@@ -40,14 +44,20 @@ type HeaderProps = {
 };
 
 export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
+  const { address, connectWallet } = useWallet();
   const history = useHistory();
+  const { pathname } = useLocation();
+
   const [isOpen, onOpen] = useState(false);
+
+  const isRoot = pathname === rootLocation;
 
   return (
     <Flex
       w="100%"
-      h={{ base: '4rem' }}
+      h={{ base: isRoot ? '4rem' : '11rem', md: '4rem' }}
       color="white"
+      direction={{ base: isRoot ? 'row' : 'column', md: 'row' }}
       fontFamily="spaceMono"
       justify="space-between"
       align="center"
@@ -62,7 +72,7 @@ export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
         cursor="pointer"
       />
 
-      {windowWidth > 1200 && (
+      {windowWidth > 1200 && isRoot && (
         <Flex
           minWidth="50%"
           direction="row"
@@ -108,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
         </Flex>
       )}
 
-      {windowWidth < 1200 && (
+      {windowWidth < 1200 && isRoot && (
         <>
           <Flex align="center" height="8rem">
             <Button
@@ -177,6 +187,28 @@ export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
             ></ChakraLink>
           </Flex>
         </>
+      )}
+      {!isRoot && (
+        <Flex mt={'8px'} direction={{ base: 'column-reverse', md: 'row' }}>
+          <StyledSecondaryButton
+            onClick={() =>
+              history.action !== 'POP'
+                ? history.goBack()
+                : history.push(rootLocation)
+            }
+            mr={{ base: '0px', md: '20px' }}
+            w={{ base: '100%', md: '100px' }}
+          >
+            Back
+          </StyledSecondaryButton>
+          <StyledPrimaryButton
+            fontSize={{ base: '16px', lg: '18px' }}
+            mb={{ base: '8px', md: '0' }}
+            onClick={connectWallet}
+          >
+            {address ? shortenAddress(address) : 'Connect Wallet'}
+          </StyledPrimaryButton>
+        </Flex>
       )}
     </Flex>
   );
