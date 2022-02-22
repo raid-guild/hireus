@@ -6,7 +6,7 @@ import { useWallet } from 'contexts/WalletContext';
 import { utils } from 'ethers';
 import { motion } from 'framer-motion';
 import { useShares } from 'hooks/useShares';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { StyledBodyText, StyledPrimaryHeading } from 'themes/styled';
 import { round, shortenAddress } from 'utils';
@@ -14,11 +14,17 @@ import { ICombinedBid } from 'utils/types';
 import { MIN_NUMBER_OF_SHARES } from 'web3/constants';
 
 const HiringBaord: React.FC = () => {
-  const { bids, chainId, isLoadingBids } = useWallet();
+  const { bids, chainId, fetchBids, isLoadingBids } = useWallet();
   const { shares, isLoadingShares } = useShares();
   const { address, connectWallet } = useWallet();
   const [showMySubmissions, setShowMySubmissions] = useState(false);
   const [filteredBids, setFilteredBids] = useState<ICombinedBid[]>([]);
+
+  useEffect(() => {
+    if (bids.length === 0) {
+      fetchBids();
+    }
+  }, [bids, fetchBids]);
 
   useEffect(() => {
     if (bids.length === 0) return;
@@ -74,9 +80,7 @@ const HiringBaord: React.FC = () => {
             </div>
           </div>
           {isLoadingShares && <p>Checking RaidGuild membership...</p>}
-          {!(address && chainId && shares) ? (
-            <div>Connect wallet to view consultation queue</div>
-          ) : isLoadingBids ? (
+          {isLoadingBids ? (
             <div className="spinner">Loading...</div>
           ) : filteredBids.length > 0 ? (
             <div className="bounty-list">
@@ -103,9 +107,9 @@ const HiringBaord: React.FC = () => {
 export default HiringBaord;
 
 type BidListItemProps = {
-  account: string;
+  account?: string | null;
   bid: ICombinedBid;
-  chainId: number;
+  chainId?: number | null;
   index: number;
   shares: string;
 };
@@ -118,6 +122,18 @@ const BidListItem: React.FC<BidListItemProps> = ({
   shares,
 }) => {
   const history = useHistory();
+
+  const showProjectName = useMemo(() => {
+    if (!account || !chainId) return false;
+    if (
+      bid.from === account ||
+      BigInt(shares) >= BigInt(MIN_NUMBER_OF_SHARES[chainId])
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [account, bid, chainId, shares]);
 
   return (
     <div key={index}>
@@ -140,10 +156,7 @@ const BidListItem: React.FC<BidListItemProps> = ({
               {new Date(bid.created).toLocaleDateString()}
             </p>
             <p>
-              {bid.from === account ||
-              BigInt(shares) >= BigInt(MIN_NUMBER_OF_SHARES[chainId])
-                ? bid.project_name
-                : shortenAddress(bid.from)}
+              {showProjectName ? bid.project_name : shortenAddress(bid.from)}
             </p>
           </div>
           <div className="bounty-list-item-inner">

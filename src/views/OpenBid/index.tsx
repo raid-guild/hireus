@@ -20,7 +20,7 @@ type ICauseParams = {
 
 const OpenBid: React.FC = () => {
   const { id } = useParams<ICauseParams>();
-  const { address, bids, chainId, refreshBids } = useWallet();
+  const { address, bids, chainId, fetchBids } = useWallet();
   const history = useHistory();
 
   const [consultationDetails, setConsultationDetails] =
@@ -130,7 +130,7 @@ const OpenBid: React.FC = () => {
                 consultationDetails={consultationDetails}
                 lockTime={lockTime}
                 lockupEnded={lockupEnded}
-                refresh={refreshBids}
+                refresh={fetchBids}
               />
             )}
           </div>
