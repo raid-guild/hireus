@@ -1,6 +1,6 @@
 import './AuctionQueue.scss';
 
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Spinner } from '@chakra-ui/react';
 import Slider from 'components/Slider';
 import { useWallet } from 'contexts/WalletContext';
 import { utils } from 'ethers';
@@ -9,10 +9,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   StyledBodyText,
+  StyledBountyRow,
   StyledCard,
+  StyledNumberText,
   StyledPrimaryHeading,
+  StyledSmallPrimaryButton,
+  StyledSmallSecondaryButton,
 } from 'themes/styled';
-import { round, shortenAddress } from 'utils';
+import { round } from 'utils';
 import { ICombinedBid } from 'utils/types';
 import { MIN_NUMBER_OF_SHARES } from 'web3/constants';
 
@@ -62,32 +66,30 @@ const HiringBaord: React.FC = () => {
         <StyledCard>
           <Flex align={'center'} justify={'space-between'} mb={'12px'}>
             <StyledBodyText fontSize={'24px'}>Open bids:</StyledBodyText>
-            <div id="switch-container">
-              <p>My submissions:</p>
-              <Slider
-                setToggleState={setShowMySubmissions}
-                toggleState={showMySubmissions}
-              />
-            </div>
+            <Slider
+              label={'My submissions:'}
+              setToggleState={setShowMySubmissions}
+              toggleState={showMySubmissions}
+            />
           </Flex>
-          {isLoadingShares && <p>Checking RaidGuild membership...</p>}
+          {isLoadingShares && (
+            <StyledBodyText>Checking RaidGuild membership...</StyledBodyText>
+          )}
           {isLoadingBids ? (
-            <div className="spinner">Loading...</div>
+            <Spinner color={'#fff'} />
           ) : filteredBids.length > 0 ? (
-            <div className="bounty-list">
-              {filteredBids.map((bid, index) => (
-                <BidListItem
-                  key={index}
-                  account={address}
-                  bid={bid}
-                  chainId={chainId}
-                  index={index}
-                  shares={shares}
-                />
-              ))}
-            </div>
+            filteredBids.map((bid, index) => (
+              <BidListItem
+                key={index}
+                account={address}
+                bid={bid}
+                chainId={chainId}
+                index={index}
+                shares={shares}
+              />
+            ))
           ) : (
-            <p>There are no bounties.</p>
+            <StyledBodyText>There are no bounties.</StyledBodyText>
           )}
         </StyledCard>
       </Flex>
@@ -129,34 +131,37 @@ const BidListItem: React.FC<BidListItemProps> = ({
   return (
     <div key={index}>
       {bid.from && (
-        <div
+        <StyledBountyRow
+          justify={'space-between'}
           onClick={() => history.push(`/bids/${bid.consultation_hash}`)}
-          className={`bounty-list-item bounty-list-item${
-            index % 2 !== 0 && '--2'
-          }`}
+          secondary={index % 2 !== 0}
         >
-          <div className="bounty-list-item-inner">
-            <p
-              style={{
-                marginRight: '20px',
-              }}
-            >
+          <Flex align={'center'}>
+            <StyledBodyText fontSize={'14px'} mr={'20px'}>
               #{index < 9 ? `0${index + 1}` : index + 1}
-            </p>
-            <p className="bounty-detail">
+            </StyledBodyText>
+            <StyledBodyText fontSize={'14px'} w={'100px'}>
               {new Date(bid.created).toLocaleDateString()}
-            </p>
-            <p>
-              {showProjectName ? bid.project_name : shortenAddress(bid.from)}
-            </p>
-          </div>
-          <div className="bounty-list-item-inner">
-            <p className="bounty-detail">
+            </StyledBodyText>
+            <StyledBodyText fontSize={'14px'}>
+              {showProjectName ? bid.project_name : bid.from}
+            </StyledBodyText>
+          </Flex>
+          <Flex align={'center'}>
+            <StyledNumberText fontSize={'14px'} w={'110px'}>
               {round(utils.formatEther(bid.amount), 2)} $RAID
-            </p>
-            <button>open</button>
-          </div>
-        </div>
+            </StyledNumberText>
+            {showProjectName ? (
+              <StyledSmallPrimaryButton fontSize={'14px'} p={'0px'}>
+                open
+              </StyledSmallPrimaryButton>
+            ) : (
+              <StyledSmallSecondaryButton fontSize={'14px'} p={'0px'}>
+                open
+              </StyledSmallSecondaryButton>
+            )}
+          </Flex>
+        </StyledBountyRow>
       )}
     </div>
   );

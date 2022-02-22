@@ -78,6 +78,14 @@ export const StyledMessageText = styled(Text)`
   line-height: 1.4;
 `;
 
+export const StyledNumberText = styled(Text)`
+  max-width: 720px;
+  font-family: ${theme.fonts.spaceMono};
+  line-height: 1.8;
+  color: white;
+  text-align: justify;
+`;
+
 export const StyledFooterHeaderText = styled(Text)`
   font-family: ${theme.fonts.spaceMono};
   font-weight: bold;
@@ -129,6 +137,45 @@ export const StyledSecondaryButton = styled(Button)`
   }
 `;
 
+export const StyledSmallPrimaryButton = styled(Button)`
+  min-width: 80px;
+  height: 28px;
+  font-family: ${theme.fonts.spaceMono};
+  text-transform: uppercase;
+  color: black;
+  border-radius: 2px;
+  background: linear-gradient(
+    94.89deg,
+    #ff5a00 0%,
+    #d62789 70.2%,
+    #ad17ad 100%
+  );
+  &:hover {
+    background: linear-gradient(
+      94.89deg,
+      #f78040 0%,
+      #dd459b 70.2%,
+      #ad3bad 100%
+    );
+  }
+`;
+
+export const StyledSmallSecondaryButton = styled(Button)`
+  min-width: 80px;
+  height: 28px;
+  font-family: ${theme.fonts.spaceMono};
+  text-transform: uppercase;
+  border: 2px solid ${theme.colors.red};
+  border-radius: 3px;
+  color: ${theme.colors.red};
+  background: black;
+  box-decoration-break: clone;
+  &:hover {
+    background: black;
+    opacity: 0.6;
+  }
+`;
+
 // --------- Form Inputs ------------
 
 export const StyledInput = styled(Input)`
@@ -146,8 +193,27 @@ export const StyledTextArea = styled(Textarea)`
 // --------- Cards ------------
 
 export const StyledCard = styled.div`
-  border: 2px solid ${theme.colors.red};
+  background: ${theme.colors.black};
+  border-top: 2px solid ${theme.colors.red};
   border-radius: 4px;
   overflow-y: scroll;
   padding: 32px;
+`;
+
+type StyledBountyRowProps = {
+  secondary?: boolean;
+};
+
+export const StyledBountyRow = styled(Flex)<StyledBountyRowProps>`
+  border: 2px solid transparent;
+  border-radius: 4px;
+  padding: 10px;
+  transition: all 0.3s ease;
+
+  ${props => props.secondary && `background: #111111;`}
+
+  &:hover {
+    background: ${theme.colors.greyDark};
+    cursor: pointer;
+  }
 `;
