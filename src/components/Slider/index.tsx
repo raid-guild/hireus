@@ -16,8 +16,14 @@ const Slider: React.FC<SliderProps> = ({
   toggleState,
 }) => {
   return (
-    <StyledSwitchContainer align={'center'}>
-      <StyledBodyText fontSize={'14px'} textTransform={'uppercase'}>
+    <StyledSwitchContainer
+      align={'center'}
+      p={{ base: '4px 8px', sm: '8px 12px' }}
+    >
+      <StyledBodyText
+        fontSize={{ base: '10px', md: '14px' }}
+        textTransform={'uppercase'}
+      >
         {label}
       </StyledBodyText>
       <StyledSwitch>
@@ -34,7 +40,6 @@ const StyledSwitchContainer = styled(Flex)`
   background: #111111;
   border-radius: 4px;
   gap: 12px;
-  padding: 8px 12px;
 `;
 
 const StyledSwitch = styled.label`

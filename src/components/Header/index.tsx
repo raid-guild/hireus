@@ -55,8 +55,9 @@ export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
   return (
     <Flex
       w="100%"
-      h={{ base: '4rem' }}
+      h={{ base: isRoot ? '4rem' : '11rem', md: '4rem' }}
       color="white"
+      direction={{ base: isRoot ? 'row' : 'column', md: 'row' }}
       fontFamily="spaceMono"
       justify="space-between"
       align="center"
@@ -188,20 +189,21 @@ export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
         </>
       )}
       {!isRoot && (
-        <Flex mt={'8px'}>
+        <Flex mt={'8px'} direction={{ base: 'column-reverse', md: 'row' }}>
           <StyledSecondaryButton
             onClick={() =>
               history.action !== 'POP'
                 ? history.goBack()
                 : history.push(rootLocation)
             }
-            mr={'20px'}
-            w={'100px'}
+            mr={{ base: '0px', md: '20px' }}
+            w={{ base: '100%', md: '100px' }}
           >
             Back
           </StyledSecondaryButton>
           <StyledPrimaryButton
             fontSize={{ base: '16px', lg: '18px' }}
+            mb={{ base: '8px', md: '0' }}
             onClick={connectWallet}
           >
             {address ? shortenAddress(address) : 'Connect Wallet'}

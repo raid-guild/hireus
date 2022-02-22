@@ -16,7 +16,7 @@ import {
   StyledSmallPrimaryButton,
   StyledSmallSecondaryButton,
 } from 'themes/styled';
-import { round } from 'utils';
+import { round, shortenAddress } from 'utils';
 import { ICombinedBid } from 'utils/types';
 import { MIN_NUMBER_OF_SHARES } from 'web3/constants';
 
@@ -26,6 +26,16 @@ const HiringBaord: React.FC = () => {
   const { address, connectWallet } = useWallet();
   const [showMySubmissions, setShowMySubmissions] = useState(false);
   const [filteredBids, setFilteredBids] = useState<ICombinedBid[]>([]);
+
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+    window.removeEventListener('resize', () => null);
+    window.addEventListener('resize', e => {
+      setWindowWidth(window.innerWidth);
+    });
+  }, []);
 
   useEffect(() => {
     if (bids.length === 0) {
@@ -49,7 +59,7 @@ const HiringBaord: React.FC = () => {
   }, [address, connectWallet, bids, showMySubmissions]);
 
   return (
-    <Box px={{ base: '2rem', lg: '5rem' }} w="100%">
+    <Box px={{ base: '10px', md: '20px', lg: '50px' }} w="100%">
       <Flex direction={'column'} mb={'60px'} justify={'center'} w={'100%'}>
         <StyledPrimaryHeading
           textAlign={'left'}
@@ -63,9 +73,11 @@ const HiringBaord: React.FC = () => {
           Select a consultation request from the queue to add or increase your
           bid.
         </StyledBodyText>
-        <StyledCard>
+        <StyledCard p={{ base: '10px', sm: '32px' }}>
           <Flex align={'center'} justify={'space-between'} mb={'12px'}>
-            <StyledBodyText fontSize={'24px'}>Open bids:</StyledBodyText>
+            <StyledBodyText fontSize={{ base: '18px', md: '24px' }}>
+              Open bids:
+            </StyledBodyText>
             <Slider
               label={'My submissions:'}
               setToggleState={setShowMySubmissions}
@@ -86,6 +98,7 @@ const HiringBaord: React.FC = () => {
                 chainId={chainId}
                 index={index}
                 shares={shares}
+                windowWidth={windowWidth}
               />
             ))
           ) : (
@@ -105,6 +118,7 @@ type BidListItemProps = {
   chainId?: number | null;
   index: number;
   shares: string;
+  windowWidth: number;
 };
 
 const BidListItem: React.FC<BidListItemProps> = ({
@@ -113,6 +127,7 @@ const BidListItem: React.FC<BidListItemProps> = ({
   chainId,
   index,
   shares,
+  windowWidth,
 }) => {
   const history = useHistory();
 
@@ -134,29 +149,52 @@ const BidListItem: React.FC<BidListItemProps> = ({
         <StyledBountyRow
           justify={'space-between'}
           onClick={() => history.push(`/bids/${bid.consultation_hash}`)}
-          secondary={index % 2 !== 0}
+          secondary={index % 2 !== 0 ? 1 : 0}
+          p={{ base: '4px', md: '10px' }}
         >
-          <Flex align={'center'}>
-            <StyledBodyText fontSize={'14px'} mr={'20px'}>
+          <Flex
+            align={{ base: 'flex-start', sm: 'center' }}
+            direction={{ base: 'column', sm: 'row' }}
+          >
+            <StyledBodyText
+              fontSize={{ base: '12px', md: '14px' }}
+              mr={{ base: '12px', md: '20px' }}
+            >
               #{index < 9 ? `0${index + 1}` : index + 1}
             </StyledBodyText>
-            <StyledBodyText fontSize={'14px'} w={'100px'}>
+            <StyledBodyText
+              fontSize={{ base: '12px', md: '14px' }}
+              w={{ base: '88px', md: '100px' }}
+            >
               {new Date(bid.created).toLocaleDateString()}
             </StyledBodyText>
-            <StyledBodyText fontSize={'14px'}>
-              {showProjectName ? bid.project_name : bid.from}
+            <StyledBodyText fontSize={{ base: '12px', md: '14px' }}>
+              {showProjectName
+                ? bid.project_name
+                : windowWidth > 1026
+                ? bid.from
+                : shortenAddress(bid.from)}
             </StyledBodyText>
           </Flex>
           <Flex align={'center'}>
-            <StyledNumberText fontSize={'14px'} w={'110px'}>
+            <StyledNumberText
+              fontSize={{ base: '12px', md: '14px' }}
+              w={{ base: '88px', md: '110px' }}
+            >
               {round(utils.formatEther(bid.amount), 2)} $RAID
             </StyledNumberText>
             {showProjectName ? (
-              <StyledSmallPrimaryButton fontSize={'14px'} p={'0px'}>
+              <StyledSmallPrimaryButton
+                fontSize={{ base: '12px', md: '14px' }}
+                w={{ base: '60px', md: '80px' }}
+              >
                 open
               </StyledSmallPrimaryButton>
             ) : (
-              <StyledSmallSecondaryButton fontSize={'14px'} p={'0px'}>
+              <StyledSmallSecondaryButton
+                fontSize={{ base: '12px', md: '14px' }}
+                w={{ base: '60px', md: '80px' }}
+              >
                 open
               </StyledSmallSecondaryButton>
             )}

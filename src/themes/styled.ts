@@ -1,4 +1,12 @@
-import { Button, Flex, Heading, Input, Text, Textarea } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Input,
+  Text,
+  Textarea,
+} from '@chakra-ui/react';
 import styled from '@emotion/styled';
 
 import { theme } from './theme';
@@ -138,7 +146,6 @@ export const StyledSecondaryButton = styled(Button)`
 `;
 
 export const StyledSmallPrimaryButton = styled(Button)`
-  min-width: 80px;
   height: 28px;
   font-family: ${theme.fonts.spaceMono};
   text-transform: uppercase;
@@ -161,7 +168,6 @@ export const StyledSmallPrimaryButton = styled(Button)`
 `;
 
 export const StyledSmallSecondaryButton = styled(Button)`
-  min-width: 80px;
   height: 28px;
   font-family: ${theme.fonts.spaceMono};
   text-transform: uppercase;
@@ -192,25 +198,23 @@ export const StyledTextArea = styled(Textarea)`
 
 // --------- Cards ------------
 
-export const StyledCard = styled.div`
+export const StyledCard = styled(Box)`
   background: ${theme.colors.black};
   border-top: 2px solid ${theme.colors.red};
   border-radius: 4px;
   overflow-y: scroll;
-  padding: 32px;
 `;
 
 type StyledBountyRowProps = {
-  secondary?: boolean;
+  secondary?: number;
 };
 
 export const StyledBountyRow = styled(Flex)<StyledBountyRowProps>`
   border: 2px solid transparent;
   border-radius: 4px;
-  padding: 10px;
   transition: all 0.3s ease;
 
-  ${props => props.secondary && `background: #111111;`}
+  ${props => props.secondary === 1 && `background: #111111;`}
 
   &:hover {
     background: ${theme.colors.greyDark};
