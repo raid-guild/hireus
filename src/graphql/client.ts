@@ -1,5 +1,5 @@
 import { Client, createClient, dedupExchange, fetchExchange } from 'urql';
-import { SUBGRAPH_URL } from 'web3/constants';
+import { MOLOCH_SUBGRAPH_URL, SUBGRAPH_URL } from 'web3/constants';
 
 type GraphQLClients = {
   [chainId: number]: Client;
@@ -15,3 +15,8 @@ export const CLIENTS: GraphQLClients = Object.entries(SUBGRAPH_URL).reduce(
   }),
   {},
 );
+
+export const MOLOCH_CLIENT = createClient({
+  url: MOLOCH_SUBGRAPH_URL,
+  exchanges: [dedupExchange, fetchExchange],
+});

@@ -4,7 +4,7 @@ import { Box, Flex, Spinner } from '@chakra-ui/react';
 import Slider from 'components/Slider';
 import { useWallet } from 'contexts/WalletContext';
 import { utils } from 'ethers';
-import { useShares } from 'hooks/useShares';
+import { useMembership } from 'hooks/useMembership';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
@@ -22,7 +22,7 @@ import { MIN_NUMBER_OF_SHARES } from 'web3/constants';
 
 const HiringBaord: React.FC = () => {
   const { bids, chainId, fetchBids, isLoadingBids } = useWallet();
-  const { shares, isLoadingShares } = useShares();
+  const { shares, isLoadingShares } = useMembership();
   const { address, connectWallet } = useWallet();
   const [showMySubmissions, setShowMySubmissions] = useState(false);
   const [filteredBids, setFilteredBids] = useState<ICombinedBid[]>([]);

@@ -82,3 +82,7 @@ export const RPC_URLS: StringInfo = {
   4: RINKEBY_RPC || 'https://rinkeby-light.eth.linkpool.io',
   100: XDAI_RPC || 'https://rpc.xdaichain.com',
 };
+
+export const MOLOCH_SUBGRAPH_URL =
+  process.env.REACT_APP_MOLOCH_SUBGRAPH_URL ||
+  'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai';

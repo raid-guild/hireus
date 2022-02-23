@@ -1,7 +1,7 @@
 import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
 import { utils } from 'ethers';
 import { motion } from 'framer-motion';
-import { useShares } from 'hooks/useShares';
+import { useMembership } from 'hooks/useMembership';
 import React from 'react';
 import { round, shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
@@ -34,7 +34,7 @@ const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
   onAccept,
   openCancelModal,
 }) => {
-  const { shares, isLoadingShares } = useShares();
+  const { shares, isLoadingShares } = useMembership();
 
   return (
     <>
