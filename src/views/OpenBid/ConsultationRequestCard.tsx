@@ -3,6 +3,7 @@ import { utils } from 'ethers';
 import { motion } from 'framer-motion';
 import { useMembership } from 'hooks/useMembership';
 import React from 'react';
+import { StyledBodyText, StyledCard } from 'themes/styled';
 import { round, shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
 import {
@@ -39,7 +40,7 @@ const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
   return (
     <>
       {consultationDetails.bid_id ? (
-        <div id="consultation-request-card">
+        <StyledCard>
           <motion.h2
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -197,17 +198,11 @@ const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
               )}
             </div>
           )}
-        </div>
+        </StyledCard>
       ) : (
-        <div id="consultation-request-card">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-          >
-            No bid details.
-          </motion.h2>
-        </div>
+        <StyledCard p={'32px'}>
+          <StyledBodyText>No bid details.</StyledBodyText>
+        </StyledCard>
       )}
     </>
   );

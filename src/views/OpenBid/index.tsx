@@ -1,11 +1,11 @@
+import { Box, Flex } from '@chakra-ui/react';
 import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
 // import ConfirmCancel from 'components/ConfirmCancel';
 // import Snackbar from 'components/Snackbar';
 import { useWallet } from 'contexts/WalletContext';
 import { motion } from 'framer-motion';
-import { rootLocation } from 'locations';
-import React, { useCallback, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
 import web3 from 'web3';
@@ -21,7 +21,6 @@ type ICauseParams = {
 const OpenBid: React.FC = () => {
   const { id } = useParams<ICauseParams>();
   const { address, bids, chainId, fetchBids } = useWallet();
-  const history = useHistory();
 
   const [consultationDetails, setConsultationDetails] =
     useState<ICombinedBid | null>(null);
@@ -37,7 +36,13 @@ const OpenBid: React.FC = () => {
   // const [hash, setHash] = useState('');
   // const [txFailed, setTxFailed] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (bids.length === 0) {
+      fetchBids();
+    }
+  }, [bids, fetchBids]);
+
+  useEffect(() => {
     if (!(bids.length !== 0 && consultationDetails && chainId)) return;
     const dateNow = Date.now();
     const lockupEnds =
@@ -49,7 +54,7 @@ const OpenBid: React.FC = () => {
     }
   }, [bids.length, chainId, consultationDetails]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!(consultationDetails && chainId)) return;
     const dateNow = Date.now();
     const lockupEnds =
@@ -71,7 +76,7 @@ const OpenBid: React.FC = () => {
     }
   }, [chainId, consultationDetails]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (address && bids.length > 0) {
       const consultationDetails = bids.filter(consultation => {
         return consultation.consultation_hash === id;
@@ -91,26 +96,10 @@ const OpenBid: React.FC = () => {
   }, []);
 
   return (
-    <div className="hiringboard-container">
-      <button
-        className="consultation-button"
-        style={{
-          marginTop: '12px',
-          position: 'absolute',
-          right: '275px',
-          top: '24px',
-        }}
-        onClick={() => {
-          history.push(rootLocation);
-        }}
-      >
-        Back
-      </button>
+    <Box px={{ base: '10px', md: '20px', lg: '50px' }} w="100%">
       {consultationDetails && chainId && (
-        <div className="hiringboard-card-container">
-          <div
-            style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
-          >
+        <Box w={'50%'}>
+          <Flex direction={'column'}>
             <ConsultationRequestCard
               address={address || ''}
               chainId={chainId}
@@ -133,8 +122,8 @@ const OpenBid: React.FC = () => {
                 refresh={fetchBids}
               />
             )}
-          </div>
-          <div className="hiringboard-card">
+          </Flex>
+          <div>
             {consultationDetails.bid_id ? (
               <div className="open-bid-details-flex">
                 <motion.h2
@@ -202,7 +191,7 @@ const OpenBid: React.FC = () => {
               </div>
             )}
           </div>
-        </div>
+        </Box>
       )}
       {/* {showSnackbar && hash !== '' && (
         <Snackbar
@@ -225,7 +214,7 @@ const OpenBid: React.FC = () => {
           setShowSnackbar={setShowSnackbar}
         />
       )} */}
-    </div>
+    </Box>
   );
 };
 
