@@ -1,8 +1,9 @@
 import { useWallet } from 'contexts/WalletContext';
+import { BigNumber } from 'ethers';
 import { getShares } from 'graphql/getShares';
 import * as _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { DAO_ADDRESS } from 'web3/constants';
+import { DAO_ADDRESS, MIN_NUMBER_OF_SHARES } from 'web3/constants';
 
 interface IMembershipDetails {
   shares: string;
@@ -22,13 +23,11 @@ export const useMembership = (refresh = 0): IMembershipDetails => {
       if (!(address && chainId)) return;
       setLoadingShares(true);
       const fetchedShares = await getShares(address, DAO_ADDRESS[chainId]);
-      setShares(_.get(fetchedShares, 'shares'));
+      const shares = _.get(fetchedShares, 'shares');
+      setShares(shares);
       setLoadingShares(false);
       if (
-        _.gte(
-          Number(_.get(fetchedShares, 'shares')),
-          _.get(DAO_ADDRESS[chainId], _.get(fetchedShares, 'molochAddress')),
-        )
+        BigNumber.from(shares).gt(BigNumber.from(MIN_NUMBER_OF_SHARES[chainId]))
       ) {
         setIsMember(true);
       }

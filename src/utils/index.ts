@@ -45,6 +45,8 @@ export const combineBids = async (
         const combinedBid = await addFromAddress(chainId, consultation, bids);
         return combinedBid;
       } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
         return false;
       }
     }),
@@ -66,6 +68,7 @@ const addFromAddress = async (
   consultation: IConsultation,
   bids: IBid[],
 ) => {
+  if (!utils.isHexString(consultation.consultation_hash)) return false;
   const newBid: ICombinedBid = {
     project_name: consultation.project_name,
     created: consultation.created,

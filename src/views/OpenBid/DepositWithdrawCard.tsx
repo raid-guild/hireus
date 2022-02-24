@@ -1,6 +1,9 @@
 import { Box, Flex, Spinner } from '@chakra-ui/react';
-import { utils } from 'ethers';
-import React, { useMemo, useState } from 'react';
+import { useWallet } from 'contexts/WalletContext';
+import { BigNumber, utils } from 'ethers';
+import { useAllowance } from 'hooks/useAllowance';
+import React, { useCallback, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 import {
   StyledBodyText,
   StyledCard,
@@ -10,6 +13,12 @@ import {
 } from 'themes/styled';
 import { round } from 'utils';
 import type { ICombinedBid } from 'utils/types';
+import { onApprove } from 'web3/approve';
+import {
+  DEFAULT_NETWORK,
+  QUEUE_CONTRACT_ADDRESS,
+  RAID_CONTRACT_ADDRESS,
+} from 'web3/constants';
 
 type DepositWithdrawCardProps = {
   address: string;
@@ -30,12 +39,23 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
   lockupEnded,
   refresh,
 }) => {
+  const { chainId, provider } = useWallet();
+  const allowance = useAllowance(
+    QUEUE_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
+    RAID_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
+  );
+
   const [depositAmount, setDepositAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
 
-  const [isApproved] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
   const [isDepositing] = useState(false);
   const [isWithdrawing] = useState(false);
+
+  const isApproved = useMemo(() => {
+    if (!depositAmount) return false;
+    return utils.parseEther(depositAmount).lte(BigNumber.from(allowance));
+  }, [allowance, depositAmount]);
 
   const onDepositAndUpdate = async (id: string) => {
     setTxConfirmed(false);
@@ -49,13 +69,27 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
     refresh();
   };
 
-  const onApproveAndUpdate = async () => {
+  const onApproveRaid = useCallback(async () => {
+    if (!(provider && chainId)) return;
+    setIsApproving(true);
     setTxConfirmed(false);
     setShowSnackbar(true);
-    // await onApprove();
-    setTxConfirmed(true);
-    refresh();
-  };
+    try {
+      await onApprove(
+        provider,
+        RAID_CONTRACT_ADDRESS[chainId],
+        QUEUE_CONTRACT_ADDRESS[chainId],
+        utils.parseEther(depositAmount).toString(),
+      );
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+      toast.error('Error approving $RAID');
+    } finally {
+      setIsApproving(false);
+      setTxConfirmed(true);
+    }
+  }, [chainId, depositAmount, provider, setShowSnackbar, setTxConfirmed]);
 
   const onWithdrawAndupdate = async (id: string) => {
     setTxConfirmed(false);
@@ -120,12 +154,12 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
                         ? consultationDetails.bid_id
                         : consultationDetails.airtable_id,
                     )
-                  : onApproveAndUpdate();
+                  : onApproveRaid();
               }}
               mt={'20px'}
               w={'100%'}
             >
-              {isDepositing ? (
+              {isDepositing || isApproving ? (
                 <Spinner color={'#fff'} />
               ) : isApproved ? (
                 'Submit Bid'

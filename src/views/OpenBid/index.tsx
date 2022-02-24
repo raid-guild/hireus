@@ -9,7 +9,11 @@ import { useParams } from 'react-router-dom';
 import { shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
 import web3 from 'web3';
-import { BLOCK_EXPLORER_URL, LOCKUP_PERIOD } from 'web3/constants';
+import {
+  BLOCK_EXPLORER_URL,
+  DEFAULT_NETWORK,
+  LOCKUP_PERIOD,
+} from 'web3/constants';
 
 import ConsultationRequestCard from './ConsultationRequestCard';
 import DepositWithdrawCard from './DepositWithdrawCard';
@@ -77,7 +81,7 @@ const OpenBid: React.FC = () => {
   }, [chainId, consultationDetails]);
 
   useEffect(() => {
-    if (address && bids.length > 0) {
+    if (bids.length > 0) {
       const consultationDetails = bids.filter(consultation => {
         return consultation.consultation_hash === id;
       });
@@ -97,12 +101,12 @@ const OpenBid: React.FC = () => {
 
   return (
     <Box my={'60px'} px={{ base: '10px', md: '20px', lg: '50px' }} w="100%">
-      {consultationDetails && chainId && (
+      {consultationDetails && (
         <Box w={'50%'}>
           <Flex direction={'column'}>
             <ConsultationRequestCard
               address={address || ''}
-              chainId={chainId}
+              chainId={chainId || DEFAULT_NETWORK}
               consultationDetails={consultationDetails}
               isAccepting={isAccepting}
               isCancelling={isCancelling}
