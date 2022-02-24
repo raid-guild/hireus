@@ -96,7 +96,7 @@ const OpenBid: React.FC = () => {
   }, []);
 
   return (
-    <Box px={{ base: '10px', md: '20px', lg: '50px' }} w="100%">
+    <Box my={'60px'} px={{ base: '10px', md: '20px', lg: '50px' }} w="100%">
       {consultationDetails && chainId && (
         <Box w={'50%'}>
           <Flex direction={'column'}>

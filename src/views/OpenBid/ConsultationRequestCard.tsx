@@ -200,7 +200,7 @@ const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
           )}
         </StyledCard>
       ) : (
-        <StyledCard p={'32px'}>
+        <StyledCard mb={'32px'} p={'32px'}>
           <StyledBodyText>No bid details.</StyledBodyText>
         </StyledCard>
       )}

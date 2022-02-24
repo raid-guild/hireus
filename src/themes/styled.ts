@@ -185,9 +185,14 @@ export const StyledSmallSecondaryButton = styled(Button)`
 // --------- Form Inputs ------------
 
 export const StyledInput = styled(Input)`
-  background: ${theme.colors.blackLight};
-  border: none;
-  border-radius: 0;
+  background: ${theme.colors.black};
+  border: 2px solid ${theme.colors.red};
+  border-radius: 4px;
+  color: #fff;
+
+  &::placeholder {
+    color: ${theme.colors.greyDark};
+  }
 `;
 
 export const StyledTextArea = styled(Textarea)`
@@ -202,6 +207,7 @@ export const StyledCard = styled(Box)`
   background: ${theme.colors.black};
   border-top: 2px solid ${theme.colors.red};
   border-radius: 4px;
+  min-height: 200px;
   overflow-y: scroll;
 `;
 

@@ -1,6 +1,13 @@
+import { Box, Flex, Spinner } from '@chakra-ui/react';
 import { utils } from 'ethers';
-import { motion } from 'framer-motion';
 import React, { useMemo, useState } from 'react';
+import {
+  StyledBodyText,
+  StyledCard,
+  StyledInput,
+  StyledNumberText,
+  StyledPrimaryButton,
+} from 'themes/styled';
 import { round } from 'utils';
 import type { ICombinedBid } from 'utils/types';
 
@@ -73,28 +80,24 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
   // }, [raidBalance, depositAmount]);
 
   return (
-    <div id="deposit-withdraw-card">
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            width: '48%',
-          }}
-        >
-          <div>
-            <p>Wallet Balance:</p>
+    <StyledCard p={'32px'}>
+      <Flex justify={'space-between'}>
+        <Flex direction={'column'} justify={'space-between'} w={'48%'}>
+          <Box>
+            <StyledBodyText>Wallet Balance:</StyledBodyText>
             {/* <h2>{round(raidBalance, 4)} $RAID</h2> */}
-            <h2>{round('500', 4)} $RAID</h2>
-          </div>
-          <div>
+            <StyledNumberText fontSize={'20px'} mb={'16px'}>
+              {round('500', 4)} $RAID
+            </StyledNumberText>
+          </Box>
+          <Box>
             {insufficientBalance && (
-              <p style={{ fontSize: '12px', marginBottom: '10px' }}>
+              <StyledBodyText fontSize={'12px'} mb={'10px'}>
                 Insufficient balance
-              </p>
+              </StyledBodyText>
             )}
-            <input
+            <StyledInput
+              color={'#fff'}
               id={'deposit-amount'}
               placeholder={`0`}
               type={'number'}
@@ -103,12 +106,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
               value={depositAmount}
               onChange={e => setDepositAmount(e.target.value)}
             />
-            <motion.button
-              className="consultation-button"
-              style={{ margin: '0', width: '100%' }}
-              initial={{ x: '100vw' }}
-              animate={{ x: 0 }}
-              transition={{ delay: 1.3 }}
+            <StyledPrimaryButton
               disabled={
                 depositAmount === '0' ||
                 depositAmount === '' ||
@@ -124,36 +122,31 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
                     )
                   : onApproveAndUpdate();
               }}
+              mt={'20px'}
+              w={'100%'}
             >
               {isDepositing ? (
-                <div className="spinner">Loading...</div>
+                <Spinner color={'#fff'} />
               ) : isApproved ? (
                 'Submit Bid'
               ) : (
                 'Approve $RAID'
               )}
-            </motion.button>
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            width: '48%',
-          }}
-        >
-          <div>
-            <p>You deposited:</p>
-            <h2>
+            </StyledPrimaryButton>
+          </Box>
+        </Flex>
+        <Flex direction={'column'} justify={'space-between'} w={'48%'}>
+          <Box>
+            <StyledBodyText>You deposited:</StyledBodyText>
+            <StyledNumberText fontSize={'20px'} mb={'16px'}>
               {consultationDetails.submitter === address
                 ? round(utils.formatEther(consultationDetails.amount), 4)
                 : '0'}{' '}
               $RAID
-            </h2>
-          </div>
-          <div>
-            <input
+            </StyledNumberText>
+          </Box>
+          <Box>
+            <StyledInput
               id={'deposit-amount'}
               placeholder={`0`}
               type={'number'}
@@ -162,12 +155,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
               value={withdrawAmount}
               onChange={e => setWithdrawAmount(e.target.value)}
             />
-            <motion.button
-              className="consultation-button"
-              style={{ margin: '0', width: '100%' }}
-              initial={{ x: '100vw' }}
-              animate={{ x: 0 }}
-              transition={{ delay: 1.3 }}
+            <StyledPrimaryButton
               disabled={
                 withdrawAmount === '0' ||
                 withdrawAmount === '' ||
@@ -179,29 +167,20 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
               onClick={() => {
                 onWithdrawAndupdate(consultationDetails.bid_id);
               }}
+              mt={'20px'}
+              w={'100%'}
             >
-              {isWithdrawing ? (
-                <div className="spinner">Loading...</div>
-              ) : (
-                'Withdraw Bid'
-              )}
-            </motion.button>
-          </div>
-        </div>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+              {isWithdrawing ? <Spinner color={'#fff'} /> : 'Withdraw Bid'}
+            </StyledPrimaryButton>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex justify={'center'}>
         {!!consultationDetails.bid_id && !lockupEnded && (
-          <motion.p
-            id="lock-time"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            {lockTime}
-          </motion.p>
+          <StyledBodyText>{lockTime}</StyledBodyText>
         )}
-      </div>
-    </div>
+      </Flex>
+    </StyledCard>
   );
 };
 
