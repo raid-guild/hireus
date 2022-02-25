@@ -38,7 +38,7 @@ export const RAID_CONTRACT_ADDRESS: StringInfo = {
 export const QUEUE_CONTRACT_ADDRESS: StringInfo = {
   4: '0x3a9f3147742e51efba1f04ff26e8dc95978dccb4',
   100: devMode
-    ? '0x6FE12999D11e02423fb57Cc75566BCDd4EB98DD2'
+    ? '0x6fe12999d11e02423fb57cc75566bcdd4eb98dd2'
     : '0xD880b00877726c2B76173aCEc061b29C27D5d791',
 };
 export const DAO_ADDRESS: StringInfo = {

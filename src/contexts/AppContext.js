@@ -14,68 +14,6 @@ export const AppContext = createContext();
 class AppContextProvider extends Component {
   state = {};
 
-  // Auction Queue Functions
-  // getRaidBalance = async () => {
-  //   const RAID = new this.state.web3.eth.Contract(
-  //     RAID_ABI,
-  //     RAID_CONTRACT_ADDRESS,
-  //   );
-  //   const balance = await RAID.methods.balanceOf(this.state.account).call();
-  //   const balanceConverted = this.state.web3.utils.fromWei(balance);
-  //   const allowance = await RAID.methods
-  //     .allowance(this.state.account, QUEUE_CONTRACT_ADDRESS)
-  //     .call();
-  //   const allowanceConverted = this.state.web3.utils.fromWei(allowance);
-  //   this.setState({
-  //     raidBalance: balanceConverted,
-  //     raidAllowance: allowanceConverted,
-  //   });
-  // };
-
-  // onChangeDepositAmount = amount => {
-  //   this.setState({ depositAmount: amount });
-  //   if (amount === '') {
-  //     this.setState({ isApproved: false });
-  //   } else if (
-  //     BigInt(this.state.web3.utils.toWei(amount)) >
-  //     BigInt(this.state.web3.utils.toWei(this.state.raidAllowance))
-  //   ) {
-  //     this.setState({ isApproved: false });
-  //   } else {
-  //     this.setState({ isApproved: true });
-  //   }
-  // };
-
-  // onDeposit = async consultationId => {
-  //   const hex = this.state.web3.utils.asciiToHex(consultationId);
-  //   this.setState({ isDepositPending: true, hash: '' });
-  //   try {
-  //     const QUEUE_CONTRACT = new this.state.web3.eth.Contract(
-  //       QUEUE_ABI,
-  //       QUEUE_CONTRACT_ADDRESS,
-  //     );
-  //     await QUEUE_CONTRACT.methods
-  //       .submitBid(this.state.web3.utils.toWei(this.state.depositAmount), hex)
-  //       .send({
-  //         from: this.state.account,
-  //       })
-  //       .once('transactionHash', async hash => {
-  //         this.setState({ hash: hash });
-  //       })
-  //       .on('confirmation', async () => {
-  //         await this.getRaidBalance();
-  //         this.onChangeDepositAmount('');
-  //       })
-  //       .on('error', async error => {
-  //         this.setState({ txFailed: true });
-  //         console.error('Could not submit bid', error);
-  //       });
-  //   } catch (err) {
-  //     console.error('Could not submit bid', err);
-  //   }
-  //   this.setState({ isDepositPending: false });
-  // };
-
   // onIncreaseBid = async bidId => {
   //   this.setState({ isDepositPending: true, hash: '' });
   //   try {

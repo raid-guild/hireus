@@ -21,6 +21,7 @@ import {
   QUEUE_CONTRACT_ADDRESS,
   RAID_CONTRACT_ADDRESS,
 } from 'web3/constants';
+import { submitBid } from 'web3/queue';
 
 type DepositWithdrawCardProps = {
   address: string;
@@ -61,7 +62,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
   const [withdrawAmount, setWithdrawAmount] = useState('');
 
   const [isApproving, setIsApproving] = useState(false);
-  const [isDepositing] = useState(false);
+  const [isDepositing, setIsDepositing] = useState(false);
   const [isWithdrawing] = useState(false);
 
   const isApproved = useMemo(() => {
@@ -69,17 +70,79 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
     return utils.parseEther(depositAmount).lte(BigNumber.from(allowance));
   }, [allowance, depositAmount]);
 
-  const onDepositAndUpdate = async (id: string) => {
-    setTxConfirmed(false);
-    setShowSnackbar(true);
-    if (consultationDetails.bid_id) {
-      // await onIncreaseBid(id);
-    } else {
-      // await onDeposit(id);
-    }
-    setTxConfirmed(true);
-    fetchBids();
-  };
+  const onDeposit = useCallback(
+    async (id: string) => {
+      if (!(chainId && isApproved && provider)) return;
+      setIsDepositing(true);
+      setTxConfirmed(false);
+      setShowSnackbar(true);
+      const hex = utils.formatBytes32String(id);
+      try {
+        const tx = await submitBid(
+          provider,
+          QUEUE_CONTRACT_ADDRESS[chainId],
+          utils.parseEther(depositAmount).toString(),
+          hex,
+        );
+        if (!tx) {
+          toast.error('Transaction failed');
+          setTxFailed(false);
+          setIsDepositing(false);
+          return;
+        }
+        setHash(tx.hash);
+        const { status } = await tx.wait(2);
+        if (status === 1) {
+          toast.success('Bid successfully submitted');
+          setTxConfirmed(true);
+          refresh();
+          fetchBids();
+          setIsDepositing(false);
+        } else {
+          setTxFailed(false);
+          setIsDepositing(false);
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+        toast.error('Error submitting bid');
+        setIsDepositing(false);
+      }
+    },
+    [
+      chainId,
+      depositAmount,
+      fetchBids,
+      isApproved,
+      provider,
+      refresh,
+      setHash,
+      setShowSnackbar,
+      setTxConfirmed,
+      setTxFailed,
+    ],
+  );
+
+  const onDepositOrIncrease = useCallback(
+    async (id: string) => {
+      setTxConfirmed(false);
+      setShowSnackbar(true);
+      if (consultationDetails.bid_id) {
+        // await onIncreaseBid(id);
+      } else {
+        await onDeposit(id);
+      }
+      setTxConfirmed(true);
+      fetchBids();
+    },
+    [
+      consultationDetails,
+      fetchBids,
+      onDeposit,
+      setTxConfirmed,
+      setShowSnackbar,
+    ],
+  );
 
   const onApproveRaid = useCallback(async () => {
     if (!(provider && chainId)) return;
@@ -102,6 +165,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
       setHash(tx.hash);
       const { status } = await tx.wait(2);
       if (status === 1) {
+        toast.success('$RAID successfully approved');
         setTxConfirmed(true);
         refresh();
         setIsApproving(false);
@@ -134,19 +198,18 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
     refresh();
   };
 
-  const insufficientBalance = useMemo(() => false, []);
-
-  // const insufficientBalance = useMemo(() => {
-  //   if (!(depositAmount && raidBalance)) return false;
-  //   try {
-  //     return (
-  //       BigInt(utils.parseEther(depositAmount || '0').toString()) >
-  //       BigInt(utils.parseEther(raidBalance).toString())
-  //     );
-  //   } catch (e) {
-  //     return false;
-  //   }
-  // }, [raidBalance, depositAmount]);
+  const insufficientBalance = useMemo(() => {
+    if (!(depositAmount && balance)) return false;
+    try {
+      return BigNumber.from(utils.parseEther(depositAmount || '0')).gt(
+        BigNumber.from(balance),
+      );
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      return false;
+    }
+  }, [balance, depositAmount]);
 
   return (
     <StyledCard p={'32px'}>
@@ -183,7 +246,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
               }
               onClick={() => {
                 isApproved
-                  ? onDepositAndUpdate(
+                  ? onDepositOrIncrease(
                       consultationDetails.bid_id
                         ? consultationDetails.bid_id
                         : consultationDetails.airtable_id,
