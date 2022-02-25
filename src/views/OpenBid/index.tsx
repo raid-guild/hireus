@@ -1,7 +1,7 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
 // import ConfirmCancel from 'components/ConfirmCancel';
-// import Snackbar from 'components/Snackbar';
+import Snackbar from 'components/Snackbar';
 import { useWallet } from 'contexts/WalletContext';
 import { motion } from 'framer-motion';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -35,10 +35,10 @@ const OpenBid: React.FC = () => {
   const [lockupEnded, setLockupEnded] = useState(false);
   const [lockTime, setLockTime] = useState('');
   const [, setShowCancelModal] = useState(false);
-  const [, setShowSnackbar] = useState(false);
-  const [, setTxConfirmed] = useState(false);
-  // const [hash, setHash] = useState('');
-  // const [txFailed, setTxFailed] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [txConfirmed, setTxConfirmed] = useState(false);
+  const [hash, setHash] = useState('');
+  const [txFailed, setTxFailed] = useState(false);
 
   useEffect(() => {
     if (bids.length === 0) {
@@ -118,8 +118,10 @@ const OpenBid: React.FC = () => {
             {address && (
               <DepositWithdrawCard
                 address={address}
+                setHash={setHash}
                 setShowSnackbar={setShowSnackbar}
                 setTxConfirmed={setTxConfirmed}
+                setTxFailed={setTxFailed}
                 consultationDetails={consultationDetails}
                 lockTime={lockTime}
                 lockupEnded={lockupEnded}
@@ -197,7 +199,7 @@ const OpenBid: React.FC = () => {
           </div>
         </Box>
       )}
-      {/* {showSnackbar && hash !== '' && (
+      {showSnackbar && hash !== '' && (
         <Snackbar
           setShowSnackbar={setShowSnackbar}
           message={
@@ -209,7 +211,7 @@ const OpenBid: React.FC = () => {
           }
           hash={hash}
         />
-      )} */}
+      )}
       {/* {consultationDetails && (
         <ConfirmCancel
           consultationDetails={consultationDetails}

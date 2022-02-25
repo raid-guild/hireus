@@ -2,6 +2,7 @@ import { Box, Flex, Spinner } from '@chakra-ui/react';
 import { useWallet } from 'contexts/WalletContext';
 import { BigNumber, utils } from 'ethers';
 import { useAllowance } from 'hooks/useAllowance';
+import { useRefresh } from 'hooks/useRefresh';
 import React, { useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
@@ -22,8 +23,10 @@ import {
 
 type DepositWithdrawCardProps = {
   address: string;
+  setHash: React.Dispatch<React.SetStateAction<string>>;
   setShowSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
   setTxConfirmed: React.Dispatch<React.SetStateAction<boolean>>;
+  setTxFailed: React.Dispatch<React.SetStateAction<boolean>>;
   consultationDetails: ICombinedBid;
   lockTime: string;
   lockupEnded: boolean;
@@ -32,17 +35,21 @@ type DepositWithdrawCardProps = {
 
 const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
   address,
+  setHash,
   setShowSnackbar,
   setTxConfirmed,
+  setTxFailed,
   consultationDetails,
   lockTime,
   lockupEnded,
   refresh,
 }) => {
   const { chainId, provider } = useWallet();
+  const [refreshCount, allowanceRefresh] = useRefresh();
   const allowance = useAllowance(
     QUEUE_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
     RAID_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
+    refreshCount,
   );
 
   const [depositAmount, setDepositAmount] = useState('');
@@ -75,21 +82,44 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
     setTxConfirmed(false);
     setShowSnackbar(true);
     try {
-      await onApprove(
+      const tx = await onApprove(
         provider,
         RAID_CONTRACT_ADDRESS[chainId],
         QUEUE_CONTRACT_ADDRESS[chainId],
         utils.parseEther(depositAmount).toString(),
       );
+      if (!tx) {
+        toast.error('Transaction failed');
+        setTxFailed(false);
+        setIsApproving(false);
+        return;
+      }
+      setHash(tx.hash);
+      const { status } = await tx.wait(2);
+      if (status === 1) {
+        setTxConfirmed(true);
+        allowanceRefresh();
+        setIsApproving(false);
+      } else {
+        setTxFailed(false);
+        setIsApproving(false);
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
       toast.error('Error approving $RAID');
-    } finally {
       setIsApproving(false);
-      setTxConfirmed(true);
     }
-  }, [chainId, depositAmount, provider, setShowSnackbar, setTxConfirmed]);
+  }, [
+    allowanceRefresh,
+    chainId,
+    depositAmount,
+    provider,
+    setHash,
+    setShowSnackbar,
+    setTxConfirmed,
+    setTxFailed,
+  ]);
 
   const onWithdrawAndupdate = async (id: string) => {
     setTxConfirmed(false);
