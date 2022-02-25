@@ -46,38 +46,6 @@ class AppContextProvider extends Component {
   //   }
   // };
 
-  // onApprove = async () => {
-  //   this.setState({ isDepositPending: true, hash: '' });
-  //   try {
-  //     const RAID = new this.state.web3.eth.Contract(
-  //       RAID_ABI,
-  //       RAID_CONTRACT_ADDRESS,
-  //     );
-  //     await RAID.methods
-  //       .approve(
-  //         QUEUE_CONTRACT_ADDRESS,
-  //         this.state.web3.utils.toWei(this.state.depositAmount),
-  //       )
-  //       .send({
-  //         from: this.state.account,
-  //       })
-  //       .once('transactionHash', async hash => {
-  //         this.setState({ hash: hash });
-  //       })
-  //       .on('confirmation', async () => {
-  //         await this.getRaidBalance();
-  //         this.onChangeDepositAmount(this.state.depositAmount);
-  //       })
-  //       .on('error', async error => {
-  //         this.setState({ txFailed: true });
-  //         console.error('Could not approve token', error);
-  //       });
-  //   } catch (err) {
-  //     console.error('Could not approve token', err);
-  //   }
-  //   this.setState({ isDepositPending: false });
-  // };
-
   // onDeposit = async consultationId => {
   //   const hex = this.state.web3.utils.asciiToHex(consultationId);
   //   this.setState({ isDepositPending: true, hash: '' });
