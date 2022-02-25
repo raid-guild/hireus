@@ -2,6 +2,7 @@ import { Box, Flex, Spinner } from '@chakra-ui/react';
 import { useWallet } from 'contexts/WalletContext';
 import { BigNumber, utils } from 'ethers';
 import { useAllowance } from 'hooks/useAllowance';
+import { useBalance } from 'hooks/useBalance';
 import { useRefresh } from 'hooks/useRefresh';
 import React, { useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -30,7 +31,7 @@ type DepositWithdrawCardProps = {
   consultationDetails: ICombinedBid;
   lockTime: string;
   lockupEnded: boolean;
-  refresh: () => void;
+  fetchBids: () => void;
 };
 
 const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
@@ -42,12 +43,16 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
   consultationDetails,
   lockTime,
   lockupEnded,
-  refresh,
+  fetchBids,
 }) => {
   const { chainId, provider } = useWallet();
-  const [refreshCount, allowanceRefresh] = useRefresh();
+  const [refreshCount, refresh] = useRefresh();
   const allowance = useAllowance(
     QUEUE_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
+    RAID_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
+    refreshCount,
+  );
+  const { balance } = useBalance(
     RAID_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
     refreshCount,
   );
@@ -73,7 +78,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
       // await onDeposit(id);
     }
     setTxConfirmed(true);
-    refresh();
+    fetchBids();
   };
 
   const onApproveRaid = useCallback(async () => {
@@ -98,7 +103,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
       const { status } = await tx.wait(2);
       if (status === 1) {
         setTxConfirmed(true);
-        allowanceRefresh();
+        refresh();
         setIsApproving(false);
       } else {
         setTxFailed(false);
@@ -111,7 +116,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
       setIsApproving(false);
     }
   }, [
-    allowanceRefresh,
+    refresh,
     chainId,
     depositAmount,
     provider,
@@ -149,9 +154,8 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
         <Flex direction={'column'} justify={'space-between'} w={'48%'}>
           <Box>
             <StyledBodyText>Wallet Balance:</StyledBodyText>
-            {/* <h2>{round(raidBalance, 4)} $RAID</h2> */}
             <StyledNumberText fontSize={'20px'} mb={'16px'}>
-              {round('500', 4)} $RAID
+              {round(utils.formatEther(balance).toString(), 4)} $RAID
             </StyledNumberText>
           </Box>
           <Box>

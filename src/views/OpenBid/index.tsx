@@ -125,7 +125,7 @@ const OpenBid: React.FC = () => {
                 consultationDetails={consultationDetails}
                 lockTime={lockTime}
                 lockupEnded={lockupEnded}
-                refresh={fetchBids}
+                fetchBids={fetchBids}
               />
             )}
           </Flex>
