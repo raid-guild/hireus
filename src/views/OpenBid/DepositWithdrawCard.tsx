@@ -21,7 +21,7 @@ import {
   QUEUE_CONTRACT_ADDRESS,
   RAID_CONTRACT_ADDRESS,
 } from 'web3/constants';
-import { submitBid } from 'web3/queue';
+import { increaseBid, submitBid } from 'web3/queue';
 
 type DepositWithdrawCardProps = {
   address: string;
@@ -106,7 +106,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
         }
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.error(error);
         toast.error('Error submitting bid');
         setIsSubmittingOrIncreasingBid(false);
       }
@@ -133,7 +133,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
       setTxConfirmed(false);
       setShowSnackbar(true);
       try {
-        const tx = await submitBid(
+        const tx = await increaseBid(
           provider,
           QUEUE_CONTRACT_ADDRESS[chainId],
           utils.parseEther(depositAmount).toString(),
@@ -159,7 +159,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
         }
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.error(error);
         toast.error('Error increasing bid');
         setIsSubmittingOrIncreasingBid(false);
       }
@@ -229,7 +229,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
       }
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.log(error);
+      console.error(error);
       toast.error('Error approving $RAID');
       setIsApproving(false);
     }
@@ -290,6 +290,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
               step={'0.01'}
               value={depositAmount}
               onChange={e => setDepositAmount(e.target.value)}
+              onWheel={() => (document?.activeElement as HTMLElement).blur()}
             />
             <StyledPrimaryButton
               disabled={
@@ -307,7 +308,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
               {isSubmittingOrIncreasingBid || isApproving ? (
                 <Spinner color={'#fff'} />
               ) : isApproved ? (
-                'Submit Bid'
+                `${consultationDetails.bid_id ? 'Increase' : 'Submit'} Bid`
               ) : (
                 'Approve $RAID'
               )}
@@ -333,6 +334,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
               step={'0.01'}
               value={withdrawAmount}
               onChange={e => setWithdrawAmount(e.target.value)}
+              onWheel={() => (document?.activeElement as HTMLElement).blur()}
             />
             <StyledPrimaryButton
               disabled={

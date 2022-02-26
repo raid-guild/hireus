@@ -3,9 +3,14 @@ import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
 // import ConfirmCancel from 'components/ConfirmCancel';
 import Snackbar from 'components/Snackbar';
 import { useWallet } from 'contexts/WalletContext';
-import { motion } from 'framer-motion';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import {
+  StyledBodyText,
+  StyledBountyRow,
+  StyledCard,
+  StyledNumberText,
+} from 'themes/styled';
 import { shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
 import web3 from 'web3';
@@ -101,8 +106,8 @@ const OpenBid: React.FC = () => {
 
   return (
     <Box my={'60px'} px={{ base: '10px', md: '20px', lg: '50px' }} w="100%">
-      {consultationDetails && (
-        <Box w={'50%'}>
+      <Flex justify={'space-between'}>
+        <Box w={'49%'}>
           <Flex direction={'column'}>
             <ConsultationRequestCard
               address={address || ''}
@@ -115,7 +120,7 @@ const OpenBid: React.FC = () => {
               onAccept={onAccept}
               openCancelModal={() => setShowCancelModal(true)}
             />
-            {address && (
+            {address && consultationDetails && (
               <DepositWithdrawCard
                 address={address}
                 setHash={setHash}
@@ -129,76 +134,65 @@ const OpenBid: React.FC = () => {
               />
             )}
           </Flex>
-          <div>
-            {consultationDetails.bid_id ? (
-              <div className="open-bid-details-flex">
-                <motion.h2
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4, duration: 0.5 }}
-                >
-                  Bid History:
-                </motion.h2>
-              </div>
-            ) : (
-              <p>
-                No bid has been submitted for this consultation.{' '}
-                {!address && 'Connect wallet to submit a bid.'}
-              </p>
-            )}
-            {consultationDetails.changes.length > 0 && (
-              <div className="bounty-list" style={{ marginTop: '20px' }}>
-                {consultationDetails.changes.map((change, index) => (
+        </Box>
+        <StyledCard minH={'400px'} p={'32px'} width={'49%'}>
+          {consultationDetails?.bid_id ? (
+            <Flex>
+              <StyledBodyText fontSize={'20px'}>Bid History:</StyledBodyText>
+            </Flex>
+          ) : (
+            <StyledBodyText>
+              No bid has been submitted for this consultation.{' '}
+              {!address && 'Connect wallet to submit a bid.'}
+            </StyledBodyText>
+          )}
+          {consultationDetails && consultationDetails.changes?.length > 0 && (
+            <Flex direction={'column'} mt={'20px'}>
+              {consultationDetails?.changes.map((change, index) => (
+                <Flex w={'100%'} key={index}>
                   <a
-                    href={`${BLOCK_EXPLORER_URL}tx/${change.txHash}`}
+                    href={`${
+                      BLOCK_EXPLORER_URL[chainId || DEFAULT_NETWORK]
+                    }tx/${change.txHash}`}
                     target={'_blank'}
                     rel={'noopener noreferrer'}
-                    key={index}
-                    className={`bounty-list-item bounty-list-item${
-                      index % 2 !== 0 && '--2'
-                    }`}
+                    style={{ width: '100%' }}
                   >
-                    <div className="bounty-list-item-inner">
-                      <motion.div
-                        className="etherscan-container"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.6, duration: 0.5 }}
-                        style={{ marginRight: '16px' }}
-                      >
-                        <XDaiSvg />
-                      </motion.div>
-                      <p>
-                        {new Date(
-                          Number(change.changedAt) * 1000,
-                        ).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="bounty-list-item-inner">
-                      <p>
+                    <StyledBountyRow
+                      justify={'space-between'}
+                      secondary={index % 2 !== 0 ? 1 : 0}
+                      p={{ base: '4px', md: '10px' }}
+                    >
+                      <Flex>
+                        <Box mr={'16px'}>
+                          <XDaiSvg />
+                        </Box>
+                        <StyledNumberText>
+                          {new Date(
+                            Number(change.changedAt) * 1000,
+                          ).toLocaleDateString()}
+                        </StyledNumberText>
+                      </Flex>
+                      <StyledNumberText>
                         {shortenAddress(
                           change.increasedBy || consultationDetails.submitter,
                           8,
                         )}
-                      </p>
-                    </div>
-                    <div className="bounty-list-item-inner">
-                      <p
-                        className={`withdraw-amount withdraw-amount--${
-                          change.withdrawnAt ? 'red' : 'green'
-                        }`}
+                      </StyledNumberText>
+                      <StyledNumberText
+                        color={change.withdrawnAt ? 'red' : 'green'}
                       >
                         {change.withdrawnAt ? '-' : '+'}
                         {web3.utils.fromWei(change.amount)} $RAID
-                      </p>
-                    </div>
+                      </StyledNumberText>
+                    </StyledBountyRow>
                   </a>
-                ))}
-              </div>
-            )}
-          </div>
-        </Box>
-      )}
+                </Flex>
+              ))}
+            </Flex>
+          )}
+        </StyledCard>
+      </Flex>
       {showSnackbar && hash !== '' && (
         <Snackbar
           chainId={chainId || DEFAULT_NETWORK}

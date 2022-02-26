@@ -20,7 +20,7 @@ import {
 type ConsultationRequestCardProps = {
   address: string;
   chainId: number;
-  consultationDetails: ICombinedBid;
+  consultationDetails: ICombinedBid | null;
   isAccepting: boolean;
   isCancelling: boolean;
   lockTime: string;
@@ -44,7 +44,7 @@ const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
 
   return (
     <>
-      {consultationDetails.bid_id ? (
+      {consultationDetails?.bid_id ? (
         <StyledCard p={'32px'}>
           <StyledBodyText fontSize={'20px'} mb={'20px'}>
             Consultation request:
@@ -125,7 +125,11 @@ const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
           )}
         </StyledCard>
       ) : (
-        <StyledCard mb={'32px'} p={'32px'}>
+        <StyledCard
+          mb={address ? '32px' : '0px'}
+          minH={address ? '200px' : '400px'}
+          p={'32px'}
+        >
           <StyledBodyText>No bid details.</StyledBodyText>
         </StyledCard>
       )}
