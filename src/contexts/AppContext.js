@@ -14,38 +14,6 @@ export const AppContext = createContext();
 class AppContextProvider extends Component {
   state = {};
 
-  // onIncreaseBid = async bidId => {
-  //   this.setState({ isDepositPending: true, hash: '' });
-  //   try {
-  //     const QUEUE_CONTRACT = new this.state.web3.eth.Contract(
-  //       QUEUE_ABI,
-  //       QUEUE_CONTRACT_ADDRESS,
-  //     );
-  //     await QUEUE_CONTRACT.methods
-  //       .increaseBid(
-  //         this.state.web3.utils.toWei(this.state.depositAmount),
-  //         bidId,
-  //       )
-  //       .send({
-  //         from: this.state.account,
-  //       })
-  //       .once('transactionHash', async hash => {
-  //         this.setState({ hash: hash });
-  //       })
-  //       .on('confirmation', async () => {
-  //         await this.getRaidBalance();
-  //         this.onChangeDepositAmount('');
-  //       })
-  //       .on('error', async error => {
-  //         this.setState({ txFailed: true });
-  //         console.error('Could not submit bid', error);
-  //       });
-  //   } catch (err) {
-  //     console.error('Could not submit bid', err);
-  //   }
-  //   this.setState({ isDepositPending: false });
-  // };
-
   // onWithdraw = async consultationId => {
   //   this.setState({ isWithdrawPending: true, hash: '' });
   //   try {

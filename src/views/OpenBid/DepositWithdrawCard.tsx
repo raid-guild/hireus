@@ -62,7 +62,8 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
   const [withdrawAmount, setWithdrawAmount] = useState('');
 
   const [isApproving, setIsApproving] = useState(false);
-  const [isDepositing, setIsDepositing] = useState(false);
+  const [isSubmittingOrIncreasingBid, setIsSubmittingOrIncreasingBid] =
+    useState(false);
   const [isWithdrawing] = useState(false);
 
   const isApproved = useMemo(() => {
@@ -70,14 +71,14 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
     return utils.parseEther(depositAmount).lte(BigNumber.from(allowance));
   }, [allowance, depositAmount]);
 
-  const onDeposit = useCallback(
-    async (id: string) => {
+  const onSubmitBid = useCallback(
+    async (dbId: string) => {
       if (!(chainId && isApproved && provider)) return;
-      setIsDepositing(true);
+      setIsSubmittingOrIncreasingBid(true);
       setHash('');
       setTxConfirmed(false);
       setShowSnackbar(true);
-      const hex = utils.formatBytes32String(id);
+      const hex = utils.formatBytes32String(dbId);
       try {
         const tx = await submitBid(
           provider,
@@ -88,7 +89,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
         if (!tx) {
           toast.error('Transaction failed');
           setTxFailed(false);
-          setIsDepositing(false);
+          setIsSubmittingOrIncreasingBid(false);
           return;
         }
         setHash(tx.hash);
@@ -98,16 +99,16 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
           setTxConfirmed(true);
           refresh();
           fetchBids();
-          setIsDepositing(false);
+          setIsSubmittingOrIncreasingBid(false);
         } else {
           setTxFailed(false);
-          setIsDepositing(false);
+          setIsSubmittingOrIncreasingBid(false);
         }
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log(error);
         toast.error('Error submitting bid');
-        setIsDepositing(false);
+        setIsSubmittingOrIncreasingBid(false);
       }
     },
     [
@@ -124,26 +125,77 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
     ],
   );
 
-  const onDepositOrIncrease = useCallback(
-    async (id: string) => {
+  const onIncreaseBid = useCallback(
+    async (bidId: string) => {
+      if (!(chainId && isApproved && provider)) return;
+      setIsSubmittingOrIncreasingBid(true);
+      setHash('');
       setTxConfirmed(false);
       setShowSnackbar(true);
-      if (consultationDetails.bid_id) {
-        // await onIncreaseBid(id);
-      } else {
-        await onDeposit(id);
+      try {
+        const tx = await submitBid(
+          provider,
+          QUEUE_CONTRACT_ADDRESS[chainId],
+          utils.parseEther(depositAmount).toString(),
+          bidId,
+        );
+        if (!tx) {
+          toast.error('Transaction failed');
+          setTxFailed(false);
+          setIsSubmittingOrIncreasingBid(false);
+          return;
+        }
+        setHash(tx.hash);
+        const { status } = await tx.wait(2);
+        if (status === 1) {
+          toast.success('Bid successfully increased');
+          setTxConfirmed(true);
+          refresh();
+          fetchBids();
+          setIsSubmittingOrIncreasingBid(false);
+        } else {
+          setTxFailed(false);
+          setIsSubmittingOrIncreasingBid(false);
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+        toast.error('Error increasing bid');
+        setIsSubmittingOrIncreasingBid(false);
       }
-      setTxConfirmed(true);
-      fetchBids();
     },
     [
-      consultationDetails,
+      chainId,
+      depositAmount,
       fetchBids,
-      onDeposit,
-      setTxConfirmed,
+      isApproved,
+      provider,
+      refresh,
+      setHash,
       setShowSnackbar,
+      setTxConfirmed,
+      setTxFailed,
     ],
   );
+
+  const onDepositOrIncrease = useCallback(async () => {
+    setTxConfirmed(false);
+    setShowSnackbar(true);
+    if (consultationDetails.bid_id) {
+      await onIncreaseBid(consultationDetails.bid_id);
+    } else {
+      await onSubmitBid(consultationDetails.airtable_id);
+    }
+    setTxConfirmed(true);
+    fetchBids();
+  }, [
+    consultationDetails,
+    fetchBids,
+    onSubmitBid,
+    onIncreaseBid,
+    setTxConfirmed,
+    setShowSnackbar,
+  ]);
 
   const onApproveRaid = useCallback(async () => {
     if (!(provider && chainId)) return;
@@ -244,21 +296,15 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
                 depositAmount === '0' ||
                 depositAmount === '' ||
                 insufficientBalance ||
-                isDepositing
+                isSubmittingOrIncreasingBid
               }
               onClick={() => {
-                isApproved
-                  ? onDepositOrIncrease(
-                      consultationDetails.bid_id
-                        ? consultationDetails.bid_id
-                        : consultationDetails.airtable_id,
-                    )
-                  : onApproveRaid();
+                isApproved ? onDepositOrIncrease() : onApproveRaid();
               }}
               mt={'20px'}
               w={'100%'}
             >
-              {isDepositing || isApproving ? (
+              {isSubmittingOrIncreasingBid || isApproving ? (
                 <Spinner color={'#fff'} />
               ) : isApproved ? (
                 'Submit Bid'
