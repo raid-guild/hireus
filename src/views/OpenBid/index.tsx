@@ -201,6 +201,7 @@ const OpenBid: React.FC = () => {
       )}
       {showSnackbar && hash !== '' && (
         <Snackbar
+          chainId={chainId || DEFAULT_NETWORK}
           setShowSnackbar={setShowSnackbar}
           message={
             txConfirmed

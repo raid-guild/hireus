@@ -10,18 +10,24 @@ import { theme } from 'themes/theme';
 import { BLOCK_EXPLORER_URL } from 'web3/constants';
 
 type ISnackbar = {
+  chainId: number;
   hash: string;
   message: string;
   setShowSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Snackbar: React.FC<ISnackbar> = ({ hash, message, setShowSnackbar }) => {
+const Snackbar: React.FC<ISnackbar> = ({
+  chainId,
+  hash,
+  message,
+  setShowSnackbar,
+}) => {
   return (
     <StyledPosition>
       <StyledContainer>
         <Flex align={'center'}>
           <a
-            href={`${BLOCK_EXPLORER_URL}tx/${hash}`}
+            href={`${BLOCK_EXPLORER_URL[chainId]}tx/${hash}`}
             target={'_blank'}
             rel={'noopener noreferrer'}
           >

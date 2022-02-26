@@ -74,6 +74,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
     async (id: string) => {
       if (!(chainId && isApproved && provider)) return;
       setIsDepositing(true);
+      setHash('');
       setTxConfirmed(false);
       setShowSnackbar(true);
       const hex = utils.formatBytes32String(id);
@@ -147,6 +148,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
   const onApproveRaid = useCallback(async () => {
     if (!(provider && chainId)) return;
     setIsApproving(true);
+    setHash('');
     setTxConfirmed(false);
     setShowSnackbar(true);
     try {
