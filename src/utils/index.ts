@@ -133,7 +133,7 @@ const getData = async (
         )
         .toString();
       combinedBid.amount = bid.amount;
-      combinedBid.submitter = utils.getAddress(bid.submitter.id);
+      combinedBid.submitter = utils.getAddress(bid.submitter.id).toLowerCase();
       combinedBid.bidCreated = bid.createdAt;
       combinedBid.createTxHash = bid.createTxHash;
       combinedBid.changes = [...combinedBid.changes, ...updatedChanges];

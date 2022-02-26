@@ -1,9 +1,14 @@
+import { Flex, Spinner } from '@chakra-ui/react';
 import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
-import { utils } from 'ethers';
-import { motion } from 'framer-motion';
+import { BigNumber, utils } from 'ethers';
 import { useMembership } from 'hooks/useMembership';
 import React from 'react';
-import { StyledBodyText, StyledCard } from 'themes/styled';
+import {
+  StyledBodyText,
+  StyledCard,
+  StyledNumberText,
+  StyledPrimaryButton,
+} from 'themes/styled';
 import { round, shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
 import {
@@ -40,163 +45,83 @@ const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
   return (
     <>
       {consultationDetails.bid_id ? (
-        <StyledCard>
-          <motion.h2
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-          >
+        <StyledCard p={'32px'}>
+          <StyledBodyText fontSize={'20px'} mb={'20px'}>
             Consultation request:
-          </motion.h2>
-          <div className="open-bid-details-flex">
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-              style={{ marginBottom: 0 }}
-            >
-              <span>Submitter:</span>
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-              style={{ marginBottom: 0 }}
-            >
+          </StyledBodyText>
+          <Flex align={'center'} mb={'12px'}>
+            <StyledBodyText w={'160px'}>Submitter:</StyledBodyText>
+            <StyledNumberText mr={'8px'}>
               {shortenAddress(consultationDetails.submitter)}
-            </motion.p>
-            <motion.a
-              href={`${BLOCK_EXPLORER_URL}address/${consultationDetails.submitter}`}
+            </StyledNumberText>
+            <a
+              href={`${BLOCK_EXPLORER_URL[chainId]}address/${consultationDetails.submitter}`}
               target={'_blank'}
               rel={'noopener noreferrer'}
-              className="etherscan-container"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
             >
               <XDaiSvg />
-            </motion.a>
-          </div>
-          <div className="open-bid-details-flex">
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-              style={{ marginBottom: 0 }}
-            >
-              <span>Submitted On:</span>
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-              style={{ marginBottom: 0 }}
-            >
+            </a>
+          </Flex>
+          <Flex align={'center'} mb={'12px'}>
+            <StyledBodyText w={'160px'}>Submitted On:</StyledBodyText>
+            <StyledNumberText mr={'8px'}>
               {new Date(
                 Number(consultationDetails.bidCreated) * 1000,
               ).toLocaleString()}
-            </motion.p>
-            <motion.a
-              href={`${BLOCK_EXPLORER_URL}tx/${consultationDetails.createTxHash}`}
+            </StyledNumberText>
+            <a
+              href={`${BLOCK_EXPLORER_URL[chainId]}tx/${consultationDetails.createTxHash}`}
               target={'_blank'}
               rel={'noopener noreferrer'}
-              className="etherscan-container"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
             >
               <XDaiSvg />
-            </motion.a>
-          </div>
-          <div className="open-bid-details-flex">
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-              style={{ marginBottom: 0 }}
-            >
-              <span>Status:</span>
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-              style={{ marginBottom: 0 }}
-            >
-              {lockTime}
-            </motion.p>
-          </div>
-          <div className="open-bid-details-flex">
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-              style={{ marginBottom: 0 }}
-            >
-              <span>Total Bounty:</span>
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-              style={{ marginBottom: 0 }}
-            >
+            </a>
+          </Flex>
+          <Flex align={'center'} mb={'12px'}>
+            <StyledBodyText w={'160px'}>Status:</StyledBodyText>
+            <StyledNumberText mr={'8px'}>{lockTime}</StyledNumberText>
+          </Flex>
+          <Flex align={'center'} mb={'12px'}>
+            <StyledBodyText w={'160px'}>Total Bounty:</StyledBodyText>
+            <StyledNumberText mr={'8px'}>
               {round(utils.formatEther(consultationDetails.amount), 4)} $RAID
-            </motion.p>
-            <motion.a
-              href={`${BLOCK_EXPLORER_URL}address/${RAID_CONTRACT_ADDRESS}`}
+            </StyledNumberText>
+            <a
+              href={`${BLOCK_EXPLORER_URL[chainId]}address/${RAID_CONTRACT_ADDRESS}`}
               target={'_blank'}
               rel={'noopener noreferrer'}
-              className="etherscan-container"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
             >
               <XDaiSvg />
-            </motion.a>
-          </div>
+            </a>
+          </Flex>
           {address && !isLoadingShares && (
-            <div className="open-bounty-buttons-container">
-              {BigInt(shares) >= BigInt(MIN_NUMBER_OF_SHARES[chainId]) &&
+            <Flex gap={'12px'} mt={'20px'}>
+              {BigNumber.from(shares).gte(
+                BigNumber.from(MIN_NUMBER_OF_SHARES[chainId]),
+              ) &&
                 consultationDetails?.bid_id && (
-                  <motion.button
-                    className="consultation-button"
-                    style={{ marginTop: '20px' }}
-                    initial={{ x: '100vw' }}
-                    animate={{ x: 0 }}
-                    transition={{ delay: 1.3 }}
+                  <StyledPrimaryButton
                     disabled={isAccepting}
                     onClick={() => {
                       onAccept(consultationDetails.bid_id);
                     }}
                   >
                     {isAccepting ? (
-                      <div className="spinner">Loading...</div>
+                      <Spinner color={'#fff'} />
                     ) : (
                       'Accept Request'
                     )}
-                  </motion.button>
+                  </StyledPrimaryButton>
                 )}
-              {consultationDetails?.submitter === address && lockupEnded && (
-                <div>
-                  <motion.button
-                    className="consultation-button"
-                    style={{ marginTop: '20px' }}
-                    initial={{ x: '100vw' }}
-                    animate={{ x: 0 }}
-                    transition={{ delay: 1.3 }}
-                    disabled={isCancelling}
-                    onClick={openCancelModal}
-                  >
-                    {isCancelling ? (
-                      <div className="spinner">Loading...</div>
-                    ) : (
-                      'Cancel Bid'
-                    )}
-                  </motion.button>
-                </div>
+              {consultationDetails?.submitter === address && (
+                <StyledPrimaryButton
+                  disabled={isCancelling || !lockupEnded}
+                  onClick={openCancelModal}
+                >
+                  {isCancelling ? <Spinner color={'#fff'} /> : 'Cancel Bid'}
+                </StyledPrimaryButton>
               )}
-            </div>
+            </Flex>
           )}
         </StyledCard>
       ) : (
