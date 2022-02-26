@@ -310,7 +310,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
       </Flex>
       <Flex justify={'center'}>
         {!!consultationDetails.bid_id && !lockupEnded && (
-          <StyledBodyText>{lockTime}</StyledBodyText>
+          <StyledBodyText mt={'20px'}>{lockTime}</StyledBodyText>
         )}
       </Flex>
     </StyledCard>
