@@ -1,7 +1,6 @@
 import { Flex, Spinner } from '@chakra-ui/react';
 import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
 import { BigNumber, utils } from 'ethers';
-import { useMembership } from 'hooks/useMembership';
 import React from 'react';
 import {
   StyledBodyText,
@@ -23,10 +22,12 @@ type ConsultationRequestCardProps = {
   consultationDetails: ICombinedBid | null;
   isAccepting: boolean;
   isCancelling: boolean;
+  isLoadingShares: boolean;
   lockTime: string;
   lockupEnded: boolean;
   onAccept: (id: string) => Promise<void>;
   openCancelModal: () => void;
+  shares: string;
 };
 
 const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
@@ -35,17 +36,17 @@ const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
   consultationDetails,
   isAccepting,
   isCancelling,
+  isLoadingShares,
   lockTime,
   lockupEnded,
   onAccept,
   openCancelModal,
+  shares,
 }) => {
-  const { shares, isLoadingShares } = useMembership();
-
   return (
     <>
       {consultationDetails?.bid_id ? (
-        <StyledCard p={'32px'}>
+        <StyledCard p={'32px'} mb={address ? '32px' : '0px'}>
           <StyledBodyText fontSize={'20px'} mb={'20px'}>
             Consultation request:
           </StyledBodyText>

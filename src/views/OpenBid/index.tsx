@@ -3,13 +3,16 @@ import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
 // import ConfirmCancel from 'components/ConfirmCancel';
 import Snackbar from 'components/Snackbar';
 import { useWallet } from 'contexts/WalletContext';
-import React, { useCallback, useEffect, useState } from 'react';
+import { BigNumber } from 'ethers';
+import { useMembership } from 'hooks/useMembership';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   StyledBodyText,
   StyledBountyRow,
   StyledCard,
   StyledNumberText,
+  StyledPrimaryHeading,
 } from 'themes/styled';
 import { shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
@@ -18,6 +21,7 @@ import {
   BLOCK_EXPLORER_URL,
   DEFAULT_NETWORK,
   LOCKUP_PERIOD,
+  MIN_NUMBER_OF_SHARES,
 } from 'web3/constants';
 
 import ConsultationRequestCard from './ConsultationRequestCard';
@@ -30,6 +34,7 @@ type ICauseParams = {
 const OpenBid: React.FC = () => {
   const { id } = useParams<ICauseParams>();
   const { address, bids, chainId, fetchBids } = useWallet();
+  const { shares, isLoadingShares } = useMembership();
 
   const [consultationDetails, setConsultationDetails] =
     useState<ICombinedBid | null>(null);
@@ -64,10 +69,11 @@ const OpenBid: React.FC = () => {
   }, [bids.length, chainId, consultationDetails]);
 
   useEffect(() => {
-    if (!(consultationDetails && chainId)) return;
+    if (!consultationDetails) return;
     const dateNow = Date.now();
     const lockupEnds =
-      Number(consultationDetails.bidCreated) * 1000 + LOCKUP_PERIOD[chainId];
+      Number(consultationDetails.bidCreated) * 1000 +
+      LOCKUP_PERIOD[chainId || DEFAULT_NETWORK];
     const timeRemaining = lockupEnds - dateNow;
     if (timeRemaining > 0) {
       const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
@@ -104,8 +110,35 @@ const OpenBid: React.FC = () => {
     console.log('Accept: ', id);
   }, []);
 
+  const showProjectName = useMemo(() => {
+    if (!(address && consultationDetails && chainId)) return false;
+    if (
+      consultationDetails.from === address ||
+      consultationDetails.submitter === address ||
+      BigNumber.from(shares).gte(BigNumber.from(MIN_NUMBER_OF_SHARES[chainId]))
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [address, consultationDetails, chainId, shares]);
+
   return (
-    <Box my={'60px'} px={{ base: '10px', md: '20px', lg: '50px' }} w="100%">
+    <Box
+      mb={'60px'}
+      mt={showProjectName ? '0px' : '60px'}
+      px={{ base: '10px', md: '20px', lg: '50px' }}
+      w="100%"
+    >
+      {consultationDetails && showProjectName && (
+        <StyledPrimaryHeading
+          textAlign={'left'}
+          fontSize={{ base: '1.5rem', lg: '36px' }}
+          my={'40px'}
+        >
+          {consultationDetails.project_name}
+        </StyledPrimaryHeading>
+      )}
       <Flex justify={'space-between'}>
         <Box w={'49%'}>
           <Flex direction={'column'}>
@@ -115,10 +148,12 @@ const OpenBid: React.FC = () => {
               consultationDetails={consultationDetails}
               isAccepting={isAccepting}
               isCancelling={isCancelling}
+              isLoadingShares={isLoadingShares}
               lockTime={lockTime}
               lockupEnded={lockupEnded}
               onAccept={onAccept}
               openCancelModal={() => setShowCancelModal(true)}
+              shares={shares}
             />
             {address && consultationDetails && (
               <DepositWithdrawCard
