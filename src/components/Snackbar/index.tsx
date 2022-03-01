@@ -21,7 +21,11 @@ const Snackbar: React.FC<ISnackbar> = ({
   setShowSnackbar,
 }) => {
   return (
-    <StyledPosition>
+    <StyledPosition
+      bottom={'50px'}
+      right={{ base: '50%', md: '100px' }}
+      transform={{ base: 'translateX(50%)', md: 'translateX(0%)' }}
+    >
       <StyledContainer>
         <Flex align={'center'}>
           <a

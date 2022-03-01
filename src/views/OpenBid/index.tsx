@@ -338,9 +338,7 @@ const OpenBid: React.FC = () => {
                           ).toLocaleDateString()}
                         </StyledNumberText>
                       </Flex>
-                      <Flex
-                        justify={{ base: 'space-between', sm: 'flex-start' }}
-                      >
+                      <Flex justify={'space-between'} gap={'16px'}>
                         <StyledNumberText
                           fontSize={{ base: '14px', sm: '16px' }}
                         >
