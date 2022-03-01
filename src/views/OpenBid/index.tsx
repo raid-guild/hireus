@@ -323,6 +323,7 @@ const OpenBid: React.FC = () => {
                     style={{ width: '100%' }}
                   >
                     <StyledBountyRow
+                      direction={{ base: 'column', sm: 'row' }}
                       justify={'space-between'}
                       secondary={index % 2 !== 0 ? 1 : 0}
                       p={{ base: '4px', md: '10px' }}
@@ -337,21 +338,28 @@ const OpenBid: React.FC = () => {
                           ).toLocaleDateString()}
                         </StyledNumberText>
                       </Flex>
-                      <StyledNumberText>
-                        {windowWidth > 1800
-                          ? change.increasedBy || consultationDetails.submitter
-                          : shortenAddress(
-                              change.increasedBy ||
-                                consultationDetails.submitter,
-                              4,
-                            )}
-                      </StyledNumberText>
-                      <StyledNumberText
-                        color={change.withdrawnAt ? 'red' : 'green'}
+                      <Flex
+                        justify={{ base: 'space-between', sm: 'flex-start' }}
                       >
-                        {change.withdrawnAt ? '-' : '+'}
-                        {utils.formatEther(change.amount)} $RAID
-                      </StyledNumberText>
+                        <StyledNumberText
+                          fontSize={{ base: '14px', sm: '16px' }}
+                        >
+                          {windowWidth > 1800
+                            ? change.increasedBy ||
+                              consultationDetails.submitter
+                            : shortenAddress(
+                                change.increasedBy ||
+                                  consultationDetails.submitter,
+                                4,
+                              )}
+                        </StyledNumberText>
+                        <StyledNumberText
+                          color={change.withdrawnAt ? 'red' : 'green'}
+                        >
+                          {change.withdrawnAt ? '-' : '+'}
+                          {utils.formatEther(change.amount)} $RAID
+                        </StyledNumberText>
+                      </Flex>
                     </StyledBountyRow>
                   </a>
                 </Flex>
