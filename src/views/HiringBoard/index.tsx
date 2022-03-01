@@ -29,10 +29,12 @@ const HiringBaord: React.FC = () => {
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
-    window.removeEventListener('resize', () => null);
     window.addEventListener('resize', e => {
       setWindowWidth(window.innerWidth);
     });
+    return () => {
+      window.removeEventListener('resize', () => null);
+    };
   }, []);
 
   useEffect(() => {

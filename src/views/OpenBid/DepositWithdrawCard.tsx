@@ -297,9 +297,17 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
   }, [balance, depositAmount]);
 
   return (
-    <StyledCard p={'32px'}>
-      <Flex justify={'space-between'}>
-        <Flex direction={'column'} justify={'space-between'} w={'48%'}>
+    <StyledCard p={'32px'} mb={{ base: '32px', lg: '0px' }}>
+      <Flex
+        direction={{ base: 'column', sm: 'row' }}
+        gap={{ base: '32px', sm: '0px' }}
+        justify={'space-between'}
+      >
+        <Flex
+          direction={'column'}
+          justify={'space-between'}
+          w={{ base: '100%', sm: '48%' }}
+        >
           <Box>
             <StyledBodyText>Wallet Balance:</StyledBodyText>
             <StyledNumberText fontSize={'20px'} mb={'16px'}>
@@ -346,7 +354,11 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
             </StyledPrimaryButton>
           </Box>
         </Flex>
-        <Flex direction={'column'} justify={'space-between'} w={'48%'}>
+        <Flex
+          direction={'column'}
+          justify={'space-between'}
+          w={{ base: '100%', sm: '48%' }}
+        >
           <Box>
             <StyledBodyText>You deposited:</StyledBodyText>
             <StyledNumberText fontSize={'20px'} mb={'16px'}>

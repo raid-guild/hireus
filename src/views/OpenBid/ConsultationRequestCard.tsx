@@ -50,21 +50,35 @@ const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
           <StyledBodyText fontSize={'20px'} mb={'20px'}>
             Consultation request:
           </StyledBodyText>
-          <Flex align={'center'} mb={'12px'}>
-            <StyledBodyText w={'160px'}>Submitter:</StyledBodyText>
-            <StyledNumberText mr={'8px'}>
-              {shortenAddress(consultationDetails.submitter)}
-            </StyledNumberText>
-            <a
-              href={`${BLOCK_EXPLORER_URL[chainId]}address/${consultationDetails.submitter}`}
-              target={'_blank'}
-              rel={'noopener noreferrer'}
-            >
-              <XDaiSvg />
-            </a>
+          <Flex
+            align={{ base: 'flex-start', sm: 'center' }}
+            direction={{ base: 'column', sm: 'row' }}
+            mb={'12px'}
+          >
+            <StyledBodyText minW={{ base: '140px', xl: '160px' }}>
+              Submitter:
+            </StyledBodyText>
+            <Flex>
+              <StyledNumberText mr={'8px'}>
+                {shortenAddress(consultationDetails.submitter)}
+              </StyledNumberText>
+              <a
+                href={`${BLOCK_EXPLORER_URL[chainId]}address/${consultationDetails.submitter}`}
+                target={'_blank'}
+                rel={'noopener noreferrer'}
+              >
+                <XDaiSvg />
+              </a>
+            </Flex>
           </Flex>
-          <Flex align={'center'} mb={'12px'}>
-            <StyledBodyText w={'160px'}>Submitted On:</StyledBodyText>
+          <Flex
+            align={{ base: 'flex-start', sm: 'center' }}
+            direction={{ base: 'column', sm: 'row' }}
+            mb={'12px'}
+          >
+            <StyledBodyText minW={{ base: '140px', xl: '160px' }}>
+              Submitted On:
+            </StyledBodyText>
             <StyledNumberText mr={'8px'}>
               {new Date(
                 Number(consultationDetails.bidCreated) * 1000,
@@ -78,25 +92,43 @@ const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
               <XDaiSvg />
             </a>
           </Flex>
-          <Flex align={'center'} mb={'12px'}>
-            <StyledBodyText w={'160px'}>Status:</StyledBodyText>
+          <Flex
+            align={{ base: 'flex-start', sm: 'center' }}
+            direction={{ base: 'column', sm: 'row' }}
+            mb={'12px'}
+          >
+            <StyledBodyText minW={{ base: '140px', xl: '160px' }}>
+              Status:
+            </StyledBodyText>
             <StyledNumberText mr={'8px'}>{lockTime}</StyledNumberText>
           </Flex>
-          <Flex align={'center'} mb={'12px'}>
-            <StyledBodyText w={'160px'}>Total Bounty:</StyledBodyText>
-            <StyledNumberText mr={'8px'}>
-              {round(utils.formatEther(consultationDetails.amount), 4)} $RAID
-            </StyledNumberText>
-            <a
-              href={`${BLOCK_EXPLORER_URL[chainId]}address/${RAID_CONTRACT_ADDRESS}`}
-              target={'_blank'}
-              rel={'noopener noreferrer'}
-            >
-              <XDaiSvg />
-            </a>
+          <Flex
+            align={{ base: 'flex-start', sm: 'center' }}
+            direction={{ base: 'column', sm: 'row' }}
+            mb={'12px'}
+          >
+            <StyledBodyText minW={{ base: '140px', xl: '160px' }}>
+              Total Bounty:
+            </StyledBodyText>
+            <Flex>
+              <StyledNumberText mr={'8px'}>
+                {round(utils.formatEther(consultationDetails.amount), 4)} $RAID
+              </StyledNumberText>
+              <a
+                href={`${BLOCK_EXPLORER_URL[chainId]}address/${RAID_CONTRACT_ADDRESS}`}
+                target={'_blank'}
+                rel={'noopener noreferrer'}
+              >
+                <XDaiSvg />
+              </a>
+            </Flex>
           </Flex>
           {address && !isLoadingShares && (
-            <Flex gap={'12px'} mt={'20px'}>
+            <Flex
+              direction={{ base: 'column', sm: 'row' }}
+              gap={'12px'}
+              mt={'20px'}
+            >
               {BigNumber.from(shares).gte(
                 BigNumber.from(MIN_NUMBER_OF_SHARES[chainId]),
               ) &&

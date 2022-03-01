@@ -66,6 +66,18 @@ const OpenBid: React.FC = () => {
   const [hash, setHash] = useState('');
   const [txFailed, setTxFailed] = useState(false);
 
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', e => {
+      setWindowWidth(window.innerWidth);
+    });
+    return () => {
+      window.removeEventListener('resize', () => null);
+    };
+  }, []);
+
   useEffect(() => {
     if (bids.length === 0) {
       fetchBids();
@@ -253,8 +265,8 @@ const OpenBid: React.FC = () => {
           {consultationDetails.project_name}
         </StyledPrimaryHeading>
       )}
-      <Flex justify={'space-between'}>
-        <Box w={'49%'}>
+      <Flex direction={{ base: 'column', lg: 'row' }} justify={'space-between'}>
+        <Box w={{ base: '100%', lg: '49%' }}>
           <Flex direction={'column'}>
             <ConsultationRequestCard
               address={address || ''}
@@ -287,7 +299,7 @@ const OpenBid: React.FC = () => {
             )}
           </Flex>
         </Box>
-        <StyledCard minH={'400px'} p={'32px'} width={'49%'}>
+        <StyledCard minH={'400px'} p={'32px'} w={{ base: '100%', lg: '49%' }}>
           {consultationDetails?.bid_id ? (
             <Flex>
               <StyledBodyText fontSize={'20px'}>Bid History:</StyledBodyText>
@@ -326,10 +338,13 @@ const OpenBid: React.FC = () => {
                         </StyledNumberText>
                       </Flex>
                       <StyledNumberText>
-                        {shortenAddress(
-                          change.increasedBy || consultationDetails.submitter,
-                          8,
-                        )}
+                        {windowWidth > 1800
+                          ? change.increasedBy || consultationDetails.submitter
+                          : shortenAddress(
+                              change.increasedBy ||
+                                consultationDetails.submitter,
+                              4,
+                            )}
                       </StyledNumberText>
                       <StyledNumberText
                         color={change.withdrawnAt ? 'red' : 'green'}
