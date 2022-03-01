@@ -86,12 +86,18 @@ export const StyledMessageText = styled(Text)`
   line-height: 1.4;
 `;
 
-export const StyledNumberText = styled(Text)`
+type StyledNumberTextProps = {
+  color?: string;
+};
+
+export const StyledNumberText = styled(Text)<StyledNumberTextProps>`
   max-width: 720px;
   font-family: ${theme.fonts.spaceMono};
   line-height: 1.8;
   color: white;
   text-align: justify;
+
+  ${({ color }) => color && `color: ${color}`};
 `;
 
 export const StyledFooterHeaderText = styled(Text)`
@@ -185,9 +191,14 @@ export const StyledSmallSecondaryButton = styled(Button)`
 // --------- Form Inputs ------------
 
 export const StyledInput = styled(Input)`
-  background: ${theme.colors.blackLight};
-  border: none;
-  border-radius: 0;
+  background: ${theme.colors.black};
+  border: 2px solid ${theme.colors.red};
+  border-radius: 4px;
+  color: #fff;
+
+  &::placeholder {
+    color: ${theme.colors.greyDark};
+  }
 `;
 
 export const StyledTextArea = styled(Textarea)`
@@ -202,6 +213,7 @@ export const StyledCard = styled(Box)`
   background: ${theme.colors.black};
   border-top: 2px solid ${theme.colors.red};
   border-radius: 4px;
+  box-size: border-box;
   overflow-y: scroll;
 `;
 

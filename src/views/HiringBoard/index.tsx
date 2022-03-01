@@ -1,9 +1,7 @@
-import './AuctionQueue.scss';
-
 import { Box, Flex, Spinner } from '@chakra-ui/react';
 import Slider from 'components/Slider';
 import { useWallet } from 'contexts/WalletContext';
-import { utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import { useMembership } from 'hooks/useMembership';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -31,10 +29,12 @@ const HiringBaord: React.FC = () => {
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
-    window.removeEventListener('resize', () => null);
     window.addEventListener('resize', e => {
       setWindowWidth(window.innerWidth);
     });
+    return () => {
+      window.removeEventListener('resize', () => null);
+    };
   }, []);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const HiringBaord: React.FC = () => {
         connectWallet();
       }
       const filteredConsultations = bids.filter(bid => {
-        return bid.from === address;
+        return bid.from === address || bid.submitter === address;
       });
       setFilteredBids(filteredConsultations);
     } else {
@@ -135,7 +135,8 @@ const BidListItem: React.FC<BidListItemProps> = ({
     if (!account || !chainId) return false;
     if (
       bid.from === account ||
-      BigInt(shares) >= BigInt(MIN_NUMBER_OF_SHARES[chainId])
+      bid.submitter === account ||
+      BigNumber.from(shares).gte(BigNumber.from(MIN_NUMBER_OF_SHARES[chainId]))
     ) {
       return true;
     } else {

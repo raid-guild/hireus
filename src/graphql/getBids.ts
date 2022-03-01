@@ -1,14 +1,12 @@
 import gql from 'fake-tag';
 import type { IBid } from 'utils/types';
+import { DEFAULT_NETWORK, QUEUE_CONTRACT_ADDRESS } from 'web3/constants';
 
 import { CLIENTS } from './client';
 
 const rinkebyBidsQuery = gql`
-  query {
-    bids(
-      first: 100
-      where: { queue: "0x3a9f3147742e51efba1f04ff26e8dc95978dccb4" }
-    ) {
+  query RinkebyBidsQuery($molochAddress: String) {
+    bids(first: 100, where: { queue: $molochAddress }) {
       id
       amount
       createdAt
@@ -34,11 +32,8 @@ const rinkebyBidsQuery = gql`
 `;
 
 const gnosisBidsQuery = gql`
-  query {
-    bids(
-      first: 100
-      where: { queue: "0xd880b00877726c2b76173acec061b29c27d5d791" }
-    ) {
+  query GnosisBidsQuery($molochAddress: String) {
+    bids(first: 100, where: { queue: $molochAddress }) {
       id
       amount
       createdAt
@@ -65,7 +60,9 @@ const gnosisBidsQuery = gql`
 
 export const getBids = async (chainId: number): Promise<IBid[]> => {
   const { data, error } = await CLIENTS[chainId]
-    .query(chainId === 100 ? gnosisBidsQuery : rinkebyBidsQuery)
+    .query(chainId === 100 ? gnosisBidsQuery : rinkebyBidsQuery, {
+      molochAddress: QUEUE_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
+    })
     .toPromise();
   if (!data) {
     if (error) {
