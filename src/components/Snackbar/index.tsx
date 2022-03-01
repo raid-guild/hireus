@@ -1,5 +1,3 @@
-import './snackbar.scss';
-
 import { Box, Flex } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';

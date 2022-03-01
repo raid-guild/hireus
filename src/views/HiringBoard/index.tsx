@@ -1,5 +1,3 @@
-import './AuctionQueue.scss';
-
 import { Box, Flex, Spinner } from '@chakra-ui/react';
 import Slider from 'components/Slider';
 import { useWallet } from 'contexts/WalletContext';
