@@ -25,7 +25,7 @@ type ConsultationRequestCardProps = {
   isLoadingShares: boolean;
   lockTime: string;
   lockupEnded: boolean;
-  onAccept: (id: string) => Promise<void>;
+  onAccept: () => Promise<void>;
   openCancelModal: () => void;
   shares: string;
 };
@@ -103,9 +103,7 @@ const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
                 consultationDetails?.bid_id && (
                   <StyledPrimaryButton
                     disabled={isAccepting}
-                    onClick={() => {
-                      onAccept(consultationDetails.bid_id);
-                    }}
+                    onClick={onAccept}
                   >
                     {isAccepting ? (
                       <Spinner color={'#fff'} />

@@ -26,8 +26,8 @@ type CurrencyInfo = {
 const devMode = ENV_MODE === 'production' ? false : true;
 
 export const LOCKUP_PERIOD: NumberInfo = {
-  4: 120000,
-  100: 7 * 24 * 60 * 60 * 1000, // 7 days
+  4: 120000, // 2 minutes
+  100: devMode ? 120000 : 7 * 24 * 60 * 60 * 1000, // 7 days
 };
 export const RAID_CONTRACT_ADDRESS: StringInfo = {
   4: '0x982e00b16c313e979c0947b85230907fce45d50e',

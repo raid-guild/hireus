@@ -1,9 +1,6 @@
 import { Box, Flex, Spinner } from '@chakra-ui/react';
 import { useWallet } from 'contexts/WalletContext';
 import { BigNumber, utils } from 'ethers';
-import { useAllowance } from 'hooks/useAllowance';
-import { useBalance } from 'hooks/useBalance';
-import { useRefresh } from 'hooks/useRefresh';
 import React, { useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
@@ -16,47 +13,39 @@ import {
 import { round } from 'utils';
 import type { ICombinedBid } from 'utils/types';
 import { onApprove } from 'web3/approve';
-import {
-  DEFAULT_NETWORK,
-  QUEUE_CONTRACT_ADDRESS,
-  RAID_CONTRACT_ADDRESS,
-} from 'web3/constants';
-import { increaseBid, submitBid } from 'web3/queue';
+import { QUEUE_CONTRACT_ADDRESS, RAID_CONTRACT_ADDRESS } from 'web3/constants';
+import { increaseBid, submitBid, withdrawBid } from 'web3/queue';
 
 type DepositWithdrawCardProps = {
   address: string;
+  allowance: string;
+  balance: string;
+  consultationDetails: ICombinedBid;
+  fetchBids: () => void;
+  lockTime: string;
+  lockupEnded: boolean;
+  refresh: () => void;
   setHash: React.Dispatch<React.SetStateAction<string>>;
   setShowSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
   setTxConfirmed: React.Dispatch<React.SetStateAction<boolean>>;
   setTxFailed: React.Dispatch<React.SetStateAction<boolean>>;
-  consultationDetails: ICombinedBid;
-  lockTime: string;
-  lockupEnded: boolean;
-  fetchBids: () => void;
 };
 
 const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
   address,
+  allowance,
+  balance,
+  fetchBids,
+  consultationDetails,
+  lockTime,
+  lockupEnded,
+  refresh,
   setHash,
   setShowSnackbar,
   setTxConfirmed,
   setTxFailed,
-  consultationDetails,
-  lockTime,
-  lockupEnded,
-  fetchBids,
 }) => {
   const { chainId, provider } = useWallet();
-  const [refreshCount, refresh] = useRefresh();
-  const allowance = useAllowance(
-    QUEUE_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
-    RAID_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
-    refreshCount,
-  );
-  const { balance } = useBalance(
-    RAID_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
-    refreshCount,
-  );
 
   const [depositAmount, setDepositAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
@@ -64,7 +53,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
   const [isApproving, setIsApproving] = useState(false);
   const [isSubmittingOrIncreasingBid, setIsSubmittingOrIncreasingBid] =
     useState(false);
-  const [isWithdrawing] = useState(false);
+  const [isWithdrawing, setIsWithdrawing] = useState(false);
 
   const isApproved = useMemo(() => {
     if (!depositAmount) return false;
@@ -187,10 +176,8 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
       await onSubmitBid(consultationDetails.airtable_id);
     }
     setTxConfirmed(true);
-    fetchBids();
   }, [
     consultationDetails,
-    fetchBids,
     onSubmitBid,
     onIncreaseBid,
     setTxConfirmed,
@@ -244,13 +231,57 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
     setTxFailed,
   ]);
 
-  const onWithdrawAndupdate = async (id: string) => {
-    setTxConfirmed(false);
-    setShowSnackbar(true);
-    // await onWithdraw(id);
-    setTxConfirmed(true);
-    refresh();
-  };
+  const onWithdraw = useCallback(
+    async (bidId: string) => {
+      if (!(chainId && provider && withdrawAmount)) return;
+      setIsWithdrawing(true);
+      setHash('');
+      setTxConfirmed(false);
+      setShowSnackbar(true);
+      try {
+        const tx = await withdrawBid(
+          provider,
+          QUEUE_CONTRACT_ADDRESS[chainId],
+          utils.parseEther(withdrawAmount).toString(),
+          bidId,
+        );
+        if (!tx) {
+          toast.error('Transaction failed');
+          setTxFailed(false);
+          setIsWithdrawing(false);
+          return;
+        }
+        setHash(tx.hash);
+        const { status } = await tx.wait(2);
+        if (status === 1) {
+          toast.success('Bid successfully withdrawn');
+          setTxConfirmed(true);
+          refresh();
+          fetchBids();
+          setIsWithdrawing(false);
+        } else {
+          setTxFailed(false);
+          setIsWithdrawing(false);
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        toast.error('Error withdrawing bid');
+        setIsWithdrawing(false);
+      }
+    },
+    [
+      chainId,
+      fetchBids,
+      provider,
+      refresh,
+      setHash,
+      setShowSnackbar,
+      setTxConfirmed,
+      setTxFailed,
+      withdrawAmount,
+    ],
+  );
 
   const insufficientBalance = useMemo(() => {
     if (!(depositAmount && balance)) return false;
@@ -340,13 +371,14 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
               disabled={
                 withdrawAmount === '0' ||
                 withdrawAmount === '' ||
-                BigInt(utils.parseEther(withdrawAmount).toString()) >
-                  BigInt(consultationDetails.amount) ||
+                utils
+                  .parseEther(withdrawAmount)
+                  .gt(BigNumber.from(consultationDetails.amount)) ||
                 isWithdrawing ||
                 !lockupEnded
               }
               onClick={() => {
-                onWithdrawAndupdate(consultationDetails.bid_id);
+                onWithdraw(consultationDetails.bid_id);
               }}
               mt={'20px'}
               w={'100%'}

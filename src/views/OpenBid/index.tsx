@@ -1,12 +1,16 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { ReactComponent as XDaiSvg } from 'assets/xdai.svg';
-// import ConfirmCancel from 'components/ConfirmCancel';
+import ConfirmCancel from 'components/ConfirmCancel';
 import Snackbar from 'components/Snackbar';
 import { useWallet } from 'contexts/WalletContext';
-import { BigNumber } from 'ethers';
+import { BigNumber, utils } from 'ethers';
+import { useAllowance } from 'hooks/useAllowance';
+import { useBalance } from 'hooks/useBalance';
 import { useMembership } from 'hooks/useMembership';
+import { useRefresh } from 'hooks/useRefresh';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   StyledBodyText,
   StyledBountyRow,
@@ -16,13 +20,15 @@ import {
 } from 'themes/styled';
 import { shortenAddress } from 'utils';
 import type { ICombinedBid } from 'utils/types';
-import web3 from 'web3';
 import {
   BLOCK_EXPLORER_URL,
   DEFAULT_NETWORK,
   LOCKUP_PERIOD,
   MIN_NUMBER_OF_SHARES,
+  QUEUE_CONTRACT_ADDRESS,
+  RAID_CONTRACT_ADDRESS,
 } from 'web3/constants';
+import { acceptBid, cancelBid } from 'web3/queue';
 
 import ConsultationRequestCard from './ConsultationRequestCard';
 import DepositWithdrawCard from './DepositWithdrawCard';
@@ -33,18 +39,28 @@ type ICauseParams = {
 
 const OpenBid: React.FC = () => {
   const { id } = useParams<ICauseParams>();
-  const { address, bids, chainId, fetchBids } = useWallet();
+  const { address, bids, chainId, fetchBids, provider } = useWallet();
   const { shares, isLoadingShares } = useMembership();
+  const [refreshCount, refresh] = useRefresh();
+  const { balance } = useBalance(
+    RAID_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
+    refreshCount,
+  );
+  const allowance = useAllowance(
+    QUEUE_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
+    RAID_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK],
+    refreshCount,
+  );
 
   const [consultationDetails, setConsultationDetails] =
     useState<ICombinedBid | null>(null);
 
-  const [isAccepting] = useState(false);
-  const [isCancelling] = useState(false);
+  const [isAccepting, setIsAccepting] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
 
   const [lockupEnded, setLockupEnded] = useState(false);
   const [lockTime, setLockTime] = useState('');
-  const [, setShowCancelModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [txConfirmed, setTxConfirmed] = useState(false);
   const [hash, setHash] = useState('');
@@ -100,15 +116,113 @@ const OpenBid: React.FC = () => {
     }
   }, [address, bids, id]);
 
-  const onAccept = useCallback(async (id: string) => {
-    // setTxConfirmed(false);
-    // setShowSnackbar(true);
-    // await onAccept(id);
-    // setTxConfirmed(true);
-    // refresh();
-    // eslint-disable-next-line no-console
-    console.log('Accept: ', id);
-  }, []);
+  const onAccept = useCallback(async () => {
+    if (
+      !(
+        chainId &&
+        consultationDetails &&
+        consultationDetails.bid_id &&
+        provider
+      )
+    )
+      return;
+    setIsAccepting(true);
+    setHash('');
+    setTxConfirmed(false);
+    setShowSnackbar(true);
+    try {
+      const tx = await acceptBid(
+        provider,
+        QUEUE_CONTRACT_ADDRESS[chainId],
+        consultationDetails.bid_id,
+      );
+      if (!tx) {
+        toast.error('Transaction failed');
+        setTxFailed(false);
+        setIsAccepting(false);
+        return;
+      }
+      setHash(tx.hash);
+      const { status } = await tx.wait(2);
+      if (status === 1) {
+        toast.success('Bid successfully accepted');
+        setTxConfirmed(true);
+        fetchBids();
+        setIsAccepting(false);
+      } else {
+        setTxFailed(false);
+        setIsAccepting(false);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      toast.error('Error accepting bid');
+      setIsAccepting(false);
+    }
+  }, [
+    chainId,
+    consultationDetails,
+    fetchBids,
+    provider,
+    setHash,
+    setShowSnackbar,
+    setTxConfirmed,
+    setTxFailed,
+  ]);
+
+  const onCancel = useCallback(async () => {
+    if (
+      !(
+        chainId &&
+        consultationDetails &&
+        consultationDetails.bid_id &&
+        provider
+      )
+    )
+      return;
+    setIsCancelling(true);
+    setHash('');
+    setTxConfirmed(false);
+    setShowSnackbar(true);
+    try {
+      const tx = await cancelBid(
+        provider,
+        QUEUE_CONTRACT_ADDRESS[chainId],
+        consultationDetails.bid_id,
+      );
+      if (!tx) {
+        toast.error('Transaction failed');
+        setTxFailed(false);
+        setIsCancelling(false);
+        return;
+      }
+      setHash(tx.hash);
+      const { status } = await tx.wait(2);
+      if (status === 1) {
+        toast.success('Bid successfully cancelled');
+        setTxConfirmed(true);
+        fetchBids();
+        setIsCancelling(false);
+      } else {
+        setTxFailed(false);
+        setIsCancelling(false);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      toast.error('Error cancelling bid');
+      setIsCancelling(false);
+    }
+  }, [
+    chainId,
+    consultationDetails,
+    fetchBids,
+    provider,
+    setHash,
+    setShowSnackbar,
+    setTxConfirmed,
+    setTxFailed,
+  ]);
 
   const showProjectName = useMemo(() => {
     if (!(address && consultationDetails && chainId)) return false;
@@ -158,14 +272,17 @@ const OpenBid: React.FC = () => {
             {address && consultationDetails && (
               <DepositWithdrawCard
                 address={address}
+                allowance={allowance}
+                balance={balance}
+                consultationDetails={consultationDetails}
+                fetchBids={fetchBids}
+                lockTime={lockTime}
+                lockupEnded={lockupEnded}
+                refresh={refresh}
                 setHash={setHash}
                 setShowSnackbar={setShowSnackbar}
                 setTxConfirmed={setTxConfirmed}
                 setTxFailed={setTxFailed}
-                consultationDetails={consultationDetails}
-                lockTime={lockTime}
-                lockupEnded={lockupEnded}
-                fetchBids={fetchBids}
               />
             )}
           </Flex>
@@ -218,7 +335,7 @@ const OpenBid: React.FC = () => {
                         color={change.withdrawnAt ? 'red' : 'green'}
                       >
                         {change.withdrawnAt ? '-' : '+'}
-                        {web3.utils.fromWei(change.amount)} $RAID
+                        {utils.formatEther(change.amount)} $RAID
                       </StyledNumberText>
                     </StyledBountyRow>
                   </a>
@@ -242,14 +359,14 @@ const OpenBid: React.FC = () => {
           hash={hash}
         />
       )}
-      {/* {consultationDetails && (
+      {consultationDetails && (
         <ConfirmCancel
-          consultationDetails={consultationDetails}
-          refresh={refresh}
-          setTxConfirmed={setTxConfirmed}
-          setShowSnackbar={setShowSnackbar}
+          onCancel={onCancel}
+          isCancelling={isCancelling}
+          isOpen={showCancelModal}
+          onClose={() => setShowCancelModal(false)}
         />
-      )} */}
+      )}
     </Box>
   );
 };
