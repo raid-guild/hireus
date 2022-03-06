@@ -41,7 +41,9 @@ const HiringBaord: React.FC = () => {
     if (bids.length === 0) {
       fetchBids();
     }
-  }, [bids, fetchBids]);
+    // Check only once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (bids.length === 0) return;
@@ -149,7 +151,7 @@ const BidListItem: React.FC<BidListItemProps> = ({
       {bid.from && (
         <StyledBountyRow
           justify={'space-between'}
-          onClick={() => history.push(`/bids/${bid.consultation_hash}`)}
+          onClick={() => history.push(`/bids/${bid.submission_hash}`)}
           secondary={index % 2 !== 0 ? 1 : 0}
           p={{ base: '4px', md: '10px' }}
         >
@@ -167,7 +169,7 @@ const BidListItem: React.FC<BidListItemProps> = ({
               fontSize={{ base: '12px', md: '14px' }}
               w={{ base: '88px', md: '100px' }}
             >
-              {new Date(bid.created).toLocaleDateString()}
+              {new Date(Number(bid.created)).toLocaleDateString()}
             </StyledBodyText>
             <StyledBodyText fontSize={{ base: '12px', md: '14px' }}>
               {showProjectName
