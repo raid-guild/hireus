@@ -82,7 +82,9 @@ const OpenBid: React.FC = () => {
     if (bids.length === 0) {
       fetchBids();
     }
-  }, [bids, fetchBids]);
+    // Check only once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!(bids.length !== 0 && consultationDetails && chainId)) return;
@@ -122,7 +124,7 @@ const OpenBid: React.FC = () => {
   useEffect(() => {
     if (bids.length > 0) {
       const consultationDetails = bids.filter(consultation => {
-        return consultation.consultation_hash === id;
+        return consultation.submission_hash === id;
       });
       setConsultationDetails(consultationDetails[0]);
     }

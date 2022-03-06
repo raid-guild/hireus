@@ -1,6 +1,7 @@
 import { SafeAppWeb3Modal as Web3Modal } from '@gnosis.pm/safe-apps-web3modal';
 import { providers } from 'ethers';
 import { getBids } from 'graphql/getBids';
+import { getConsultations } from 'graphql/getConsultations';
 import React, {
   createContext,
   useCallback,
@@ -12,7 +13,6 @@ import { toast } from 'react-toastify';
 import { combineBids } from 'utils';
 import { ICombinedBid } from 'utils/types';
 import { DEFAULT_NETWORK, NETWORK_NAMES } from 'web3/constants';
-import { GUILD_KEEPER_ENDPOINT } from 'web3/constants';
 import { switchChainOnMetaMask } from 'web3/metamask';
 import { providerOptions } from 'web3/providerOptions';
 
@@ -147,23 +147,11 @@ export const WalletProvider: React.FC = ({ children }) => {
       setIsLoadingBids(true);
       const bids = await getBids(DEFAULT_NETWORK);
       if (bids) {
-        const res = await fetch(`${GUILD_KEEPER_ENDPOINT}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            key: process.env.REACT_APP_ACCESS_KEY,
-          }),
-        });
-        if (res.status !== 200) {
-          toast.error('Failed to fetch bids');
-          return;
-        }
-        const consultationData = await res.json();
+        const consultationsData = await getConsultations();
+        if (!consultationsData.length) return;
         const combinedBids = await combineBids(
           DEFAULT_NETWORK,
-          consultationData,
+          consultationsData,
           bids,
         );
         if (!combinedBids) {

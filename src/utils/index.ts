@@ -1,9 +1,13 @@
 import { BigNumber, ethers, utils } from 'ethers';
 import type { IBid, ICombinedBid, IConsultation } from 'utils/types';
 import web3 from 'web3';
-import { QUEUE_CONTRACT_ADDRESS } from 'web3/constants';
+import {
+  DEFAULT_NETWORK,
+  QUEUE_CONTRACT_ADDRESS,
+  RPC_URLS,
+} from 'web3/constants';
 
-const provider = ethers.getDefaultProvider(process.env.REACT_APP_MAINNET_RPC);
+const provider = ethers.getDefaultProvider(RPC_URLS[DEFAULT_NETWORK]);
 
 /**
  * Shorten an Ethereum address. `charsLength` allows to change the number of
@@ -68,19 +72,19 @@ const addFromAddress = async (
   consultation: IConsultation,
   bids: IBid[],
 ) => {
-  if (!utils.isHexString(consultation.consultation_hash)) return false;
+  if (!utils.isHexString(consultation.submission_hash)) return false;
   const newBid: ICombinedBid = {
     project_name: consultation.project_name,
-    created: consultation.created,
-    airtable_id: consultation.id,
-    consultation_hash: consultation.consultation_hash,
+    created: consultation.createdAt,
+    airtable_id: consultation._id,
+    submission_hash: consultation.submission_hash,
     bid_id: '',
     amount: '0',
     submitter: '',
     bidCreated: '0',
     createTxHash: '',
     changes: [],
-    from: 'a',
+    from: 'NA',
     status: '',
   };
   const combinedBid = await getData(chainId, newBid, consultation, bids);
@@ -93,15 +97,18 @@ const getData = async (
   consultation: IConsultation,
   bids: IBid[],
 ) => {
-  const tx = await provider.getTransaction(consultation.consultation_hash);
-  combinedBid['from'] = tx.from;
+  const tx = await provider.getTransaction(consultation.submission_hash);
+  combinedBid['from'] = tx.from.toLowerCase();
 
   const openBids = bids.filter(
     bid => bid.status !== 'canceled' && bid.status !== 'accepted',
   );
   openBids.forEach(bid => {
-    let airtableId = utils.parseBytes32String(bid.details);
-    airtableId = airtableId.replace(/\0.*$/g, '');
+    let details = bid.details;
+    if (utils.isBytes(bid.details)) {
+      details = utils.parseBytes32String(bid.details);
+      details = details.replace(/\0.*$/g, '');
+    }
     const changes = [...bid.withdraws, ...bid.increases];
     const updatedChanges = changes.map(change => {
       if (change.withdrawnAt) {
@@ -123,7 +130,7 @@ const getData = async (
         new Date(Number(a.changedAt)).getTime()
       );
     });
-    if (consultation.id === airtableId) {
+    if (consultation.submission_hash === details) {
       combinedBid.bid_id = web3.utils
         .hexToNumber(
           bid.id.replace(

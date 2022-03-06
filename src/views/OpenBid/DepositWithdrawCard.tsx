@@ -67,13 +67,14 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
       setHash('');
       setTxConfirmed(false);
       setShowSnackbar(true);
-      const hex = utils.formatBytes32String(dbId);
+      // Turning recordID into bytes is no longer necessary
+      // const hex = utils.formatBytes32String(dbId);
       try {
         const tx = await submitBid(
           provider,
           QUEUE_CONTRACT_ADDRESS[chainId],
           utils.parseEther(depositAmount).toString(),
-          hex,
+          dbId,
         );
         if (!tx) {
           toast.error('Transaction failed');
@@ -173,7 +174,7 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
     if (consultationDetails.bid_id) {
       await onIncreaseBid(consultationDetails.bid_id);
     } else {
-      await onSubmitBid(consultationDetails.airtable_id);
+      await onSubmitBid(consultationDetails.submission_hash);
     }
     setTxConfirmed(true);
   }, [

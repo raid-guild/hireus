@@ -98,3 +98,6 @@ export const RPC_URLS: StringInfo = {
 export const MOLOCH_SUBGRAPH_URL =
   process.env.REACT_APP_MOLOCH_SUBGRAPH_URL ||
   'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai';
+
+export const DUNGEON_MASTER_API_URL =
+  process.env.REACT_APP_DUNGEON_MASTER_API_URL || '';

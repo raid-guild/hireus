@@ -11,7 +11,7 @@ export type IBidChange = {
 
 export type ICombinedBid = {
   airtable_id: string;
-  consultation_hash: string;
+  submission_hash: string;
   amount: string;
   bidCreated: string;
   bid_id: string;
@@ -40,7 +40,9 @@ export type IBid = {
 
 export type IConsultation = {
   project_name: string;
+  submission_type: 'Paid' | 'Unpaid';
+  submission_hash: string;
   consultation_hash: string;
-  created: string;
-  id: string;
+  createdAt: string;
+  _id: string;
 };
