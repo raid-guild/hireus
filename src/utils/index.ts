@@ -71,8 +71,8 @@ const addFromAddress = async (
   if (!utils.isHexString(consultation.consultation_hash)) return false;
   const newBid: ICombinedBid = {
     project_name: consultation.project_name,
-    created: consultation.created,
-    airtable_id: consultation.id,
+    created: consultation.createdAt,
+    airtable_id: consultation._id,
     consultation_hash: consultation.consultation_hash,
     bid_id: '',
     amount: '0',
@@ -126,7 +126,7 @@ const getData = async (
         new Date(Number(a.changedAt)).getTime()
       );
     });
-    if (consultation.id === details) {
+    if (consultation._id === details) {
       combinedBid.bid_id = web3.utils
         .hexToNumber(
           bid.id.replace(

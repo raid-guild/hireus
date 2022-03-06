@@ -40,7 +40,9 @@ export type IBid = {
 
 export type IConsultation = {
   project_name: string;
+  submission_type: 'Paid' | 'Unpaid';
+  submission_hash: string;
   consultation_hash: string;
-  created: string;
-  id: string;
+  createdAt: string;
+  _id: string;
 };
