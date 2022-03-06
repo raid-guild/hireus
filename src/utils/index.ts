@@ -100,8 +100,11 @@ const getData = async (
     bid => bid.status !== 'canceled' && bid.status !== 'accepted',
   );
   openBids.forEach(bid => {
-    let airtableId = utils.parseBytes32String(bid.details);
-    airtableId = airtableId.replace(/\0.*$/g, '');
+    let details = bid.details;
+    if (utils.isBytes(bid.details)) {
+      details = utils.parseBytes32String(bid.details);
+      details = details.replace(/\0.*$/g, '');
+    }
     const changes = [...bid.withdraws, ...bid.increases];
     const updatedChanges = changes.map(change => {
       if (change.withdrawnAt) {
@@ -123,7 +126,7 @@ const getData = async (
         new Date(Number(a.changedAt)).getTime()
       );
     });
-    if (consultation.id === airtableId) {
+    if (consultation.id === details) {
       combinedBid.bid_id = web3.utils
         .hexToNumber(
           bid.id.replace(
