@@ -100,10 +100,7 @@ const getData = async (
   const tx = await provider.getTransaction(consultation.submission_hash);
   combinedBid['from'] = tx.from.toLowerCase();
 
-  const openBids = bids.filter(
-    bid => bid.status !== 'canceled' && bid.status !== 'accepted',
-  );
-  openBids.forEach(bid => {
+  bids.forEach(bid => {
     let details = bid.details;
     if (utils.isBytes(bid.details)) {
       details = utils.parseBytes32String(bid.details);

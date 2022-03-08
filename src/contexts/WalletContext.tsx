@@ -158,11 +158,14 @@ export const WalletProvider: React.FC = ({ children }) => {
           toast.error('Error: no bids found');
           return;
         }
-        combinedBids.sort(function (a, b) {
+        const openBids = combinedBids.filter(
+          bid => bid.status !== 'canceled' && bid.status !== 'accepted',
+        );
+        openBids.sort(function (a, b) {
           return new Date(b.created).getTime() - new Date(a.created).getTime();
         });
-        combinedBids.sort((a, b) => Number(b.amount) - Number(a.amount));
-        setBids(combinedBids);
+        openBids.sort((a, b) => Number(b.amount) - Number(a.amount));
+        setBids(openBids);
       } else {
         toast.error('Error: unable to fetch bids');
       }
