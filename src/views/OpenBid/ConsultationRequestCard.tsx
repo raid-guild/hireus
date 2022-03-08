@@ -115,7 +115,7 @@ const ConsultationRequestCard: React.FC<ConsultationRequestCardProps> = ({
                 {round(utils.formatEther(consultationDetails.amount), 4)} $RAID
               </StyledNumberText>
               <a
-                href={`${BLOCK_EXPLORER_URL[chainId]}address/${RAID_CONTRACT_ADDRESS}`}
+                href={`${BLOCK_EXPLORER_URL[chainId]}address/${RAID_CONTRACT_ADDRESS[chainId]}`}
                 target={'_blank'}
                 rel={'noopener noreferrer'}
               >
