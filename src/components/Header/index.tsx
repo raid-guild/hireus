@@ -1,7 +1,7 @@
 import { Button, Flex, Image, Link as ChakraLink } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { useWallet } from 'contexts/WalletContext';
-import { rootLocation } from 'locations';
+import { hiringBoardLocation, rootLocation } from 'locations';
 import { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { StyledPrimaryButton } from 'themes/styled';
@@ -192,9 +192,9 @@ export const Header: React.FC<HeaderProps> = ({ windowWidth }) => {
         <Flex mt={'8px'} direction={{ base: 'column-reverse', md: 'row' }}>
           <StyledSecondaryButton
             onClick={() =>
-              history.action !== 'POP'
-                ? history.goBack()
-                : history.push(rootLocation)
+              history.location.pathname === hiringBoardLocation
+                ? history.push(rootLocation)
+                : history.push(hiringBoardLocation)
             }
             mr={{ base: '0px', md: '20px' }}
             w={{ base: '100%', md: '100px' }}
