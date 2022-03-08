@@ -9,6 +9,7 @@ import {
   StyledInput,
   StyledNumberText,
   StyledPrimaryButton,
+  StyledSmallSecondaryButton,
 } from 'themes/styled';
 import { round } from 'utils';
 import type { ICombinedBid } from 'utils/types';
@@ -284,6 +285,10 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
     ],
   );
 
+  const onMax = useCallback(() => {
+    setDepositAmount(utils.formatEther(balance));
+  }, [balance]);
+
   const insufficientBalance = useMemo(() => {
     if (!(depositAmount && balance)) return false;
     try {
@@ -311,9 +316,19 @@ const DepositWithdrawCared: React.FC<DepositWithdrawCardProps> = ({
         >
           <Box>
             <StyledBodyText>Wallet Balance:</StyledBodyText>
-            <StyledNumberText fontSize={'20px'} mb={'16px'}>
-              {round(utils.formatEther(balance).toString(), 4)} $RAID
-            </StyledNumberText>
+            <Flex
+              align={{ base: 'flex-start', sm: 'center' }}
+              direction={{ base: 'column', sm: 'row' }}
+              gap={'20px'}
+              mb={'16px'}
+            >
+              <StyledNumberText fontSize={'20px'}>
+                {round(utils.formatEther(balance).toString(), 4)} $RAID
+              </StyledNumberText>
+              <StyledSmallSecondaryButton onClick={onMax} w={68}>
+                Max
+              </StyledSmallSecondaryButton>
+            </Flex>
           </Box>
           <Box>
             {insufficientBalance && (
