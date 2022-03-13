@@ -9,6 +9,7 @@ import {
   StyledSecondaryButton,
 } from 'themes/styled';
 import { theme } from 'themes/theme';
+import { RAIDGUILD_WEBSITE_URL } from 'web3/constants';
 
 const Explainer: React.FC = () => {
   const history = useHistory();
@@ -48,7 +49,7 @@ const Explainer: React.FC = () => {
           proceed. If you haven&apos;t done so yet, you can submit a
           consultation request{' '}
           <Link
-            href={'https://dot-org-v2-git-hireus-rip-raidguild.vercel.app/hire'}
+            href={`${RAIDGUILD_WEBSITE_URL}/hire`}
             target={'_blank'}
             rel={'noopener noreferrer'}
             color={theme.colors.red}

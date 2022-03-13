@@ -103,3 +103,7 @@ export const MOLOCH_SUBGRAPH_URL =
 
 export const DUNGEON_MASTER_API_URL =
   process.env.REACT_APP_DUNGEON_MASTER_API_URL || '';
+
+export const RAIDGUILD_WEBSITE_URL = devMode
+  ? 'https://dot-org-v2-git-hireus-rip-raidguild.vercel.app'
+  : 'https://www.raidguild.org';
