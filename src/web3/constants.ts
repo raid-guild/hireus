@@ -4,6 +4,7 @@ import xdaiIcon from 'assets/xdai.png';
 import { Token } from './types';
 
 const {
+  REACT_APP_MAINNET_RPC: MAINNET_RPC,
   REACT_APP_RINKEBY_RPC: RINKEBY_RPC,
   REACT_APP_XDAI_RPC: XDAI_RPC,
   REACT_APP_DEFAULT_NETWORK,
@@ -91,6 +92,7 @@ export const EXPLORER_URLS: StringInfo = {
 };
 
 export const RPC_URLS: StringInfo = {
+  1: MAINNET_RPC || '',
   4: RINKEBY_RPC || 'https://rinkeby-light.eth.linkpool.io',
   100: XDAI_RPC || 'https://rpc.xdaichain.com',
 };

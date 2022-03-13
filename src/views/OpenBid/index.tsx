@@ -124,7 +124,10 @@ const OpenBid: React.FC = () => {
   useEffect(() => {
     if (bids.length > 0) {
       const consultationDetails = bids.filter(consultation => {
-        return consultation.submission_hash === id;
+        return (
+          consultation.submission_hash === id ||
+          consultation.consultation_hash === id
+        );
       });
       setConsultationDetails(consultationDetails[0]);
     }
