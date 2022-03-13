@@ -40,7 +40,7 @@ export const QUEUE_CONTRACT_ADDRESS: StringInfo = {
   4: '0x3a9f3147742e51efba1f04ff26e8dc95978dccb4',
   100: devMode
     ? '0x6fe12999d11e02423fb57cc75566bcdd4eb98dd2'
-    : '0xD880b00877726c2B76173aCEc061b29C27D5d791',
+    : '0xd880b00877726c2b76173acec061b29c27d5d791',
 };
 export const DAO_ADDRESS: StringInfo = {
   4: '0xe189a9c5acfd2e53c4663150b2703b9ffad224ff',
