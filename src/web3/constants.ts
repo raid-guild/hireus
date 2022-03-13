@@ -4,6 +4,7 @@ import xdaiIcon from 'assets/xdai.png';
 import { Token } from './types';
 
 const {
+  REACT_APP_MAINNET_RPC: MAINNET_RPC,
   REACT_APP_RINKEBY_RPC: RINKEBY_RPC,
   REACT_APP_XDAI_RPC: XDAI_RPC,
   REACT_APP_DEFAULT_NETWORK,
@@ -39,7 +40,7 @@ export const QUEUE_CONTRACT_ADDRESS: StringInfo = {
   4: '0x3a9f3147742e51efba1f04ff26e8dc95978dccb4',
   100: devMode
     ? '0x6fe12999d11e02423fb57cc75566bcdd4eb98dd2'
-    : '0xD880b00877726c2B76173aCEc061b29C27D5d791',
+    : '0xd880b00877726c2b76173acec061b29c27d5d791',
 };
 export const DAO_ADDRESS: StringInfo = {
   4: '0xe189a9c5acfd2e53c4663150b2703b9ffad224ff',
@@ -91,6 +92,7 @@ export const EXPLORER_URLS: StringInfo = {
 };
 
 export const RPC_URLS: StringInfo = {
+  1: MAINNET_RPC || '',
   4: RINKEBY_RPC || 'https://rinkeby-light.eth.linkpool.io',
   100: XDAI_RPC || 'https://rpc.xdaichain.com',
 };
@@ -101,3 +103,7 @@ export const MOLOCH_SUBGRAPH_URL =
 
 export const DUNGEON_MASTER_API_URL =
   process.env.REACT_APP_DUNGEON_MASTER_API_URL || '';
+
+export const RAIDGUILD_WEBSITE_URL = devMode
+  ? 'https://dot-org-v2-git-hireus-rip-raidguild.vercel.app'
+  : 'https://www.raidguild.org';

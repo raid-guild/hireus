@@ -7,7 +7,8 @@ import {
   RPC_URLS,
 } from 'web3/constants';
 
-const provider = ethers.getDefaultProvider(RPC_URLS[DEFAULT_NETWORK]);
+const gnosisProvider = ethers.getDefaultProvider(RPC_URLS[DEFAULT_NETWORK]);
+const mainnetProvider = ethers.getDefaultProvider(RPC_URLS[1]);
 
 /**
  * Shorten an Ethereum address. `charsLength` allows to change the number of
@@ -72,12 +73,13 @@ const addFromAddress = async (
   consultation: IConsultation,
   bids: IBid[],
 ) => {
-  if (!utils.isHexString(consultation.submission_hash)) return false;
+  // if (!utils.isHexString(consultation.submission_hash)) return false;
   const newBid: ICombinedBid = {
     project_name: consultation.project_name,
     created: consultation.createdAt,
     airtable_id: consultation._id,
     submission_hash: consultation.submission_hash,
+    consultation_hash: consultation.consultation_hash || '',
     bid_id: '',
     amount: '0',
     submitter: '',
@@ -97,17 +99,25 @@ const getData = async (
   consultation: IConsultation,
   bids: IBid[],
 ) => {
-  const tx = await provider.getTransaction(consultation.submission_hash);
+  let tx = null;
+  const oldConsultation =
+    !consultation?.submission_hash && !!consultation?.consultation_hash;
+  if (oldConsultation) {
+    tx = await mainnetProvider.getTransaction(consultation.consultation_hash);
+  } else {
+    tx = await gnosisProvider.getTransaction(consultation.submission_hash);
+  }
+  if (!tx) return false;
+
   combinedBid['from'] = tx.from.toLowerCase();
 
-  const openBids = bids.filter(
-    bid => bid.status !== 'canceled' && bid.status !== 'accepted',
-  );
-  openBids.forEach(bid => {
-    let details = bid.details;
-    if (utils.isBytes(bid.details)) {
+  bids.forEach(bid => {
+    let details = '';
+    try {
       details = utils.parseBytes32String(bid.details);
       details = details.replace(/\0.*$/g, '');
+    } catch (e) {
+      details = bid.details;
     }
     const changes = [...bid.withdraws, ...bid.increases];
     const updatedChanges = changes.map(change => {
@@ -130,7 +140,10 @@ const getData = async (
         new Date(Number(a.changedAt)).getTime()
       );
     });
-    if (consultation.submission_hash === details) {
+    if (
+      consultation.submission_hash === details ||
+      consultation._id === details
+    ) {
       combinedBid.bid_id = web3.utils
         .hexToNumber(
           bid.id.replace(

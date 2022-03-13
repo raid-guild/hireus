@@ -1,6 +1,5 @@
 import { Flex, Link } from '@chakra-ui/react';
 import { FAQ } from 'components/FAQ';
-import { useWallet } from 'contexts/WalletContext';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
@@ -10,10 +9,9 @@ import {
   StyledSecondaryButton,
 } from 'themes/styled';
 import { theme } from 'themes/theme';
-import { RAID_CONTRACT_ADDRESS } from 'web3/constants';
+import { RAIDGUILD_WEBSITE_URL } from 'web3/constants';
 
 const Explainer: React.FC = () => {
-  const { chainId } = useWallet();
   const history = useHistory();
 
   const [isFaqOpen, setIsFaqOpen] = useState(false);
@@ -37,9 +35,9 @@ const Explainer: React.FC = () => {
           The first step to hiring RaidGuild is submitting a request for a
           consultation (submission cost is 500{' '}
           <Link
-            href={`https://blockscout.com/xdai/mainnet/address/${
-              RAID_CONTRACT_ADDRESS[chainId || 4]
-            }`}
+            href={
+              'https://app.honeyswap.org/#/swap?inputCurrency=0x18e9262e68cc6c6004db93105cc7c001bb103e49&chainId=100'
+            }
             target={'_blank'}
             rel={'noopener noreferrer'}
             color={theme.colors.red}
@@ -51,7 +49,7 @@ const Explainer: React.FC = () => {
           proceed. If you haven&apos;t done so yet, you can submit a
           consultation request{' '}
           <Link
-            href={'/'}
+            href={`${RAIDGUILD_WEBSITE_URL}/hire`}
             target={'_blank'}
             rel={'noopener noreferrer'}
             color={theme.colors.red}
@@ -76,9 +74,9 @@ const Explainer: React.FC = () => {
           If you’d like to get prioritized access to our services, you can move
           your submission up in the queue by bidding{' '}
           <Link
-            href={`https://blockscout.com/xdai/mainnet/address/${
-              RAID_CONTRACT_ADDRESS[chainId || 4]
-            }`}
+            href={
+              'https://app.honeyswap.org/#/swap?inputCurrency=0x18e9262e68cc6c6004db93105cc7c001bb103e49&chainId=100'
+            }
             target={'_blank'}
             rel={'noopener noreferrer'}
             color={theme.colors.red}

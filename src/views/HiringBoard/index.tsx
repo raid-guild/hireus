@@ -151,7 +151,11 @@ const BidListItem: React.FC<BidListItemProps> = ({
       {bid.from && (
         <StyledBountyRow
           justify={'space-between'}
-          onClick={() => history.push(`/bids/${bid.submission_hash}`)}
+          onClick={() =>
+            history.push(
+              `/bids/${bid.submission_hash || bid.consultation_hash}`,
+            )
+          }
           secondary={index % 2 !== 0 ? 1 : 0}
           p={{ base: '4px', md: '10px' }}
         >
