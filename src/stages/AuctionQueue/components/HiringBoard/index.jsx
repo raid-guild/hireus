@@ -4,14 +4,13 @@ import { utils } from 'web3';
 
 import {
   MIN_NUMBER_OF_SHARES,
-  RAID_CONTRACT_ADDRESS,
 } from '../../../../constants';
 import { round, shortenAddress } from '../../../../utils';
 import { AppContext } from '../../../../context/AppContext';
 import Slider from '../../../../components/Slider';
 
 export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
-  const { account, connectWallet, updateStage, shares } =
+  const { account, connectWallet, shares } =
     useContext(AppContext);
   const [showMySubmissions, setShowMySubmissions] = React.useState(false);
   const [filteredConsultations, setFilteredConsultations] = React.useState(
@@ -47,58 +46,17 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            The first step to hiring Raid Guild is to submit a request for a
-            consultation. During the consultation, we will discuss your needs,
-            whether Raid Guild can meet them, and collectively determine how
-            best to proceed.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.5 }}
           >
-            Since demand for our services is high, Raid Guild selects the next
-            consultation to take from a queue (see right). To add your request
-            to queue, you can submit a payment of 500{' '}
+            You are currently viewing an older version of the Consultation Queue. To go through the new hiring flow, visit{' '}
             <a
-              href="https://etherscan.io/token/0x6b175474e89094c44da98b954eedeac495271d0f"
+              href="https://raidguild.org/hire"
               target="_blank"
               rel="noopener noreferrer"
               className="hiringboard-link"
             >
-              DAI
-            </a>{' '}
-            (on mainnet). Your request will be placed at the bottom of the
-            queue.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 0.5 }}
-          >
-            If you’d like to get prioritized access to our services, you can
-            move your submission up in the queue by bidding{' '}
-            <a
-              href={`https://blockscout.com/xdai/mainnet/address/${RAID_CONTRACT_ADDRESS}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hiringboard-link"
-            >
-              $RAID
-            </a>{' '}
-            tokens (on xDAI). Raid Guild will accept the consultation request
-            with the highest bid in $RAID.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 0.5 }}
-          >
-            Your bid will be locked for 7 days. After 7 days, you may decrease
-            or cancel your bid if you’d like. You are welcome to increase your
-            bid at any time to move further up the queue.
+              RaidGuild.org/hire
+            </a>
           </motion.p>
           <div id="hiringboard-button-container">
             <div>
@@ -118,7 +76,7 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
                 </button>
               </a>
             </div>
-            <div>
+            {/* <div>
               <button
                 className="consultation-button"
                 initial={{ x: '100vw' }}
@@ -130,7 +88,7 @@ export const HiringBoard = ({ consultations, setSelectedConsultations }) => {
               >
                 New Consultation
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="hiringboard-card">
