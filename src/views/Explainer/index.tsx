@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   StyledBodyText,
+  StyledMessageText,
   StyledPrimaryButton,
   StyledPrimaryHeading,
   StyledSecondaryButton,
@@ -93,6 +94,34 @@ const Explainer: React.FC = () => {
           cancel your bid if you’d like. You are welcome to increase your bid at
           any time to move further up the queue.
         </StyledBodyText>
+
+        <br />
+        <Flex
+          direction="column"
+          bgColor="white"
+          borderRadius="0.5rem"
+          p="0.5rem 1rem"
+          maxW="720px"
+        >
+          <StyledMessageText
+            fontSize={{ base: '1rem', lg: '18px' }}
+            fontWeight="bold"
+            mb=".5rem"
+          >
+            IMPORTANT
+          </StyledMessageText>
+          <StyledMessageText fontSize={{ base: '1rem', lg: '16px' }}>
+            If you made a bid prior to March 15th, 2022, please use the old
+            version of the Consultation Queue:{' '}
+            <Link
+              href="https://hireus.raidguild.org"
+              isExternal
+              textDecoration="underline"
+            >
+              hireus.raidguild.org
+            </Link>
+          </StyledMessageText>
+        </Flex>
         <br />
         <br />
 
