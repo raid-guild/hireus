@@ -94,7 +94,7 @@ export const EXPLORER_URLS: StringInfo = {
 export const RPC_URLS: StringInfo = {
   1: MAINNET_RPC || '',
   4: RINKEBY_RPC || 'https://rinkeby-light.eth.linkpool.io',
-  100: XDAI_RPC || 'https://rpc.xdaichain.com',
+  100: XDAI_RPC || 'https://rpc.gnosischain.com',
 };
 
 export const MOLOCH_SUBGRAPH_URL =
